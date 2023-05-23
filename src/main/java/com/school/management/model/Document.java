@@ -1,7 +1,11 @@
 package com.school.management.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,10 +21,13 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Documents")
-public class Document {
+public class Document implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "file_name", nullable = false)
+	private String fileName;
 
 	@Column(name = "title", nullable = false)
 	private String title;
@@ -31,6 +38,7 @@ public class Document {
 	@Column(name = "file_path")
 	private String filePath;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "uploaded_by")
 	private User uploadedBy;
