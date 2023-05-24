@@ -1,6 +1,5 @@
 package com.school.management.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
