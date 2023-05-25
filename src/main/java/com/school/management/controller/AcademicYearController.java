@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.model.AcademicYear;
 import com.school.management.payload.response.MessageResponse;
-import com.school.management.security.service.AcademicYearServiceImpl;
-import com.school.management.security.service.AcademicYearServiceImpl.AcademicYearNotFoundException;
+import com.school.management.service.AcademicYearServiceImpl;
+import com.school.management.service.AcademicYearServiceImpl.AcademicYearNotFoundException;
 
 @RestController
 @RequestMapping("/api/academic-years")

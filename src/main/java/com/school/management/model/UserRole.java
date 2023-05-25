@@ -1,9 +1,9 @@
 package com.school.management.model;
 
-public enum ERole {
+public enum UserRole {
 	ADMIN,
 	STUDENT,
 	TEACHER,
-	PARENT,
+	PARENTS,
 	SCHOOl
 }

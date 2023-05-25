@@ -1,4 +1,4 @@
-package com.school.management.security.service;
+package com.school.management.service;
 
 import com.school.management.model.Document;
 import com.school.management.model.User;

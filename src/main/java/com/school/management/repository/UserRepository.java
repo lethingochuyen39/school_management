@@ -1,9 +1,12 @@
 package com.school.management.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+
+import org.springframework.data.repository.CrudRepository;
 
 import com.school.management.model.User;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
+    Optional<User> findByEmail(String email);
 }

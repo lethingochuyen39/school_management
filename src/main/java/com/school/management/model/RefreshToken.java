@@ -1,6 +1,6 @@
 package com.school.management.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class RefreshToken {
 	private String token;
 
 	@Column(name = "expiryDate", nullable = false)
-	private LocalDateTime expiryDate;
+	private Instant expiryDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)

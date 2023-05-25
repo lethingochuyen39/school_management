@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.school.management.model.Document;
-import com.school.management.security.service.DocumentServiceImpl;
-import com.school.management.security.service.DocumentServiceImpl.DocumentNotFoundException;
+import com.school.management.service.DocumentServiceImpl;
+import com.school.management.service.DocumentServiceImpl.DocumentNotFoundException;
 
 @RestController
 @RequestMapping("/api/documents")

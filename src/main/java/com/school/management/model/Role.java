@@ -1,5 +1,10 @@
 package com.school.management.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +21,15 @@ import lombok.experimental.Accessors;
 @Table(name = "Roles")
 public class Role {
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+	@JsonBackReference
+	private List<User> users = new ArrayList<>();
+
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role_name", nullable = false)
-	private ERole name;
+	private UserRole role;
 
 }
