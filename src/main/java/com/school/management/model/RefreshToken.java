@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RefreshToken")
+@Table(name = "Refresh_Token")
 public class RefreshToken {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
