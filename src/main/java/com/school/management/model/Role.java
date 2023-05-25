@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Roles")
+@Table(name = "Role")
 public class Role {
 	@Id
 	@Column(name = "id")
