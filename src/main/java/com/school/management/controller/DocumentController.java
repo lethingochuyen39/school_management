@@ -35,9 +35,9 @@ public class DocumentController {
 	@Autowired
 	private DocumentServiceImpl documentServiceImpl;
 
-	@PostMapping("/user/{uploadedById}/add")
-	public ResponseEntity<?> createDocument(Document document, @RequestPart("file") MultipartFile file,
-			@PathVariable Long uploadedById) {
+	@PostMapping("/add")
+	public ResponseEntity<?> createDocument(@ModelAttribute Document document, @RequestPart("file") MultipartFile file,
+			@RequestParam("uploadedById") Long uploadedById) {
 		try {
 			Document addDocument = documentServiceImpl.createDocument(document, file, uploadedById);
 			return ResponseEntity.ok(addDocument);

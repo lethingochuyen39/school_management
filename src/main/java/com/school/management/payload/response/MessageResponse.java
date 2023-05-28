@@ -15,4 +15,10 @@ public class MessageResponse {
   public void setMessage(String message) {
     this.message = message;
   }
+
+  public class MessageResponseNotFoundException extends RuntimeException {
+    public MessageResponseNotFoundException(String message) {
+      super(message);
+    }
+  }
 }
