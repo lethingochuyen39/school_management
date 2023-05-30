@@ -4,7 +4,6 @@ import com.school.management.dto.ScoreDTO;
 import com.school.management.model.Score;
 import com.school.management.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +32,11 @@ public class ScoreController {
 		}
 	}
 
-	@PostMapping("/{add}")
+	@PostMapping("/add")
 	public ResponseEntity<?> createScore(@RequestBody ScoreDTO scoreDTO) {
 		try {
 			Score createdScore = scoreService.createScore(scoreDTO);
-			return ResponseEntity.status(HttpStatus.CREATED).body(createdScore);
+			return ResponseEntity.ok(createdScore);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

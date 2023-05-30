@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Academic_Year")
+@Table(name = "Academic_year")
 public class AcademicYear {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

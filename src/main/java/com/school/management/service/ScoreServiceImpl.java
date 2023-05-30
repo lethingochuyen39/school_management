@@ -51,10 +51,6 @@ public class ScoreServiceImpl implements ScoreService {
 		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
 				.orElseThrow(() -> new IllegalArgumentException("ScoreType not found with id: " + scoreTypeId));
 
-		if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId, subjectId, scoreTypeId)) {
-			throw new IllegalArgumentException("Score with the same Student, Subject, and ScoreType already exists");
-		}
-
 		Score score = new Score();
 		score.setStudent(student);
 		score.setSubject(subject);
@@ -80,9 +76,11 @@ public class ScoreServiceImpl implements ScoreService {
 		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
 				.orElseThrow(() -> new IllegalArgumentException("ScoreType not found with id: " + scoreTypeId));
 
-		if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId, subjectId, scoreTypeId)) {
-			throw new IllegalArgumentException("Score with the same Student, Subject, and ScoreType already exists");
-		}
+		// if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId,
+		// subjectId, scoreTypeId)) {
+		// throw new IllegalArgumentException("Score with the same Student, Subject, and
+		// ScoreType already exists");
+		// }
 
 		if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId, subjectId, scoreTypeId)
 				&& !existingScore.getStudent().getId().equals(studentId)
