@@ -82,13 +82,6 @@ public class ScoreServiceImpl implements ScoreService {
 		// ScoreType already exists");
 		// }
 
-		if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId, subjectId, scoreTypeId)
-				&& !existingScore.getStudent().getId().equals(studentId)
-				&& !existingScore.getSubject().getId().equals(subjectId)
-				&& !existingScore.getScoreType().getId().equals(scoreTypeId)) {
-			throw new IllegalArgumentException("Score with the same Student, Subject, and ScoreType already exists");
-		}
-
 		existingScore.setStudent(student);
 		existingScore.setSubject(subject);
 		existingScore.setScoreType(scoreType);
@@ -114,9 +107,4 @@ public class ScoreServiceImpl implements ScoreService {
 	public List<Score> searchScoresByStudentId(Long studentId) {
 		return scoreRepository.findByStudentId(studentId);
 	}
-
-	// @Override
-	// public List<Score> searchScoresByClassName(String className) {
-	// return scoreRepository.findByStudentClassName(className);
-	// }
 }
