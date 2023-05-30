@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "ReportCards")
 public class ReportCard {
 	@Id
