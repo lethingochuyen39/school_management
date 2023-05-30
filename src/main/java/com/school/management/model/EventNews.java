@@ -24,6 +24,9 @@ public class EventNews {
 	@Column(name = "title", nullable = false)
 	private String title;
 
+	@Column(name = "image_name", nullable = false)
+	private String imageName;
+
 	@Column(name = "content", columnDefinition = "TEXT")
 	private String content;
 

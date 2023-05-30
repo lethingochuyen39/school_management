@@ -1,6 +1,5 @@
 package com.school.management.controller;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,7 +52,7 @@ public class DocumentController {
 		try {
 			Document document = documentServiceImpl.getDocumentById(id);
 			return ResponseEntity.ok(document);
-		} catch (DocumentServiceImpl.DocumentNotFoundException e) {
+		} catch (DocumentNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
