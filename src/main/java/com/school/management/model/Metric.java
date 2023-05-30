@@ -33,8 +33,4 @@ public class Metric {
 	@Column(name = "year")
 	private Integer year;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "school_id", nullable = false)
-	private School school;
-
 }

@@ -33,11 +33,10 @@ public class Class {
 	@JoinColumn(name = "academic_year_id", nullable = false)
 	private AcademicYear academicYear;
 
+	@Column(name = "grade")
+	private String grade;
+
 	@Column(name = "status", nullable = false)
 	private String status;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "school_id", nullable = false)
-	private School school;
 
 }

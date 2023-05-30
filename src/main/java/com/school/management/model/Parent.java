@@ -30,6 +30,9 @@ public class Parent {
 	@Column(name = "dob", nullable = false)
 	private LocalDate dob;
 
+	@Column(name = "email")
+	private String email;
+
 	@Column(name = "address")
 	private String address;
 

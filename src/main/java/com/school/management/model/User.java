@@ -28,7 +28,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", nullable = false, unique = true)
 	private String email;
 
 	@Column(name = "password", nullable = false)
@@ -43,9 +43,4 @@ public class User implements Serializable {
 	@JsonManagedReference
 	private List<Role> roles = new ArrayList<>();
 
-	// public User(String username, String status, String password) {
-	// this.email = username;
-	// this.status = status;
-	// this.password = password;
-	// }
 }

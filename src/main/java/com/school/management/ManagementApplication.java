@@ -51,13 +51,6 @@ public class ManagementApplication {
 	// roleRepository.save(parentRole);
 	// }
 
-	// Role schoolRole = roleRepository.findByRole(UserRole.SCHOOl);
-	// if (schoolRole == null) {
-	// schoolRole = new Role();
-	// schoolRole.setRole(UserRole.SCHOOl);
-	// roleRepository.save(schoolRole);
-	// }
-
 	// Role teacherRole = roleRepository.findByRole(UserRole.TEACHER);
 	// if (teacherRole == null) {
 	// teacherRole = new Role();
