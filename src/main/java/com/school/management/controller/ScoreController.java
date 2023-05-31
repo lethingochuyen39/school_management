@@ -2,7 +2,8 @@ package com.school.management.controller;
 
 import com.school.management.dto.ScoreDTO;
 import com.school.management.model.Score;
-import com.school.management.service.ScoreService;
+import com.school.management.service.ScoreServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class ScoreController {
 
 	@Autowired
-	private ScoreService scoreService;
+	private ScoreServiceImpl scoreService;
 
 	@GetMapping
 	public ResponseEntity<List<Score>> getAllScores() {

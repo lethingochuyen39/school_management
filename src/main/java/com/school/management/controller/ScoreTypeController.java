@@ -1,7 +1,7 @@
 package com.school.management.controller;
 
 import com.school.management.model.ScoreType;
-import com.school.management.service.ScoreTypeService;
+import com.school.management.service.ScoreTypeServiceImpl;
 import com.school.management.service.ScoreTypeServiceImpl.ScoreTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ScoreTypeController {
 
 	@Autowired
-	private ScoreTypeService scoreTypeService;
+	private ScoreTypeServiceImpl scoreTypeService;
 
 	@GetMapping
 	public ResponseEntity<List<ScoreType>> getAllScoreTypes() {
