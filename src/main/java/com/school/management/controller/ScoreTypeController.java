@@ -16,18 +16,18 @@ import java.util.List;
 public class ScoreTypeController {
 
 	@Autowired
-	private ScoreTypeServiceImpl scoreTypeService;
+	private ScoreTypeServiceImpl scoreTypeServiceImpl;
 
 	@GetMapping
 	public ResponseEntity<List<ScoreType>> getAllScoreTypes() {
-		List<ScoreType> scoreTypes = scoreTypeService.getAllScoreTypes();
+		List<ScoreType> scoreTypes = scoreTypeServiceImpl.getAllScoreTypes();
 		return ResponseEntity.ok(scoreTypes);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getScoreTypeById(@PathVariable("id") Long id) {
 		try {
-			ScoreType scoreType = scoreTypeService.getScoreTypeById(id);
+			ScoreType scoreType = scoreTypeServiceImpl.getScoreTypeById(id);
 			return ResponseEntity.ok(scoreType);
 		} catch (ScoreTypeNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -37,7 +37,7 @@ public class ScoreTypeController {
 	@PostMapping
 	public ResponseEntity<?> createScoreType(@RequestBody ScoreType scoreType) {
 		try {
-			ScoreType createdScoreType = scoreTypeService.createScoreType(scoreType);
+			ScoreType createdScoreType = scoreTypeServiceImpl.createScoreType(scoreType);
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdScoreType);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -48,7 +48,7 @@ public class ScoreTypeController {
 	public ResponseEntity<?> updateScoreType(@PathVariable("id") Long id,
 			@RequestBody ScoreType scoreType) {
 		try {
-			ScoreType updatedScoreType = scoreTypeService.updateScoreType(id, scoreType);
+			ScoreType updatedScoreType = scoreTypeServiceImpl.updateScoreType(id, scoreType);
 			return ResponseEntity.ok(updatedScoreType);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -60,7 +60,7 @@ public class ScoreTypeController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteScoreType(@PathVariable("id") Long id) {
 		try {
-			scoreTypeService.deleteScoreType(id);
+			scoreTypeServiceImpl.deleteScoreType(id);
 			return (ResponseEntity<?>) ResponseEntity.ok();
 		} catch (ScoreTypeNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
