@@ -39,11 +39,12 @@ public class UserServiceImpl implements UserService {
         Role userRole;
         Optional<User> user = userRepository.findByEmail(userDto.getEmail());
         if (!user.isPresent()) {
-            if (userDto.getRoles().toString() == "Admin") {
+            String role = userDto.getRoles().get(0).getRole();
+            if (role.equals("ADMIN")) {
                 userRole = roleRepository.findByRole(UserRole.ADMIN);
-            } else if (userDto.getRoles().toString() == "Parents") {
+            } else if (role.equals("PARENTS")) {
                 userRole = roleRepository.findByRole(UserRole.PARENTS);
-            } else if (userDto.getRoles().toString() == "Student") {
+            } else if (role.equals("TEACHER")) {
                 userRole = roleRepository.findByRole(UserRole.TEACHER);
             } else {
                 userRole = roleRepository.findByRole(UserRole.STUDENT);

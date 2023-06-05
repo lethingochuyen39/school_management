@@ -2,6 +2,8 @@ package com.school.management.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,10 +48,12 @@ public class Student {
 	private String image;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "class_id", nullable = false)
-	private Class className;
+	private Classes className;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "user_id", unique = true, nullable = false)
 	private User user;
 

@@ -1,6 +1,9 @@
 package com.school.management.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +19,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Teachers")
-public class Teacher {
+public class Teacher implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -46,6 +49,7 @@ public class Teacher {
 	private String image;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "user_id", unique = true, nullable = false)
 	private User user;
 
