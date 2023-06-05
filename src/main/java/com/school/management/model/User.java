@@ -2,9 +2,7 @@ package com.school.management.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
