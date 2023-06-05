@@ -19,9 +19,11 @@ public class ScheduleController {
 	private ScheduleServiceImpl scheduleServiceImpl;
 
 	@PostMapping
-	public ResponseEntity<?> createSchedules(@RequestBody List<Schedule> schedules) {
+	public ResponseEntity<?> createSchedules(@RequestBody List<Schedule> schedules,
+			@RequestParam LocalDateTime startTime,
+			@RequestParam LocalDateTime endTime) {
 		try {
-			List<Schedule> createdSchedules = scheduleServiceImpl.createSchedules(schedules);
+			List<Schedule> createdSchedules = scheduleServiceImpl.createSchedules(schedules, startTime, endTime);
 			return ResponseEntity.ok(createdSchedules);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(Collections.singletonList(e.getMessage()));
