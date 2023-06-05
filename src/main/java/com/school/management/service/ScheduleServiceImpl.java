@@ -30,15 +30,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private SubjectRepository subjectRepository;
 
 	@Override
-	public List<Schedule> createSchedules(List<Schedule> schedules) {
-		List<Schedule> createdSchedules = new ArrayList<>();
+	public List<Schedule> createSchedules(List<Schedule> schedules, LocalDateTime startTime, LocalDateTime endTime) {
+		List<Schedule> scheduleList = new ArrayList<>();
 		List<String> errorMessages = new ArrayList<>();
 
 		for (Schedule schedule : schedules) {
 			try {
 				validateSchedule(schedule); // Kiểm tra ràng buộc
+				schedule.setStartTime(startTime); // Đặt giờ bắt đầu cho thời khóa biểu
+				schedule.setEndTime(endTime); // Đặt giờ kết thúc cho thời khóa biểu
 				Schedule createdSchedule = scheduleRepository.save(schedule);
-				createdSchedules.add(createdSchedule);
+				scheduleList.add(createdSchedule);
+
 			} catch (IllegalArgumentException e) {
 				String errorMessage = "Failed to create schedule: " + e.getMessage();
 				errorMessages.add(errorMessage);
@@ -49,7 +52,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			throw new IllegalArgumentException(String.join("\n", errorMessages));
 		}
 
-		return createdSchedules;
+		return scheduleList;
 	}
 
 	@Override
@@ -66,9 +69,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public Schedule updateSchedule(Long scheduleId, Schedule schedule) {
 		validateSchedule(schedule);
+
 		Schedule existingSchedule = getScheduleById(scheduleId);
-		schedule.setId(existingSchedule.getId());
-		return scheduleRepository.save(schedule);
+		existingSchedule.setDayOfWeek(schedule.getDayOfWeek());
+		existingSchedule.setLesson(schedule.getLesson());
+		existingSchedule.setSubject(schedule.getSubject());
+		existingSchedule.setClazz(schedule.getClazz());
+		existingSchedule.setTeacher(schedule.getTeacher());
+		// existingSchedule.setStartTime(schedule.getStartTime());
+		// existingSchedule.setEndTime(schedule.getEndTime());
+		return scheduleRepository.save(existingSchedule);
 	}
 
 	@Override

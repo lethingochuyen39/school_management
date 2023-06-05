@@ -6,7 +6,7 @@ import java.util.List;
 import com.school.management.model.Schedule;
 
 public interface ScheduleService {
-	List<Schedule> createSchedules(List<Schedule> schedules);
+	List<Schedule> createSchedules(List<Schedule> schedules, LocalDateTime startTime, LocalDateTime endTime);
 
 	Schedule getScheduleById(Long scheduleId);
 
