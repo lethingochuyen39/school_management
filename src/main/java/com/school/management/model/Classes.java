@@ -40,7 +40,4 @@ public class Classes {
 	@Column(name = "grade")
 	private String grade;
 
-	@Column(name = "status", nullable = false)
-	private String status;
-
 }
