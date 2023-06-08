@@ -60,10 +60,10 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public boolean deleteClasses(Long id) {
         if (!classesRepository.existsById(id)) {
-			throw new ClassesNotFoundException("Class not found with id: " + id);
-		}
-		classesRepository.deleteById(id);
-		return true;
+            throw new ClassesNotFoundException("Class not found with id: " + id);
+        }
+        classesRepository.deleteById(id);
+        return true;
     }
 
     @Override
