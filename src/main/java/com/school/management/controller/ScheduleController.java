@@ -1,15 +1,21 @@
 package com.school.management.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.ScheduleDto;
 import com.school.management.model.Schedule;
 import com.school.management.service.ScheduleServiceImpl;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/schedules")
@@ -18,63 +24,51 @@ public class ScheduleController {
 	@Autowired
 	private ScheduleServiceImpl scheduleServiceImpl;
 
-	@PostMapping
-	public ResponseEntity<?> createSchedules(@RequestBody List<Schedule> schedules,
-			@RequestParam LocalDateTime startTime,
-			@RequestParam LocalDateTime endTime) {
+	@PostMapping(path = "/add")
+	public ResponseEntity<?> createSchedule(@RequestBody ScheduleDto scheduleDto) {
 		try {
-			List<Schedule> createdSchedules = scheduleServiceImpl.createSchedules(schedules, startTime, endTime);
-			return ResponseEntity.ok(createdSchedules);
+			ScheduleDto createSchedule = scheduleServiceImpl.creaSchedule(scheduleDto);
+			return ResponseEntity.ok().body(createSchedule);
 		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(Collections.singletonList(e.getMessage()));
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
-	@GetMapping("/{scheduleId}")
-	public ResponseEntity<?> getScheduleById(@PathVariable Long scheduleId) {
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getScheduleById(@PathVariable Long id) {
 		try {
-			Schedule schedule = scheduleServiceImpl.getScheduleById(scheduleId);
+			Schedule schedule = scheduleServiceImpl.getScheduleById(id);
 			return ResponseEntity.ok(schedule);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<List<Schedule>> getAllSchedules() {
-		List<Schedule> schedules = scheduleServiceImpl.getAllSchedules();
-		return ResponseEntity.ok(schedules);
-	}
-
-	@PutMapping("/{scheduleId}")
-	public ResponseEntity<?> updateSchedule(@PathVariable Long scheduleId, @RequestBody Schedule schedule) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteSchedule(@PathVariable Long id) {
 		try {
-			Schedule updatedSchedule = scheduleServiceImpl.updateSchedule(scheduleId, schedule);
-			return ResponseEntity.ok(updatedSchedule);
-
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(Collections.singletonList(e.getMessage()));
-		}
-	}
-
-	@DeleteMapping("/{scheduleId}")
-	public ResponseEntity<?> deleteSchedule(@PathVariable Long scheduleId) {
-		if (scheduleServiceImpl.deleteSchedule(scheduleId)) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.noContent().build();
-
-		}
-	}
-
-	@GetMapping("/class/{classId}")
-	public ResponseEntity<?> getSchedulesByClassAndTime(@PathVariable Long classId,
-			@RequestParam LocalDateTime startTime, @RequestParam LocalDateTime endTime) {
-		try {
-			List<Schedule> schedules = scheduleServiceImpl.getSchedulesByClassAndTime(classId, startTime, endTime);
-			return ResponseEntity.ok(schedules);
+			scheduleServiceImpl.deleteSchedule(id);
+			return ResponseEntity.ok().build();
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
+	@GetMapping
+	public ResponseEntity<List<Schedule>> getAllScheduls() {
+		List<Schedule> schedules = scheduleServiceImpl.getAllSchedules();
+		return ResponseEntity.ok(schedules);
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateSchedule(@PathVariable("id") Long id, @RequestBody ScheduleDto scheduleDto) {
+		try {
+			ScheduleDto updatedSchedule = scheduleServiceImpl.updateSchedule(id, scheduleDto);
+			return ResponseEntity.ok(updatedSchedule);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+
+	}
+
 }

@@ -1,21 +1,15 @@
 package com.school.management.repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.school.management.model.Classes;
 import com.school.management.model.Schedule;
-import com.school.management.model.Teacher;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-	List<Schedule> findByClazz(Classes clazz);
+	boolean existsBySemesterAndClassesId(Integer semester, Long classesId);
 
-	List<Schedule> findByClazzAndStartTimeBetween(Classes clazz, LocalDateTime startTime, LocalDateTime endTime);
-
-	List<Schedule> findByTeacherAndStartTimeBetween(Teacher teacher, LocalDateTime startTime, LocalDateTime endTime);
-
-	List<Schedule> findByDayOfWeekAndLessonAndClazz(String dayOfWeek, Integer lesson, Classes clazz);
+	boolean existsByClassesIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateGreaterThanAndEndDateLessThan(
+			Long classesId, LocalDate startDate, LocalDate endDate, LocalDate newStartDate, LocalDate newEndDate);
 }
