@@ -39,4 +39,7 @@ public class EventNews {
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
 
+	@Column(name = "isActive")
+	private Boolean isActive;
+
 }
