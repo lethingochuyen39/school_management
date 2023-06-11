@@ -42,7 +42,7 @@ public class Schedule implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "class_id", nullable = false)
-	@JsonManagedReference
+	@JsonIgnore
 	private Classes classes;
 
 	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
