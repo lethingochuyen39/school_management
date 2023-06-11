@@ -16,4 +16,6 @@ public interface ScheduleService {
 	void deleteSchedule(long id);
 
 	ScheduleDto updateSchedule(Long scheduleId, ScheduleDto scheduleDto);
+
+	List<ScheduleDto> getSchedulesByClassName(String className);
 }

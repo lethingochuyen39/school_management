@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.ScheduleDto;
@@ -24,7 +25,7 @@ public class ScheduleController {
 	@Autowired
 	private ScheduleServiceImpl scheduleServiceImpl;
 
-	@PostMapping(path = "/add")
+	@PostMapping("/add")
 	public ResponseEntity<?> createSchedule(@RequestBody ScheduleDto scheduleDto) {
 		try {
 			ScheduleDto createSchedule = scheduleServiceImpl.creaSchedule(scheduleDto);
@@ -68,7 +69,12 @@ public class ScheduleController {
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
 
+	@GetMapping("/search")
+	public ResponseEntity<List<?>> searchSchedulesByClassName(@RequestParam("className") String className) {
+		List<ScheduleDto> schedules = scheduleServiceImpl.getSchedulesByClassName(className);
+		return ResponseEntity.ok(schedules);
 	}
 
 }
