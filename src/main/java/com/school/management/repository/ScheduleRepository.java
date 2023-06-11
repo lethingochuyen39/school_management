@@ -15,4 +15,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 	boolean existsByClassesIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateGreaterThanAndEndDateLessThan(
 			Long classesId, LocalDate startDate, LocalDate endDate, LocalDate newStartDate, LocalDate newEndDate);
+
 }

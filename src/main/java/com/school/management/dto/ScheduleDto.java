@@ -17,6 +17,5 @@ public class ScheduleDto {
 	private LocalDate endDate;
 	private Integer semester;
 	private Long classesId;
-	private Long AcademicYearId;
 
 }

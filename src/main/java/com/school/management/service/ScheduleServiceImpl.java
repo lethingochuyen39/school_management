@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.school.management.dto.ScheduleDto;
-import com.school.management.model.AcademicYear;
 import com.school.management.model.Classes;
 import com.school.management.model.Schedule;
-import com.school.management.repository.AcademicYearRespository;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.ScheduleRepository;
 
@@ -23,14 +21,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Autowired
 	private ClassesRepository classesRepository;
 
-	@Autowired
-	private AcademicYearRespository academicYearRepository;
-
 	@Override
 	public ScheduleDto creaSchedule(ScheduleDto scheduleDto) {
 
-		if (scheduleDto.getSemester() == null || scheduleDto.getAcademicYearId() == null
-				|| scheduleDto.getClassesId() == null) {
+		if (scheduleDto.getSemester() == null ||
+				scheduleDto.getClassesId() == null) {
 			throw new IllegalArgumentException("Học kỳ, lớp và năm học là bắt buộc.");
 		}
 
@@ -38,14 +33,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		Classes classes = classesRepository.findById(classId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp với id: " + classId));
-
-		// Lấy thông tin về thời gian của năm học từ cơ sở dữ liệu
-		AcademicYear academicYear = academicYearRepository.findById(scheduleDto.getAcademicYearId())
-				.orElseThrow(() -> new IllegalArgumentException(
-						"Không tìm thấy năm học với id: " + scheduleDto.getAcademicYearId()));
+		// Kiểm tra xem lớp học đã có thời khóa biểu hay chưa
+		boolean hasSchedule = classesRepository.hasSchedule(classId);
+		if (hasSchedule) {
+			throw new IllegalArgumentException("Lớp học đã có thời khóa biểu.");
+		}
 		// Gán thông tin thời gian của năm học vào DTO
-		scheduleDto.setStartDate(academicYear.getStartDate());
-		scheduleDto.setEndDate(academicYear.getEndDate());
+		scheduleDto.setStartDate(classes.getAcademicYear().getStartDate());
+		scheduleDto.setEndDate(classes.getAcademicYear().getEndDate());
 
 		// Kiểm tra xem thời khóa biểu của học kỳ đã tồn tại hay chưa
 		if (scheduleRepository.existsBySemesterAndClassesId(scheduleDto.getSemester(), scheduleDto.getClassesId())) {
@@ -97,36 +92,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public ScheduleDto updateSchedule(Long scheduleId, ScheduleDto scheduleDto) {
 		// ui sẽ ko update schedule
-
-		if (scheduleDto.getSemester() == null || scheduleDto.getAcademicYearId() == null
-				|| scheduleDto.getClassesId() == null) {
+		if (scheduleDto.getSemester() == null || scheduleDto.getClassesId() == null) {
 			throw new IllegalArgumentException("Học kỳ, lớp và năm học là bắt buộc.");
 		}
-		// Lấy thông tin về thời gian của năm học từ cơ sở dữ liệu
-		AcademicYear academicYear = academicYearRepository.findById(scheduleDto.getAcademicYearId())
-				.orElseThrow(() -> new IllegalArgumentException(
-						"Không tìm thấy năm học với id: " + scheduleDto.getAcademicYearId()));
-		// Gán thông tin thời gian của năm học vào DTO
-		scheduleDto.setStartDate(academicYear.getStartDate());
-		scheduleDto.setEndDate(academicYear.getEndDate());
-
 		// Lấy thông tin lớp cập nhật
 		Long classId = scheduleDto.getClassesId();
 		Classes classes = classesRepository.findById(classId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp với id: " + classId));
-
 		// Lấy thông tin thời khóa biểu cần cập nhật
 		Schedule existingSchedule = scheduleRepository.findById(scheduleId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thời khóa biểu với id: " + scheduleId));
-
 		if (!existingSchedule.getClasses().getId().equals(classId)) {
 			throw new IllegalArgumentException("Lớp không khớp với thời khóa biểu đã tồn tại.");
 		}
-
 		if (!existingSchedule.getSemester().equals(scheduleDto.getSemester())) {
 			throw new IllegalArgumentException("Học kỳ không thể thay đổi.");
 		}
-
 		existingSchedule.setClasses(classes)
 				.setSemester(scheduleDto.getSemester())
 				.setStartDate(scheduleDto.getStartDate())
@@ -157,7 +138,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 					.setClassesId(schedule.getClasses().getId())
 					.setSemester(schedule.getSemester())
 					.setStartDate(schedule.getStartDate())
-					.setAcademicYearId(schedule.getClasses().getAcademicYear().getId())
 					.setEndDate(schedule.getEndDate());
 
 			scheduleDtos.add(scheduleDto);
