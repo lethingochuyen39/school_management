@@ -161,6 +161,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Classes clazz = classesRepository.findById(classId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp học với ID: " + classId));
 
+				
 		return scheduleRepository.findByClazzAndStartTimeBetween(clazz, startTime, endTime);
 	}
 
