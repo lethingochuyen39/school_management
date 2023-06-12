@@ -10,5 +10,8 @@ public interface AcademicYearRespository extends JpaRepository<AcademicYear, Lon
 
 	boolean existsByName(String name);
 
+	List<AcademicYear> findByName(String name);
+
 	List<AcademicYear> findByNameContainingIgnoreCase(String name);
+
 }

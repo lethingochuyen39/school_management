@@ -23,16 +23,16 @@ public class Document implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "file_name", nullable = false)
+	@Column(name = "file_name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String fileName;
 
-	@Column(name = "title", nullable = false)
+	@Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String title;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
 	private String description;
 
-	@Column(name = "file_path")
+	@Column(name = "file_path", columnDefinition = "NVARCHAR(MAX)")
 	private String filePath;
 
 	@JsonIgnore

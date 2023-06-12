@@ -34,6 +34,7 @@ public class EventNewsServiceImpl implements EventNewsService {
 
 		eventNews.setImageName(imageName);
 		eventNews.setImagePath(imagePath);
+		eventNews.setIsActive(true);
 		eventNews.setCreatedAt(LocalDateTime.now());
 		eventNews.setUpdatedAt(LocalDateTime.now());
 
@@ -64,6 +65,7 @@ public class EventNewsServiceImpl implements EventNewsService {
 
 		existingEventNews.setTitle(newTitle);
 		existingEventNews.setContent(eventNews.getContent());
+		existingEventNews.setIsActive(eventNews.getIsActive());
 		existingEventNews.setUpdatedAt(LocalDateTime.now());
 
 		if (image != null && !image.isEmpty()) {
