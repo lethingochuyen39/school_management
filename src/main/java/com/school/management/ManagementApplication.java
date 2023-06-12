@@ -25,39 +25,39 @@ public class ManagementApplication {
 		SpringApplication.run(ManagementApplication.class, args);
 	}
 
-	// @Bean
-	// CommandLineRunner init(UserRepository userRepository, RoleRepository
-	// roleRepository) {
-	// return args -> {
+	@Bean
+	CommandLineRunner init(UserRepository userRepository, RoleRepository
+	roleRepository) {
+	return args -> {
 
-	// Role adminRole = roleRepository.findByRole(UserRole.ADMIN);
-	// if (adminRole == null) {
-	// adminRole = new Role();
-	// adminRole.setRole(UserRole.ADMIN);
-	// roleRepository.save(adminRole);
-	// }
+	Role adminRole = roleRepository.findByRole(UserRole.ADMIN);
+	if (adminRole == null) {
+	adminRole = new Role();
+	adminRole.setRole(UserRole.ADMIN);
+	roleRepository.save(adminRole);
+	}
 
-	// Role studentRole = roleRepository.findByRole(UserRole.STUDENT);
-	// if (studentRole == null) {
-	// studentRole = new Role();
-	// studentRole.setRole(UserRole.STUDENT);
-	// roleRepository.save(studentRole);
-	// }
+	Role studentRole = roleRepository.findByRole(UserRole.STUDENT);
+	if (studentRole == null) {
+	studentRole = new Role();
+	studentRole.setRole(UserRole.STUDENT);
+	roleRepository.save(studentRole);
+	}
 
-	// Role parentRole = roleRepository.findByRole(UserRole.PARENTS);
-	// if (parentRole == null) {
-	// parentRole = new Role();
-	// parentRole.setRole(UserRole.PARENTS);
-	// roleRepository.save(parentRole);
-	// }
+	Role parentRole = roleRepository.findByRole(UserRole.PARENTS);
+	if (parentRole == null) {
+	parentRole = new Role();
+	parentRole.setRole(UserRole.PARENTS);
+	roleRepository.save(parentRole);
+	}
 
-	// Role teacherRole = roleRepository.findByRole(UserRole.TEACHER);
-	// if (teacherRole == null) {
-	// teacherRole = new Role();
-	// teacherRole.setRole(UserRole.TEACHER);
-	// roleRepository.save(teacherRole);
-	// }
-	// };
-	// }
+	Role teacherRole = roleRepository.findByRole(UserRole.TEACHER);
+	if (teacherRole == null) {
+	teacherRole = new Role();
+	teacherRole.setRole(UserRole.TEACHER);
+	roleRepository.save(teacherRole);
+	}
+	};
+	}
 
 }

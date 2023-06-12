@@ -35,10 +35,9 @@ public class User implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "UserRole", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "role_id") })
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id", nullable = false, unique = true)
 	@JsonManagedReference
-	private List<Role> roles = new ArrayList<>();
+	private Role role;
 
 }

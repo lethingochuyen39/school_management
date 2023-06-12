@@ -16,6 +16,6 @@ import lombok.experimental.Accessors;
 public class UserDto {
     private String email;
     private String password;
-    private List<RoleDto> roles;
+    private RoleDto role;
 
 }
