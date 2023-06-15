@@ -31,9 +31,11 @@ public class ScheduleDetail implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subject_id", nullable = false)
+	@JsonIgnore
 	private Subject subject;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "teacher_id", nullable = false)
 	private Teacher teacher;
 

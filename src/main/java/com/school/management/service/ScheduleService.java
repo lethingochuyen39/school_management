@@ -2,7 +2,7 @@ package com.school.management.service;
 
 import java.util.List;
 
-import com.school.management.dto.ScheduleDto;
+import com.school.management.dto.scheduleDto.ScheduleDto;
 import com.school.management.model.Schedule;
 
 public interface ScheduleService {
@@ -17,5 +17,5 @@ public interface ScheduleService {
 
 	ScheduleDto updateSchedule(Long scheduleId, ScheduleDto scheduleDto);
 
-	List<ScheduleDto> getSchedulesByClassName(String className);
+	List<Schedule> getSchedulesByClassName(String className);
 }

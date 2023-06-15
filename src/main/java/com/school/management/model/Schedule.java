@@ -47,5 +47,5 @@ public class Schedule implements Serializable {
 
 	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonProperty("scheduleDetails")
-	private List<ScheduleDetail> scheduleDetails = new ArrayList<>();
+	private List<ScheduleDetail> scheduleDetails;
 }

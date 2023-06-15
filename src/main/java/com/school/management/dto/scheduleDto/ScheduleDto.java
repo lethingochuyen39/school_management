@@ -1,6 +1,7 @@
-package com.school.management.dto;
+package com.school.management.dto.scheduleDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class ScheduleDto {
 	private LocalDate endDate;
 	private Integer semester;
 	private Long classesId;
+	private List<ScheduleDetailDto> scheduleDetails;
 
 }

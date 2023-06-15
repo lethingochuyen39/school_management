@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.management.dto.ScheduleDto;
+import com.school.management.dto.scheduleDto.ScheduleDto;
 import com.school.management.model.Schedule;
 import com.school.management.service.ScheduleServiceImpl;
 
@@ -71,9 +71,9 @@ public class ScheduleController {
 		}
 	}
 
-	@GetMapping("/search")
+	@GetMapping("/search-className")
 	public ResponseEntity<List<?>> searchSchedulesByClassName(@RequestParam("className") String className) {
-		List<ScheduleDto> schedules = scheduleServiceImpl.getSchedulesByClassName(className);
+		List<Schedule> schedules = scheduleServiceImpl.getSchedulesByClassName(className);
 		return ResponseEntity.ok(schedules);
 	}
 
