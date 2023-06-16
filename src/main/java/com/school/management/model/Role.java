@@ -26,11 +26,8 @@ public class Role implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-	@JsonBackReference
-	private List<User> users = new ArrayList<>();
-
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
+	// long
 
 }

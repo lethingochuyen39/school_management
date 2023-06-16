@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         Role userRole;
         Optional<User> user = userRepository.findByEmail(userDto.getEmail());
         if (!user.isPresent()) {
-            String role = userDto.getRoles().get(0).getRole();
+            String role = userDto.getRole().getRole();
             if (role.equals("ADMIN")) {
                 userRole = roleRepository.findByRole(UserRole.ADMIN);
             } else if (role.equals("PARENTS")) {
@@ -49,12 +50,13 @@ public class UserServiceImpl implements UserService {
             } else {
                 userRole = roleRepository.findByRole(UserRole.STUDENT);
             }
-
+            Random random = new Random();
             User newuser = new User().setEmail(userDto.getEmail())
                     .setPassword(passwordEncoder.encode(userDto.getPassword()))
-                    .setRoles(Arrays.asList(userRole)).setStatus("active");
+                    .setRole(userRole).setStatus("active");
             userRepository.save(newuser);
             userDto.setPassword("");
+            // long
 
         }
 
@@ -67,7 +69,6 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).get());
         if (user.isPresent()) {
             return modelMapper.map((user.get()), UserDto.class);
-
         }
 
         return null;
@@ -81,14 +82,14 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             Boolean checkPass = passwordEncoder.matches(loginDto.getPassword(), user.getPassword());
             if (checkPass) {
-                List<RoleDto> roles = new ArrayList<>();
-                user.getRoles().forEach(role -> {
-                    RoleDto roleDto = new RoleDto().setRole(role.getRole().toString());
-                    roles.add(roleDto);
+                RoleDto roles = new RoleDto().setRole(user.getRole().toString());
+                // user.getRoles().forEach(role -> {
+                // RoleDto roleDto = new RoleDto().setRole(role.getRole().toString());
+                // roles.add(roleDto);
 
-                });
+                // });
                 userDto.setEmail(user.getEmail())
-                        .setRoles(roles);
+                        .setRole(roles);
 
                 return userDto;
             }
