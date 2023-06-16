@@ -1,7 +1,5 @@
 package com.school.management.dto;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,5 +15,6 @@ public class UserDto {
     private String email;
     private String password;
     private RoleDto role;
+//long
 
 }

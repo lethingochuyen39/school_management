@@ -17,6 +17,6 @@ public class SendingMailController {
     @PostMapping("/forgotpassword")
     public ResponseEntity<String> signup(@RequestBody String mail) {
         return ResponseEntity.ok(emailService.sendSimpleMail(mail));
-
+//long
     }
 }

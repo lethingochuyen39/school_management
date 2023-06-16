@@ -34,6 +34,7 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("user with email " + email + " does not exist.");
         }
     }
+//long
 
     private GrantedAuthority getUserAuthority(RoleDto userRoles) {
         GrantedAuthority roles = new SimpleGrantedAuthority(userRoles.getRole());
