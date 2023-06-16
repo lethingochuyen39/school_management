@@ -1,6 +1,5 @@
 package com.school.management.service;
 
-import java.io.File;
 import java.util.Optional;
 
 // import javax.mail.internet.MimeMessage;
@@ -48,5 +47,6 @@ public class EmailServiceImpl implements EmailService {
             return "Error while Sending Mail";
         }
     }
+//long
 
 }

@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
                     .setRole(userRole).setStatus("active");
             userRepository.save(newuser);
             userDto.setPassword("");
+//long
 
         }
 

@@ -28,5 +28,6 @@ public class Role implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
+//long
 
 }

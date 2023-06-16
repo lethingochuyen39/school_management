@@ -42,5 +42,6 @@ public class User implements Serializable {
     @JoinColumn(name="role_id", nullable=false) 
 	@JsonManagedReference
 	private Role role;
+//long
 
 }
