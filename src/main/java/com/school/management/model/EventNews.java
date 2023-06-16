@@ -21,16 +21,16 @@ public class EventNews {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "title", nullable = false)
+	@Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String title;
 
-	@Column(name = "image_name", nullable = false)
+	@Column(name = "image_name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String imageName;
 
 	@Column(name = "content", columnDefinition = "TEXT")
 	private String content;
 
-	@Column(name = "image_path")
+	@Column(name = "image_path", columnDefinition = "NVARCHAR(255)")
 	private String imagePath;
 
 	@Column(name = "created_at", nullable = false)
@@ -38,5 +38,8 @@ public class EventNews {
 
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
+
+	@Column(name = "isActive")
+	private Boolean isActive;
 
 }
