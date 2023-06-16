@@ -45,6 +45,7 @@ public class SecurityConfiguration {
             "/auth/login",
             "/auth/signup",
             "/auth/refreshtoken",
+            "/api/forgotpassword",
 
     };
 

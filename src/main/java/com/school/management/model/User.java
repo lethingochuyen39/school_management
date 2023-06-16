@@ -35,8 +35,11 @@ public class User implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "role_id", nullable = false, unique = true)
+	// @Column(name = "reset_password_token", nullable = false)
+	// private String resetPasswordToken;
+	
+    @ManyToOne
+    @JoinColumn(name="role_id", nullable=false) 
 	@JsonManagedReference
 	private Role role;
 

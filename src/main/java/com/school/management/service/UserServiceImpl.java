@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 userRole = roleRepository.findByRole(UserRole.STUDENT);
             }
-
+            Random random = new Random();
             User newuser = new User().setEmail(userDto.getEmail())
                     .setPassword(passwordEncoder.encode(userDto.getPassword()))
                     .setRole(userRole).setStatus("active");
