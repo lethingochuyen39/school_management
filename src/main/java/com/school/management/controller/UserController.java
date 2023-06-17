@@ -1,5 +1,8 @@
 package com.school.management.controller;
 
+import java.io.UnsupportedEncodingException;
+
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +16,13 @@ import com.school.management.dto.TokenRefreshDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.RefreshToken;
+import com.school.management.model.User;
+import com.school.management.service.EmailService;
 import com.school.management.service.RefreshTokenService;
 import com.school.management.service.UserService;
 import com.school.management.utils.JwtUtils;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,6 +35,8 @@ public class UserController {
     RefreshTokenService refreshTokenService;
     @Autowired
     JwtUtils jwtUtils;
+	@Autowired
+	private EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signup(@RequestBody UserDto userDto) {
@@ -62,4 +70,26 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
+
+	@PostMapping("/forgotpassword")
+	public ResponseEntity<?> forgotpassword(@RequestBody String mail) {
+        String token = RandomString.make(10);
+            try {
+                if(userService.checkUserExistByEmail(mail)){
+                return ResponseEntity.ok(emailService.sendSimpleMail(mail, token));
+                }
+                else{
+                return ResponseEntity.badRequest().body("Cannot find user");
+                }
+            } catch (UnsupportedEncodingException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            } catch (MessagingException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+	}
+
+    @PostMapping("/resetpassword")
+	public ResponseEntity<?> resetPassword(@RequestBody String token, String password) {
+        
+	}
 }

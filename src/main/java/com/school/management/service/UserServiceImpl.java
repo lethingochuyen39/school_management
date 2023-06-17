@@ -8,12 +8,15 @@ import java.util.Random;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.school.management.dto.LoginRequest;
 import com.school.management.dto.RoleDto;
+import com.school.management.dto.TokenResetPasswordDTO;
 import com.school.management.dto.UserDto;
+import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.Role;
 import com.school.management.model.User;
 import com.school.management.model.UserRole;
@@ -105,4 +108,47 @@ public class UserServiceImpl implements UserService {
         return (List<User>) userRepository.findAll();
     }
 
+    @Override
+    public void updateResetPasswordToken(String token, String email) throws TokenRefreshException{
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isPresent()){
+            User client = modelMapper.map((user.get()), User.class);
+            client.setResetPasswordToken(token);
+            userRepository.save(client);
+        }else{
+            throw new TokenRefreshException(token, "Cannot find token "+token);
+        }
+    }
+
+    @Override
+    public String getByResetPasswordToken(String token) throws RuntimeException{
+        Optional<User> user = userRepository.findByResetPasswordToken(token);
+        if(user.isPresent()){
+            User userDto = modelMapper.map((user.get()), User.class);
+            return userDto.getResetPasswordToken();
+        }
+        else{
+            throw new RuntimeException("Cant find user");
+        }
+    }
+
+    @Override
+    public void updatePassword(User user, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        user.setResetPasswordToken(null);
+        userRepository.save(user);
+    }
+    @Override
+    public Boolean checkUserExistByEmail(String email) {
+
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).get());
+        if (user.isPresent()) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 }

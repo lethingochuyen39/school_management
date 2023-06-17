@@ -35,8 +35,8 @@ public class User implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 
-	// @Column(name = "reset_password_token", nullable = false)
-	// private String resetPasswordToken;
+	@Column(name = "reset_password_token", nullable = false)
+	private String resetPasswordToken;
 
 	@ManyToOne
 	@JoinColumn(name = "role_id", nullable = false)
