@@ -1,9 +1,6 @@
 package com.school.management.model;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;

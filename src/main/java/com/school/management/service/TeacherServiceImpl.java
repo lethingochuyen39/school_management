@@ -22,43 +22,59 @@ public class TeacherServiceImpl implements TeacherService {
     private UserRepository userRepository;
 
     @Override
-    public Teacher createTeacher(TeacherDto teacher) {
-        if (teacher.getName() == null || teacher.getGender() == null ||
-                teacher.getDob() == null
-                || teacher.getEmail() == null || teacher.getAddress() == null ||
-                teacher.getPhone() == null
-                || teacher.getStatus() == null || teacher.getImage() == null) {
-            throw new IllegalArgumentException(
-                    "Name, Gender, Dob, Email, Address, Phone, Status, Images are required.");
-        } else {
-            Optional<User> user = userRepository.findByEmail(teacher.getEmail());
-            Teacher teacher2 = new Teacher(null, teacher.getName(), teacher.getGender(), teacher.getDob(),
-                    teacher.getEmail(), teacher.getAddress(), teacher.getPhone(), teacher.getStatus(),
-                    teacher.getImage(),
-                    user.get());
-            return teacherRepository.save(teacher2);
-        }
+public Teacher createTeacher(TeacherDto teacherDto) {
+    if (teacherDto.getName() == null || teacherDto.getGender() == null ||
+            teacherDto.getDob() == null
+            || teacherDto.getEmail() == null || teacherDto.getAddress() == null ||
+            teacherDto.getPhone() == null
+            || teacherDto.getStatus() == null || teacherDto.getImage() == null) {
+        throw new IllegalArgumentException(
+                "Name, Gender, Dob, Email, Address, Phone, Status, and Image are required.");
+    } else {
+        Optional<User> user = userRepository.findByEmail(teacherDto.getEmail());
+        
+        Teacher teacher = new Teacher();
+        teacher.setName(teacherDto.getName());
+        teacher.setGender(teacherDto.getGender());
+        teacher.setDob(teacherDto.getDob());
+        teacher.setEmail(teacherDto.getEmail());
+        teacher.setAddress(teacherDto.getAddress());
+        teacher.setPhone(teacherDto.getPhone());
+        teacher.setStatus(teacherDto.getStatus());
+        teacher.setImage(teacherDto.getImage());
+        teacher.setUser(user.orElseThrow());
 
+        return teacherRepository.save(teacher);
     }
+}
 
-    @Override
-    public Teacher updateTeacher(Long id, TeacherDto teacher) {
-        if (!teacherRepository.existsById(id)) {
-            throw new TeacherNotFoundException("Teacher not found with id: " + id);
-        }
-        if (teacher.getName() == null || teacher.getGender() == null || teacher.getDob() == null
-                || teacher.getEmail() == null || teacher.getAddress() == null || teacher.getPhone() == null
-                || teacher.getStatus() == null || teacher.getImage() == null) {
-            throw new IllegalArgumentException("Subject and Teacher are required.");
-        }
-        Optional<User> user = userRepository.findById(id);
-
-        Teacher teacher2 = teacherRepository.findByEmail(teacher.getEmail());
-        Teacher teacher3 = new Teacher(null, teacher2.getName(), teacher2.getGender(), teacher2.getDob(),
-                teacher.getEmail(), teacher.getAddress(), teacher.getPhone(), teacher.getStatus(),
-                teacher.getImage(), user.get());
-        return teacherRepository.save(teacher3);
+@Override
+public Teacher updateTeacher(Long id, TeacherDto teacherDto) {
+    if (!teacherRepository.existsById(id)) {
+        throw new TeacherNotFoundException("Teacher not found with id: " + id);
     }
+    if (teacherDto.getName() == null || teacherDto.getGender() == null || teacherDto.getDob() == null
+            || teacherDto.getEmail() == null || teacherDto.getAddress() == null || teacherDto.getPhone() == null
+            || teacherDto.getStatus() == null || teacherDto.getImage() == null) {
+        throw new IllegalArgumentException("Name, Gender, Dob, Email, Address, Phone, Status, and Image are required.");
+    }
+    Optional<User> user = userRepository.findById(id);
+
+    Teacher teacher = teacherRepository.findById(id)
+            .orElseThrow(() -> new TeacherNotFoundException("Teacher not found with id: " + id));
+    teacher.setName(teacherDto.getName());
+    teacher.setGender(teacherDto.getGender());
+    teacher.setDob(teacherDto.getDob());
+    teacher.setEmail(teacherDto.getEmail());
+    teacher.setAddress(teacherDto.getAddress());
+    teacher.setPhone(teacherDto.getPhone());
+    teacher.setStatus(teacherDto.getStatus());
+    teacher.setImage(teacherDto.getImage());
+    teacher.setUser(user.orElseThrow());
+
+    return teacherRepository.save(teacher);
+}
+
 
     @Override
     public boolean deleteTeacher(Long id) {

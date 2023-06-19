@@ -25,10 +25,10 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createTeacher(@RequestBody TeacherDto teacherDto) {
+    public ResponseEntity<?> createTeacher(@RequestBody TeacherDto teacher) {
         try {
-            teacherService.createTeacher(teacherDto);
-            return ResponseEntity.ok().body(teacherDto);
+            teacherService.createTeacher(teacher);
+            return ResponseEntity.ok().body(teacher);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
