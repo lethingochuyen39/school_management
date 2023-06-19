@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.model.Classes;
 import com.school.management.service.ClassesServiceImpl;
-import com.school.management.service.MetricServiceImpl;
 
 @RestController
 @RequestMapping("/api/classes")
@@ -38,7 +37,7 @@ public class ClassesController {
 		try {
 			Classes classes = classesServiceImpl.getClassesById(id);
 			return ResponseEntity.ok(classes);
-		} catch (MetricServiceImpl.MetricNotFoundException e) {
+		} catch (ClassesServiceImpl.ClassesNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

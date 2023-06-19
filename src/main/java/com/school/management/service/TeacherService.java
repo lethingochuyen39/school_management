@@ -2,20 +2,21 @@ package com.school.management.service;
 
 import java.util.List;
 
+import com.school.management.dto.TeacherDto;
 import com.school.management.model.Teacher;
 
 public interface TeacherService {
     
-    Teacher createTeacher(Teacher teacher);
+    Teacher createTeacher(TeacherDto teacher);
 
-    Teacher updateTeacher(Long id, Teacher teacher);
+    Teacher updateTeacher(Long id, TeacherDto teacher);
 
     boolean deleteTeacher(Long id);
 
-    List<Teacher> getAllTeacher();
+    List<TeacherDto> getAllTeacher();
 
-    Teacher getTeacherById(Long id);
+    // TeacherDto getTeacherByEmail(String email);
 
-    List<Teacher> getTeacherByName(String name);
+    List<TeacherDto> getTeacherByName(String name);
 
 }
