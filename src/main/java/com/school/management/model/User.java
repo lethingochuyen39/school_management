@@ -1,9 +1,6 @@
 package com.school.management.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -35,10 +32,13 @@ public class User implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "UserRole", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "role_id") })
+	@Column(name = "reset_password_token", nullable = true)
+	private String resetPasswordToken;
+
+	@ManyToOne
+	@JoinColumn(name = "role_id", nullable = false)
 	@JsonManagedReference
-	private List<Role> roles = new ArrayList<>();
+	private Role role;
+	// long
 
 }

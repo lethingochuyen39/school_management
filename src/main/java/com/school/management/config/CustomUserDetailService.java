@@ -1,11 +1,7 @@
 package com.school.management.config;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,19 +23,18 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserDto userDto = userService.findUserByEmail(email);
         if (userDto != null) {
-            List<GrantedAuthority> authorities = getUserAuthority(userDto.getRoles());
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(getUserAuthority(userDto.getRole()));
             return buildUserForAuthentication(userDto, authorities);
         } else {
             throw new UsernameNotFoundException("user with email " + email + " does not exist.");
         }
     }
+    // long
 
-    private List<GrantedAuthority> getUserAuthority(Collection<RoleDto> userRoles) {
-        Set<GrantedAuthority> roles = new HashSet<>();
-        userRoles.forEach((role) -> {
-            roles.add(new SimpleGrantedAuthority(role.getRole()));
-        });
-        return new ArrayList<GrantedAuthority>(roles);
+    private GrantedAuthority getUserAuthority(RoleDto userRoles) {
+        GrantedAuthority roles = new SimpleGrantedAuthority(userRoles.getRole());
+        return roles;
     }
 
     private UserDetails buildUserForAuthentication(UserDto user, List<GrantedAuthority> authorities) {

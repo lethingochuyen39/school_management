@@ -55,7 +55,7 @@ public class JwtUtils {
         User user = userRepository.findByEmail(email).get();
         Claims claims = Jwts.claims().setSubject(email);
         List<String> roles = new ArrayList<>();
-        user.getRoles().stream().forEach(authority -> roles.add(authority.getRole().toString()));
+        roles.add(user.getRole().toString());
         claims.put("roles", roles);
         String token = Jwts.builder().setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))

@@ -1,20 +1,21 @@
 package com.school.management.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import com.school.management.dto.scheduleDto.ScheduleDto;
 import com.school.management.model.Schedule;
 
 public interface ScheduleService {
-	List<Schedule> createSchedules(List<Schedule> schedules, LocalDateTime startTime, LocalDateTime endTime);
 
-	Schedule getScheduleById(Long scheduleId);
+	ScheduleDto creaSchedule(ScheduleDto scheduleDto);
+
+	Schedule getScheduleById(long id);
 
 	List<Schedule> getAllSchedules();
 
-	Schedule updateSchedule(Long scheduleId, Schedule schedule);
+	void deleteSchedule(long id);
 
-	boolean deleteSchedule(Long scheduleId);
+	ScheduleDto updateSchedule(Long scheduleId, ScheduleDto scheduleDto);
 
-	List<Schedule> getSchedulesByClassAndTime(Long classId, LocalDateTime startTime, LocalDateTime endTime);
+	List<Schedule> getSchedulesByClassName(String className);
 }

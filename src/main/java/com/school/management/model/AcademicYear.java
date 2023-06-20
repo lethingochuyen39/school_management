@@ -21,7 +21,7 @@ public class AcademicYear {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String name;
 
 	@Column(name = "start_date", nullable = false)

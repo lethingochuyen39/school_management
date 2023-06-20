@@ -13,6 +13,14 @@ public interface UserService {
 
     UserDto findUserByEmail(String email);
 
+    Boolean checkUserExistByEmail(String email);
+
     List<User> getAllUser();
+
+    UserDto updateResetPasswordToken(String token, String email);
+
+    User getByResetPasswordToken(String token);
+
+    void updatePassword(User customer, String newPassword);
 
 }

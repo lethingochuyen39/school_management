@@ -1,17 +1,22 @@
 package com.school.management.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
+import com.school.management.dto.scheduleDto.ScheduleDetailDto;
+import com.school.management.dto.scheduleDto.ScheduleDto;
+import com.school.management.dto.scheduleDto.SubjectDto;
+import com.school.management.dto.scheduleDto.TeacherDto;
 import com.school.management.model.Classes;
 import com.school.management.model.Schedule;
+import com.school.management.model.ScheduleDetail;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.repository.ClassesRepository;
+import com.school.management.repository.ScheduleDetailRepository;
 import com.school.management.repository.ScheduleRepository;
 import com.school.management.repository.SubjectRepository;
 import com.school.management.repository.TeacherRepository;
@@ -21,157 +26,194 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Autowired
 	private ScheduleRepository scheduleRepository;
+
 	@Autowired
 	private ClassesRepository classesRepository;
-	@Autowired
-	private TeacherRepository teacherRepository;
 
+	@Autowired
+	private ScheduleDetailRepository scheduleDetailRepository;
 	@Autowired
 	private SubjectRepository subjectRepository;
 
+	@Autowired
+	private TeacherRepository teacherRepository;
+
 	@Override
-	public List<Schedule> createSchedules(List<Schedule> schedules, LocalDateTime startTime, LocalDateTime endTime) {
-		List<Schedule> scheduleList = new ArrayList<>();
-		List<String> errorMessages = new ArrayList<>();
+	public ScheduleDto creaSchedule(ScheduleDto scheduleDto) {
 
-		for (Schedule schedule : schedules) {
-			try {
-				validateSchedule(schedule); // Kiểm tra ràng buộc
-				schedule.setStartTime(startTime); // Đặt giờ bắt đầu cho thời khóa biểu
-				schedule.setEndTime(endTime); // Đặt giờ kết thúc cho thời khóa biểu
-				Schedule createdSchedule = scheduleRepository.save(schedule);
-				scheduleList.add(createdSchedule);
-
-			} catch (IllegalArgumentException e) {
-				String errorMessage = "Failed to create schedule: " + e.getMessage();
-				errorMessages.add(errorMessage);
-			}
+		if (scheduleDto.getSemester() == null ||
+				scheduleDto.getClassesId() == null) {
+			throw new IllegalArgumentException("Học kỳ, lớp là bắt buộc.");
 		}
 
-		if (!errorMessages.isEmpty()) {
-			throw new IllegalArgumentException(String.join("\n", errorMessages));
+		Long classId = scheduleDto.getClassesId();
+
+		Classes classes = classesRepository.findById(classId)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp với id: " + classId));
+		// Kiểm tra xem lớp học đã có thời khóa biểu hay chưa
+		boolean hasSchedule = classesRepository.hasSchedule(classId, scheduleDto.getSemester());
+		if (hasSchedule) {
+			throw new IllegalArgumentException(
+					"Lớp học đã có thời khóa biểu cho học kỳ " + scheduleDto.getSemester() + ".");
+		}
+		// Gán thông tin thời gian của năm học vào DTO
+		scheduleDto.setStartDate(classes.getAcademicYear().getStartDate());
+		scheduleDto.setEndDate(classes.getAcademicYear().getEndDate());
+
+		// Kiểm tra xem thời khóa biểu của học kỳ đã tồn tại hay chưa
+		if (scheduleRepository.existsBySemesterAndClassesId(scheduleDto.getSemester(), scheduleDto.getClassesId())) {
+			throw new IllegalArgumentException("Thời khóa biểu cho học kỳ và lớp đã tồn tại.");
 		}
 
-		return scheduleList;
+		// Kiểm tra xem ngày bắt đầu có nhỏ hơn ngày kết thúc không
+		if (scheduleDto.getStartDate().isAfter(scheduleDto.getEndDate())) {
+			throw new IllegalArgumentException("Ngày bắt đầu phải nhỏ hơn ngày kết thúc.");
+		}
+
+		Schedule schedule = new Schedule();
+		schedule.setClasses(classes)
+				.setSemester(scheduleDto.getSemester())
+				.setStartDate(scheduleDto.getStartDate())
+				.setEndDate(scheduleDto.getEndDate());
+
+		scheduleRepository.save(schedule);
+
+		// List<ScheduleDetailDto> scheduleDetailDtos =
+		// scheduleDto.getScheduleDetails();
+		// for (ScheduleDetailDto scheduleDetailDto : scheduleDetailDtos) {
+		// String dayOfWeek = scheduleDetailDto.getDayOfWeek();
+		// Integer lesson = scheduleDetailDto.getLesson();
+		// SubjectDto subject = scheduleDetailDto.getSubject();
+		// TeacherDto teacher = scheduleDetailDto.getTeacher();
+		// ScheduleDetail scheduleDetail = new ScheduleDetail();
+		// scheduleDetail.setDayOfWeek(dayOfWeek)
+		// .setLesson(lesson)
+		// .setSubject(subjectRepository.findById(subject.getId())
+		// .orElseThrow(() -> new IllegalArgumentException(
+		// "Không tìm thấy môn học với id: " + subject.getId())))
+		// .setTeacher(teacherRepository.findById(teacher.getId())
+		// .orElseThrow(() -> new IllegalArgumentException(
+		// "Không tìm thấy giáo viên với id: " + teacher.getId())))
+		// .setSchedule(schedule);
+		// scheduleDetailRepository.save(scheduleDetail);
+		// }
+
+		// Sao chép thông tin từ đối tượng Schedule sang ScheduleDto
+		scheduleDto.setId(schedule.getId());
+		scheduleDto.setClassesId(schedule.getClasses().getId());
+		scheduleDto.setSemester(schedule.getSemester());
+		scheduleDto.setStartDate(schedule.getStartDate());
+		scheduleDto.setEndDate(schedule.getEndDate());
+
+		// Lấy danh sách ScheduleDetail từ cơ sở dữ liệu và gán vào ScheduleDto
+		List<ScheduleDetail> scheduleDetails = scheduleDetailRepository.findBySchedule(schedule);
+		List<ScheduleDetailDto> scheduleDetailDtoss = convertToScheduleDetailDtoList(scheduleDetails);
+		scheduleDto.setScheduleDetails(scheduleDetailDtoss);
+
+		return scheduleDto;
+	}
+
+	private List<ScheduleDetailDto> convertToScheduleDetailDtoList(List<ScheduleDetail> scheduleDetails) {
+		List<ScheduleDetailDto> scheduleDetailDtos = new ArrayList<>();
+		for (ScheduleDetail scheduleDetail : scheduleDetails) {
+			ScheduleDetailDto scheduleDetailDto = new ScheduleDetailDto();
+			// Sao chép thông tin từ đối tượng ScheduleDetail sang ScheduleDetailDto
+			scheduleDetailDto.setDayOfWeek(scheduleDetail.getDayOfWeek());
+			scheduleDetailDto.setLesson(scheduleDetail.getLesson());
+			// Lấy thông tin môn học và giáo viên từ cơ sở dữ liệu và gán vào
+			// ScheduleDetailDto
+			Subject subject = subjectRepository.findById(scheduleDetail.getSubject().getId())
+					.orElseThrow(() -> new IllegalArgumentException(
+							"Không tìm thấy môn học với id: " + scheduleDetail.getSubject().getId()));
+
+			SubjectDto subjectDto = convertToSubjectDto(subject);
+			scheduleDetailDto.setSubject(subjectDto);
+			scheduleDetailDto
+					.setTeacher(convertToTeacherDto(teacherRepository.findById(scheduleDetail.getTeacher().getId())
+							.orElseThrow(() -> new IllegalArgumentException(
+									"Không tìm thấy giáo viên với id: " + scheduleDetail.getTeacher().getId()))));
+			scheduleDetailDtos.add(scheduleDetailDto);
+		}
+		return scheduleDetailDtos;
 	}
 
 	@Override
-	public Schedule getScheduleById(Long scheduleId) throws NotFoundException {
-		return scheduleRepository.findById(scheduleId)
-				.orElseThrow(() -> new IllegalArgumentException("Schedule not found."));
+	public Schedule getScheduleById(long id) {
+		return scheduleRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thời khóa biểu với id: " + id));
 	}
 
 	@Override
 	public List<Schedule> getAllSchedules() {
+
 		return scheduleRepository.findAll();
 	}
 
 	@Override
-	public Schedule updateSchedule(Long scheduleId, Schedule schedule) {
-		validateSchedule(schedule);
-
-		Schedule existingSchedule = getScheduleById(scheduleId);
-		existingSchedule.setDayOfWeek(schedule.getDayOfWeek());
-		existingSchedule.setLesson(schedule.getLesson());
-		existingSchedule.setSubject(schedule.getSubject());
-		existingSchedule.setClazz(schedule.getClazz());
-		existingSchedule.setTeacher(schedule.getTeacher());
-		// existingSchedule.setStartTime(schedule.getStartTime());
-		// existingSchedule.setEndTime(schedule.getEndTime());
-		return scheduleRepository.save(existingSchedule);
+	public void deleteSchedule(long id) {
+		if (!scheduleRepository.existsById(id)) {
+			throw new IllegalArgumentException("không tìm thấy thời khóa biểu với id: " + id);
+		}
+		scheduleRepository.deleteById(id);
 	}
 
 	@Override
-	public boolean deleteSchedule(Long scheduleId) {
-		Schedule existingSchedule = getScheduleById(scheduleId);
-		if (existingSchedule != null) {
-			scheduleRepository.delete(existingSchedule);
-			return true;
+	public ScheduleDto updateSchedule(Long scheduleId, ScheduleDto scheduleDto) {
+		// ui sẽ ko update schedule
+		if (scheduleDto.getSemester() == null || scheduleDto.getClassesId() == null) {
+			throw new IllegalArgumentException("Học kỳ, lớp là bắt buộc.");
 		}
-		return false;
-	}
-
-	private void validateSchedule(Schedule schedule) {
-
-		List<String> errorMessages = new ArrayList<>();
-
-		// Kiểm tra không được để trống các trường thông tin
-		if (schedule.getDayOfWeek() == null) {
-			errorMessages.add("Day of week is required");
+		// Lấy thông tin lớp cập nhật
+		Long classId = scheduleDto.getClassesId();
+		Classes classes = classesRepository.findById(classId)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp với id: " + classId));
+		// Lấy thông tin thời khóa biểu cần cập nhật
+		Schedule existingSchedule = scheduleRepository.findById(scheduleId)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thời khóa biểu với id: " + scheduleId));
+		if (!existingSchedule.getClasses().getId().equals(classId)) {
+			throw new IllegalArgumentException("Lớp không khớp với thời khóa biểu đã tồn tại.");
 		}
-
-		if (schedule.getLesson() == null) {
-			errorMessages.add("Lesson is required");
+		if (!existingSchedule.getSemester().equals(scheduleDto.getSemester())) {
+			throw new IllegalArgumentException("Học kỳ không thể thay đổi.");
 		}
+		existingSchedule.setClasses(classes)
+				.setSemester(scheduleDto.getSemester())
+				.setStartDate(scheduleDto.getStartDate())
+				.setEndDate(scheduleDto.getEndDate());
+		scheduleRepository.save(existingSchedule);
 
-		if (schedule.getSubject() == null) {
-			errorMessages.add("Subject is required");
-		}
+		// Sao chép thông tin từ đối tượng Schedule sang ScheduleDto
+		scheduleDto.setId(existingSchedule.getId());
+		scheduleDto.setClassesId(classes.getId());
+		scheduleDto.setSemester(existingSchedule.getSemester());
+		scheduleDto.setStartDate(existingSchedule.getStartDate());
+		scheduleDto.setEndDate(existingSchedule.getEndDate());
 
-		if (schedule.getClazz() == null) {
-			errorMessages.add("Class is required");
-		}
-
-		if (schedule.getTeacher() == null) {
-			errorMessages.add("Teacher is required");
-		}
-
-		if (schedule.getStartTime() == null) {
-			errorMessages.add("Start time is required");
-		}
-
-		if (schedule.getEndTime() == null) {
-			errorMessages.add("End time is required");
-		}
-
-		// Kiểm tra sự tồn tại của các khóa ngoại
-		if (schedule.getSubject() != null && !subjectRepository.existsById(schedule.getSubject().getId())) {
-			errorMessages.add("Invalid subject");
-		}
-
-		if (schedule.getClazz() != null && !classesRepository.existsById(schedule.getClazz().getId())) {
-			errorMessages.add("Invalid class");
-		}
-
-		if (schedule.getTeacher() != null && !teacherRepository.existsById(schedule.getTeacher().getId())) {
-			errorMessages.add("Invalid teacher");
-		}
-
-		// Kiểm tra trùng lịch
-		LocalDateTime startTime = schedule.getStartTime();
-		LocalDateTime endTime = schedule.getEndTime();
-		Classes clazz = schedule.getClazz();
-		Teacher teacher = schedule.getTeacher();
-
-		List<Schedule> conflictingSchedules = scheduleRepository.findByClazzAndStartTimeBetween(clazz, startTime,
-				endTime);
-		if (!conflictingSchedules.isEmpty()) {
-			throw new IllegalArgumentException("Trùng lặp lịch học cho lớp học " + clazz.getName());
-		}
-
-		conflictingSchedules = scheduleRepository.findByTeacherAndStartTimeBetween(teacher, startTime, endTime);
-		if (!conflictingSchedules.isEmpty()) {
-			throw new IllegalArgumentException("Trùng lặp lịch dạy cho giáo viên " + teacher.getName());
-		}
-
-		List<Schedule> existingSchedules = scheduleRepository.findByDayOfWeekAndLessonAndClazz(schedule.getDayOfWeek(),
-				schedule.getLesson(), schedule.getClazz());
-
-		if (!existingSchedules.isEmpty()) {
-			errorMessages.add("Schedule already exists for the given day, lesson, and class");
-		}
-
-		if (!errorMessages.isEmpty()) {
-			throw new IllegalArgumentException(String.join("\n", errorMessages));
-		}
+		return scheduleDto;
 	}
 
 	@Override
-	public List<Schedule> getSchedulesByClassAndTime(Long classId, LocalDateTime startTime, LocalDateTime endTime) {
-		Classes clazz = classesRepository.findById(classId)
-				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp học với ID: " + classId));
-
-		return scheduleRepository.findByClazzAndStartTimeBetween(clazz, startTime, endTime);
+	public List<Schedule> getSchedulesByClassName(String className) {
+		List<Schedule> schedules = scheduleRepository.findByClassesNameContainingIgnoreCase(className);
+		return schedules;
 	}
 
+	private SubjectDto convertToSubjectDto(Subject subject) {
+		SubjectDto subjectDto = new SubjectDto();
+		// Sao chép thông tin từ đối tượng Subject sang SubjectDto
+		subjectDto.setId(subject.getId());
+		subjectDto.setName(subject.getName());
+		// ...
+
+		return subjectDto;
+	}
+
+	private TeacherDto convertToTeacherDto(Teacher teacher) {
+		TeacherDto teacherDto = new TeacherDto();
+		// Sao chép thông tin từ đối tượng Teacher sang TeacherDto
+		teacherDto.setId(teacher.getId());
+		teacherDto.setName(teacher.getName());
+		// ..
+		return teacherDto;
+	}
 }

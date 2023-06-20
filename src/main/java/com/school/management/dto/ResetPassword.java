@@ -1,20 +1,17 @@
 package com.school.management.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Getter
 @Setter
+@Getter
+@AllArgsConstructor
 @Accessors(chain = true)
 @NoArgsConstructor
-@ToString
-public class UserDto {
+public class ResetPassword {
     private String email;
-    private String password;
-    private RoleDto role;
-    // long
-
+    private String token;
 }

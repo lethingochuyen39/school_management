@@ -1,5 +1,6 @@
 package com.school.management.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,42 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 
 	@Override
 	public AcademicYear createAcademicYear(AcademicYear academicYear) {
+
 		if (academicYear.getName() == null || academicYear.getStartDate() == null
 				|| academicYear.getEndDate() == null) {
-			throw new IllegalArgumentException("Name, start date, and end date are required.");
+			throw new IllegalArgumentException("Tên, ngày bắt đầu và ngày kết thúc là bắt buộc.");
 		}
 
 		if (academicYearRepository.existsByName(academicYear.getName())) {
-			throw new IllegalArgumentException("Academic year with the same name already exists.");
+			throw new IllegalArgumentException("Năm học với tên đã tồn tại.");
+		}
+		// Kiểm tra xem ngày bắt đầu có nhỏ hơn ngày kết thúc không
+		if (academicYear.getStartDate().isAfter(academicYear.getEndDate())) {
+			throw new IllegalArgumentException("Ngày bắt đầu phải nhỏ hơn ngày kết thúc.");
 		}
 
+		// Kiểm tra trùng lặp với các năm học hiện có
+		List<AcademicYear> existingYears = academicYearRepository.findAll();
+		for (AcademicYear existingYear : existingYears) {
+			LocalDate existingStartDate = existingYear.getStartDate();
+			LocalDate existingEndDate = existingYear.getEndDate();
+
+			if ((academicYear.getStartDate().isAfter(existingStartDate)
+					&& academicYear.getStartDate().isBefore(existingEndDate))
+					|| (academicYear.getEndDate().isAfter(existingStartDate)
+							&& academicYear.getEndDate().isBefore(existingEndDate))
+					|| (academicYear.getStartDate().isEqual(existingStartDate)
+							&& academicYear.getEndDate().isEqual(existingEndDate))) {
+				throw new IllegalArgumentException("Thòi gian năm học trùng lặp với năm học đã tồn tại.");
+			}
+		}
 		return academicYearRepository.save(academicYear);
 	}
 
 	@Override
 	public AcademicYear getAcademicYearById(Long id) {
 		return academicYearRepository.findById(id)
-				.orElseThrow(() -> new AcademicYearNotFoundException("Academic year not found with id: " + id));
+				.orElseThrow(() -> new AcademicYearNotFoundException("Không tìm thấy năm học với id: " + id));
 
 	}
 
@@ -39,30 +60,57 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 	public AcademicYear updateAcademicYear(Long id, AcademicYear academicYear) {
 
 		if (!academicYearRepository.existsById(id)) {
-			throw new AcademicYearNotFoundException("Academic year not found with id: " + id);
+			throw new AcademicYearNotFoundException("Không tìm thấy năm học với id: " + id);
 		}
 
 		if (academicYear.getName() == null || academicYear.getStartDate() == null
 				|| academicYear.getEndDate() == null) {
-			throw new IllegalArgumentException("Name, start date, and end date are required.");
+			throw new IllegalArgumentException("Tên , ngày bắt đầu và ngày kết thúc là bắt buộc.");
+		}
+		// Kiểm tra xem ngày bắt đầu có nhỏ hơn ngày kết thúc không
+		if (academicYear.getStartDate().isAfter(academicYear.getEndDate())) {
+			throw new IllegalArgumentException("Ngày bắt đầu phải nhỏ hơn ngày kết thúc.");
 		}
 
 		AcademicYear existingAcademicYear = academicYearRepository.findById(id)
-				.orElseThrow(() -> new AcademicYearNotFoundException("Academic year not found with id: " + id));
+				.orElseThrow(() -> new AcademicYearNotFoundException("Không tìm thấy năm học với id: " + id));
 
-		if (existingAcademicYear != null && !existingAcademicYear.getName().equals(academicYear.getName())) {
-			if (academicYearRepository.existsByName(academicYear.getName())) {
-				throw new IllegalArgumentException("Academic year with the same name already exists.");
+		String newName = academicYear.getName();
+		if (!existingAcademicYear.getName().equals(newName)) {
+			List<AcademicYear> academicYearsWithSameName = academicYearRepository.findByName(newName);
+			if (!academicYearsWithSameName.isEmpty()) {
+				throw new IllegalArgumentException("Năm học với tên đã tồn tại.");
 			}
 		}
-		academicYear.setId(id);
-		return academicYearRepository.save(academicYear);
+		// Kiểm tra trùng lặp với các năm học hiện có, trừ năm học đang được cập nhật
+		List<AcademicYear> existingYears = academicYearRepository.findAll();
+		for (AcademicYear existingYear : existingYears) {
+			if (!existingYear.getId().equals(id)) {
+				LocalDate existingStartDate = existingYear.getStartDate();
+				LocalDate existingEndDate = existingYear.getEndDate();
+
+				if ((academicYear.getStartDate().isAfter(existingStartDate)
+						&& academicYear.getStartDate().isBefore(existingEndDate))
+						|| (academicYear.getEndDate().isAfter(existingStartDate)
+								&& academicYear.getEndDate().isBefore(existingEndDate))
+						|| (academicYear.getStartDate().isEqual(existingStartDate)
+								&& academicYear.getEndDate().isEqual(existingEndDate))) {
+					throw new IllegalArgumentException("Thời gian năm học trùng lặp với năm học đã tồn tại.");
+				}
+			}
+		}
+
+		existingAcademicYear.setName(academicYear.getName())
+				.setStartDate(academicYear.getStartDate())
+				.setEndDate(academicYear.getEndDate());
+
+		return academicYearRepository.save(existingAcademicYear);
 	}
 
 	@Override
 	public boolean deleteAcademicYear(Long id) {
 		if (!academicYearRepository.existsById(id)) {
-			throw new AcademicYearNotFoundException("Academic year not found with id: " + id);
+			throw new AcademicYearNotFoundException("Không tìm thấy năm học nào với id: " + id);
 		}
 		academicYearRepository.deleteById(id);
 		return true;

@@ -73,7 +73,7 @@ public class AcademicYearController {
 		return ResponseEntity.ok(academicYears);
 	}
 
-	@GetMapping("/search/{name}")
+	@GetMapping("/search/class/{name}")
 	public ResponseEntity<List<AcademicYear>> searchAcademicYearsByName(@PathVariable(value = "name") String name) {
 		List<AcademicYear> academicYears = academicYearServiceImpl.getAcademicYearsByName(name);
 		return ResponseEntity.ok(academicYears);
