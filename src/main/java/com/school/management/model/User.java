@@ -1,9 +1,6 @@
 package com.school.management.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -35,7 +32,7 @@ public class User implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 
-	@Column(name = "reset_password_token", nullable = false)
+	@Column(name = "reset_password_token", nullable = true)
 	private String resetPasswordToken;
 
 	@ManyToOne

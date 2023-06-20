@@ -1,11 +1,7 @@
 package com.school.management.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.school.management.dto.LoginRequest;
 import com.school.management.dto.RoleDto;
-import com.school.management.dto.TokenResetPasswordDTO;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.Role;
@@ -53,10 +48,10 @@ public class UserServiceImpl implements UserService {
             } else {
                 userRole = roleRepository.findByRole(UserRole.STUDENT);
             }
-            Random random = new Random();
+            // Random random = new Random();
             User newuser = new User().setEmail(userDto.getEmail())
                     .setPassword(passwordEncoder.encode(userDto.getPassword()))
-                    .setRole(userRole).setStatus("active");
+                    .setRole(userRole).setStatus("active").setResetPasswordToken(null);
             userRepository.save(newuser);
             userDto.setPassword("");
             // long
@@ -109,26 +104,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateResetPasswordToken(String token, String email) throws TokenRefreshException{
+    public UserDto updateResetPasswordToken(String token, String email) throws TokenRefreshException{
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
             User client = modelMapper.map((user.get()), User.class);
             client.setResetPasswordToken(token);
             userRepository.save(client);
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            userDto.setPassword("");
+            return userDto;
         }else{
             throw new TokenRefreshException(token, "Cannot find token "+token);
         }
     }
 
     @Override
-    public String getByResetPasswordToken(String token) throws RuntimeException{
+    public User getByResetPasswordToken(String token) throws RuntimeException{
         Optional<User> user = userRepository.findByResetPasswordToken(token);
         if(user.isPresent()){
             User userDto = modelMapper.map((user.get()), User.class);
-            return userDto.getResetPasswordToken();
+            return userDto;
         }
         else{
-            throw new RuntimeException("Cant find user");
+            return null;
         }
     }
 

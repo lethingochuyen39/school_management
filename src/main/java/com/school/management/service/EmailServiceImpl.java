@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
 			String content = "<p>Hello,</p>"
             + "<p>You have requested to reset your password.</p>"
             + "<p>Click the link below to change your password:</p>"
-            + "<p><a href=\"forgotpassword\"" + code + "\">Change my password</a></p>"
+            + "<p><a href=\"reset_password?token=" + code + "\">Change my password</a></p>"
             + "<br>"
             + "<p>Ignore this email if you do remember your password, "
             + "or you have not made the request.</p>";

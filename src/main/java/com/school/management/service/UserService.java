@@ -3,7 +3,6 @@ package com.school.management.service;
 import java.util.List;
 
 import com.school.management.dto.LoginRequest;
-import com.school.management.dto.TokenResetPasswordDTO;
 import com.school.management.dto.UserDto;
 import com.school.management.model.User;
 
@@ -18,9 +17,9 @@ public interface UserService {
 
     List<User> getAllUser();
 
-    void updateResetPasswordToken(String token, String email);
+    UserDto updateResetPasswordToken(String token, String email);
 
-    String getByResetPasswordToken(String token);
+    User getByResetPasswordToken(String token);
 
     void updatePassword(User customer, String newPassword);
 }

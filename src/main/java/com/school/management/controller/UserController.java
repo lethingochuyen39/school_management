@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.LoginRequest;
@@ -71,9 +72,9 @@ public class UserController {
     }
 
 
-	@PostMapping("/forgotpassword")
+	@PostMapping("/forgot_password")
 	public ResponseEntity<?> forgotpassword(@RequestBody String mail) {
-        String token = RandomString.make(10);
+        String token = RandomString.make(30);
             try {
                 if(userService.checkUserExistByEmail(mail)){
                 return ResponseEntity.ok(emailService.sendSimpleMail(mail, token));
@@ -88,8 +89,10 @@ public class UserController {
             }
 	}
 
-    @PostMapping("/resetpassword")
-	public ResponseEntity<?> resetPassword(@RequestBody String token, String password) {
-        
+    @PostMapping("/reset_password")
+	public ResponseEntity<?> resetPassword(@RequestParam("token") String token,@RequestBody String password) {
+        User user = userService.getByResetPasswordToken(token);
+        userService.updatePassword(user, password);
+        return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
 	}
 }
