@@ -2,6 +2,7 @@ package com.school.management.dto;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,19 +15,19 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class TeacherDto {
-    private String name;
+	private String name;
 
-    private String gender;
+	private String gender;
 
-    private LocalDate dob;
+	private LocalDate dob;
 
-    private String email;
+	private String email;
 
-    private String address;
+	private String address;
 
-    private String phone;
+	private String phone;
 
-    private String status;
+	private String status;
 
-    private String image;
+	private String image;
 }

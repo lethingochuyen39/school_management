@@ -1,7 +1,5 @@
 package com.school.management.dto;
 
-import com.school.management.model.Teacher;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +14,5 @@ import lombok.experimental.Accessors;
 public class SubjectDto {
     private String name;
 
-    private Teacher teacher;
+    private TeacherDto teacher;
 }

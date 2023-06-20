@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.AddSubject;
 import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
 import com.school.management.service.SubjectService;
@@ -25,10 +26,9 @@ public class SubjectController {
     private SubjectService subjectService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createSubject(@RequestBody SubjectDto subject) {
+    public ResponseEntity<?> createSubject(@RequestBody AddSubject subject) {
         try {
-            Subject createdSubject = subjectService.createSubject(subject);
-            return ResponseEntity.ok().body(createdSubject);
+            return ResponseEntity.ok(subjectService.createSubject(subject));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
