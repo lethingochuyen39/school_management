@@ -22,8 +22,10 @@ import com.school.management.service.EmailService;
 import com.school.management.service.RefreshTokenService;
 import com.school.management.service.UserService;
 import com.school.management.utils.JwtUtils;
+import com.school.management.utils.Utility;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -73,14 +75,17 @@ public class UserController {
 
 
 	@PostMapping("/forgot_password")
-	public ResponseEntity<?> forgotpassword(@RequestBody String mail) {
+	public ResponseEntity<?> forgotpassword(HttpServletRequest request, @RequestBody String email) {
         String token = RandomString.make(30);
+        // String email = request.getParameter("email");
             try {
-                if(userService.checkUserExistByEmail(mail)){
-                return ResponseEntity.ok(emailService.sendSimpleMail(mail, token));
+                if(userService.checkUserExistByEmail(email)){
+                    String resetPasswordLink =  Utility.getSiteURL(request) +"/reset_password?token="+ token;
+                    userService.updateResetPasswordToken(token,email);
+                    return ResponseEntity.ok(emailService.sendSimpleMail(email, resetPasswordLink));
                 }
                 else{
-                return ResponseEntity.badRequest().body("Cannot find user");
+                    return ResponseEntity.badRequest().body("Cannot find user");
                 }
             } catch (UnsupportedEncodingException e) {
                 return ResponseEntity.badRequest().body(e.getMessage());

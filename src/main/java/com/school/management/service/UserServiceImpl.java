@@ -107,9 +107,8 @@ public class UserServiceImpl implements UserService {
     public UserDto updateResetPasswordToken(String token, String email) throws TokenRefreshException{
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
-            User client = modelMapper.map((user.get()), User.class);
-            client.setResetPasswordToken(token);
-            userRepository.save(client);
+            user.get().setResetPasswordToken(token);
+            userRepository.save(user.get());
             UserDto userDto = modelMapper.map(user, UserDto.class);
             userDto.setPassword("");
             return userDto;
@@ -141,8 +140,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkUserExistByEmail(String email) {
 
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).get());
-        if (user.isPresent()) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user!=null) {
             return true;
         }else{
             return false;
