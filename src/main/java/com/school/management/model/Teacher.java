@@ -3,6 +3,8 @@ package com.school.management.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,7 +49,8 @@ public class Teacher implements Serializable{
 	private String image;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", unique = true, nullable = false)
+	@JsonIgnore
+	@JoinColumn(name = "user_id", unique = true, nullable = true)
 	private User user;
 
 }

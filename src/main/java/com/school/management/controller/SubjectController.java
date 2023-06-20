@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.management.dto.AddSubject;
-import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
 import com.school.management.service.SubjectService;
 import com.school.management.service.SubjectServiceImpl;
@@ -26,7 +24,7 @@ public class SubjectController {
     private SubjectService subjectService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createSubject(@RequestBody AddSubject subject) {
+    public ResponseEntity<?> createSubject(@RequestBody Subject subject) {
         try {
             return ResponseEntity.ok(subjectService.createSubject(subject));
         } catch (IllegalArgumentException e) {
@@ -36,7 +34,7 @@ public class SubjectController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateSubject(@PathVariable Long id,
-            @RequestBody SubjectDto subject) {
+            @RequestBody Subject subject) {
         try {
             Subject updatedSubject = subjectService.updateSubject(id, subject);
             return ResponseEntity.ok(updatedSubject);
@@ -58,8 +56,8 @@ public class SubjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SubjectDto>> getAllSubject() {
-        List<SubjectDto> subject = subjectService.getAllSubject();
+    public ResponseEntity<List<Subject>> getAllSubject() {
+        List<Subject> subject = subjectService.getAllSubject();
         return ResponseEntity.ok(subject);
     }
 
@@ -74,8 +72,8 @@ public class SubjectController {
     // }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<SubjectDto>> getSubjectByName(@PathVariable(value = "name") String name) {
-        List<SubjectDto> subject = subjectService.getSubjectByName(name);
+    public ResponseEntity<List<Subject>> getSubjectByName(@PathVariable(value = "name") String name) {
+        List<Subject> subject = subjectService.getSubjectByName(name);
         return ResponseEntity.ok(subject);
     }
 }
