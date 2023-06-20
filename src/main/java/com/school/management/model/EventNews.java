@@ -24,10 +24,10 @@ public class EventNews {
 	@Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String title;
 
-	@Column(name = "image_name", nullable = false, columnDefinition = "NVARCHAR(255)")
+	@Column(name = "image_name", columnDefinition = "NVARCHAR(255)")
 	private String imageName;
 
-	@Column(name = "content", columnDefinition = "TEXT")
+	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
 
 	@Column(name = "image_path", columnDefinition = "NVARCHAR(255)")
