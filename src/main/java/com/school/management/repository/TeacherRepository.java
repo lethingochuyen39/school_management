@@ -8,4 +8,6 @@ import com.school.management.model.Teacher;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     List<Teacher> findByNameContainingIgnoreCase(String name);
+
+    Teacher findByEmail(String string);
 }

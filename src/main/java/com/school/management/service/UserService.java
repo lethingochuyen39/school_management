@@ -22,4 +22,5 @@ public interface UserService {
     User getByResetPasswordToken(String token);
 
     void updatePassword(User customer, String newPassword);
+
 }

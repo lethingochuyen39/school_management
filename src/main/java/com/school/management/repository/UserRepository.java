@@ -11,7 +11,8 @@ import com.school.management.model.User;
 public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByResetPasswordToken(String token);
+    Optional<User> findById(Long id);
 
+    Optional<User> findByResetPasswordToken(String token);
     // User findByUsername(String username);
 }
