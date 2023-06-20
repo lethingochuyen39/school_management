@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
 import com.school.management.model.Student;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
-
+@Service
 public class StudentServiceImpl implements StudentService{
 
     @Autowired
