@@ -24,8 +24,11 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/create")
+    // public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher, @RequestPart("file") MultipartFile file,
+	// 		@RequestParam("uploadedById") Long uploadedById) {
     public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher) {
         try {
+            //teacherService.createTeacher(teacher, file, uploadedById);
             teacherService.createTeacher(teacher);
             return ResponseEntity.ok().body(teacher);
         } catch (IllegalArgumentException e) {
@@ -34,6 +37,8 @@ public class TeacherController {
     }
 
     @PutMapping("/update/{id}")
+    // public ResponseEntity<?> updateTeacher(@PathVariable Long id,
+    //         @RequestBody Teacher teacher, @RequestPart("file") MultipartFile file) {
     public ResponseEntity<?> updateTeacher(@PathVariable Long id,
             @RequestBody Teacher teacher) {
         try {
