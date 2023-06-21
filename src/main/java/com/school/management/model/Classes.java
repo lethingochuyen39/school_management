@@ -1,5 +1,6 @@
 package com.school.management.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class Classes {
 	@Column(name = "description")
 	private String description;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)	
 	@JoinColumn(name = "teacher_id", nullable = false)
 	private Teacher teacher;
 

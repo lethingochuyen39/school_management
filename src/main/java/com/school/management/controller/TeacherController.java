@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.management.dto.TeacherDto;
 import com.school.management.model.Teacher;
 import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
@@ -25,8 +24,11 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createTeacher(@RequestBody TeacherDto teacher) {
+    // public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher, @RequestPart("file") MultipartFile file,
+	// 		@RequestParam("uploadedById") Long uploadedById) {
+    public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher) {
         try {
+            //teacherService.createTeacher(teacher, file, uploadedById);
             teacherService.createTeacher(teacher);
             return ResponseEntity.ok().body(teacher);
         } catch (IllegalArgumentException e) {
@@ -35,8 +37,10 @@ public class TeacherController {
     }
 
     @PutMapping("/update/{id}")
+    // public ResponseEntity<?> updateTeacher(@PathVariable Long id,
+    //         @RequestBody Teacher teacher, @RequestPart("file") MultipartFile file) {
     public ResponseEntity<?> updateTeacher(@PathVariable Long id,
-            @RequestBody TeacherDto teacher) {
+            @RequestBody Teacher teacher) {
         try {
             Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
             return ResponseEntity.ok(updatedTeacher);
@@ -58,8 +62,8 @@ public class TeacherController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TeacherDto>> getAllTeacher() {
-        List<TeacherDto> teacher = teacherService.getAllTeacher();
+    public ResponseEntity<List<Teacher>> getAllTeacher() {
+        List<Teacher> teacher = teacherService.getAllTeacher();
         return ResponseEntity.ok(teacher);
     }
 
@@ -74,8 +78,8 @@ public class TeacherController {
     // }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<TeacherDto>> getTeacherByName(@PathVariable(value = "name") String name) {
-        List<TeacherDto> teacher = teacherService.getTeacherByName(name);
+    public ResponseEntity<List<Teacher>> getTeacherByName(@PathVariable(value = "name") String name) {
+        List<Teacher> teacher = teacherService.getTeacherByName(name);
         return ResponseEntity.ok(teacher);
     }
 }
