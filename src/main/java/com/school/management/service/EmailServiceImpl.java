@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,12 @@ public class EmailServiceImpl implements EmailService {
 	// private UserService userService;
 
 	@Override
-	public String sendSimpleMail(String email, String link) throws MessagingException, UnsupportedEncodingException{
+	public String sendSimpleMail(String email, String link, String token) throws MessagingException, UnsupportedEncodingException{
+		
+		Optional<User> findUser = userRepository.findByEmail(email);
+		if(findUser.isPresent()){
+			userRepository.save(findUser.get().setResetPasswordToken(token));
+		}
 		try {
 			MimeMessage message = emailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message);

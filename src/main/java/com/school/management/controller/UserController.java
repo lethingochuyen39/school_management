@@ -81,8 +81,8 @@ public class UserController {
             try {
                 if(userService.checkUserExistByEmail(email)){
                     String resetPasswordLink =  Utility.getSiteURL(request) +"/reset_password?token="+ token;
-                    userService.updateResetPasswordToken(token,email);
-                    return ResponseEntity.ok(emailService.sendSimpleMail(email, resetPasswordLink));
+                    // userService.updateResetPasswordToken(token,email);
+                    return ResponseEntity.ok(emailService.sendSimpleMail(email, resetPasswordLink,token));
                 }
                 else{
                     return ResponseEntity.badRequest().body("Cannot find user");
@@ -96,8 +96,7 @@ public class UserController {
 
     @PostMapping("/reset_password")
 	public ResponseEntity<?> resetPassword(@RequestParam("token") String token,@RequestBody String password) {
-        User user = userService.getByResetPasswordToken(token);
-        userService.updatePassword(user, password);
+        // userService.updatePassword(user, password);
         return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
 	}
 }

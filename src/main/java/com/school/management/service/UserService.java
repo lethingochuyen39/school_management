@@ -17,9 +17,9 @@ public interface UserService {
 
     List<User> getAllUser();
 
-    UserDto updateResetPasswordToken(String token, String email);
+    UserDto updateResetPasswordToken(String token, String password);
 
     User getByResetPasswordToken(String token);
 
-    void updatePassword(User customer, String newPassword);
+    void generateAccount();
 }

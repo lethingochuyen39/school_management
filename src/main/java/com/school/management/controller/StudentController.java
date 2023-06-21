@@ -53,8 +53,8 @@ public class StudentController {
         }
     }
 
-    @PutMapping("updateStudent/{id}")
-    public ResponseEntity<?> putMethodName(@PathVariable String id, @RequestBody StudentDTO entity) {
+    @PutMapping("/updateStudent/{id}")
+    public ResponseEntity<?> updateStudent(@PathVariable String id, @RequestBody StudentDTO entity) {
         try {
             return ResponseEntity.ok(studentService.UpdateProfile(entity));
         } catch (Exception e) {
@@ -62,4 +62,13 @@ public class StudentController {
         }
     }
 
+    // @PostMapping("/giveAccessAccount")
+    // public ResponseEntity<?> giveAccessAccount(@RequestBody String email ) {
+    //     try {
+    //         return ResponseEntity.ok(studentService.GiveAccessAccount(email));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
+    
 }

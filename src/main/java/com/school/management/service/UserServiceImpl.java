@@ -13,9 +13,11 @@ import com.school.management.dto.RoleDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.Role;
+import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.model.UserRole;
 import com.school.management.repository.RoleRepository;
+import com.school.management.repository.StudentRepository;
 import com.school.management.repository.UserRepository;
 
 @Service
@@ -31,6 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private StudentService studentService;
 
     @Override
     public UserDto signup(UserDto userDto) {
@@ -104,15 +112,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateResetPasswordToken(String token, String email) throws TokenRefreshException{
-        Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent()){
-            user.get().setResetPasswordToken(token);
-            userRepository.save(user.get());
+    public UserDto updateResetPasswordToken(String token, String password) throws TokenRefreshException{
+        // Optional<User> user = userRepository.findByEmail(email);
+        User user = getByResetPasswordToken(token);
+        try{
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);
+            user.setResetPasswordToken(null);
+            userRepository.save(user);
+            // user.setResetPasswordToken(token);
+            // userRepository.save(user);
             UserDto userDto = modelMapper.map(user, UserDto.class);
             userDto.setPassword("");
             return userDto;
-        }else{
+        }catch(Exception e){
             throw new TokenRefreshException(token, "Cannot find token "+token);
         }
     }
@@ -129,14 +143,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void updatePassword(User user, String newPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedPassword);
-        user.setResetPasswordToken(null);
-        userRepository.save(user);
-    }
+
     @Override
     public Boolean checkUserExistByEmail(String email) {
 
@@ -148,4 +155,13 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    @Override
+    public void generateAccount() {
+        // Long totalRowInStudent = studentRepository.count();
+        studentRepository.findByUser(null).stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
+        
+    }
+
+    
 }
