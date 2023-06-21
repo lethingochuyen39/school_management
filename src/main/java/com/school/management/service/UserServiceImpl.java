@@ -157,10 +157,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void generateAccount() {
-        // Long totalRowInStudent = studentRepository.count();
-        studentRepository.findByUser(null).stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
-        
+    public Long generateAccount() {
+        Long totalRowInStudent = studentRepository.count();
+        List <Student> list = studentRepository.findByUser(null);
+        list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
+        return totalRowInStudent;
     }
 
     

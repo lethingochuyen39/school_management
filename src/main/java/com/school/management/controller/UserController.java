@@ -99,4 +99,6 @@ public class UserController {
         // userService.updatePassword(user, password);
         return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
 	}
+
+    
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.service.StudentService;
+import com.school.management.service.UserService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+    
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/allStudent")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
@@ -62,13 +66,13 @@ public class StudentController {
         }
     }
 
-    // @PostMapping("/giveAccessAccount")
-    // public ResponseEntity<?> giveAccessAccount(@RequestBody String email ) {
-    //     try {
-    //         return ResponseEntity.ok(studentService.GiveAccessAccount(email));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
-    // }
+    @PostMapping("/giveAccessAccount")
+    public ResponseEntity<?> giveAccessAccount() {
+        try {
+            return ResponseEntity.ok(userService.generateAccount());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     
 }
