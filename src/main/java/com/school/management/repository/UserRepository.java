@@ -13,5 +13,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByResetPasswordToken(String token);
 
+    
     // User findByUsername(String username);
 }
