@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.model.AcademicYear;
@@ -67,7 +68,7 @@ public class AcademicYearController {
 		}
 	}
 
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<AcademicYear>> getAllAcademicYears() {
 		List<AcademicYear> academicYears = academicYearServiceImpl.getAllAcademicYears();
 		return ResponseEntity.ok(academicYears);
@@ -78,4 +79,10 @@ public class AcademicYearController {
 		List<AcademicYear> academicYears = academicYearServiceImpl.getAcademicYearsByName(name);
 		return ResponseEntity.ok(academicYears);
 	}
+
+	@GetMapping()
+	public List<AcademicYear> searchAcademicYears(@RequestParam(required = false) String name) {
+		return academicYearServiceImpl.searchAcademicYears(name);
+	}
+
 }
