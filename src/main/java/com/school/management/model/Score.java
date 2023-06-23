@@ -28,12 +28,12 @@ public class Score {
 	private Student student;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
+	// @JsonIgnore
 	@JoinColumn(name = "subject_id", nullable = false)
 	private Subject subject;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
+	// @JsonIgnore
 	@JoinColumn(name = "score_type_id", nullable = false)
 	private ScoreType scoreType;
 

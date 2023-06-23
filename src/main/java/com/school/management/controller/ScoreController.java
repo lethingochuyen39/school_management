@@ -2,6 +2,7 @@ package com.school.management.controller;
 
 import com.school.management.dto.ScoreDTO;
 import com.school.management.model.Score;
+import com.school.management.model.ScoreType;
 import com.school.management.service.ScoreServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class ScoreController {
 	private ScoreServiceImpl scoreServiceImpl;
 
 	@GetMapping
-	public ResponseEntity<List<Score>> getAllScores() {
-		List<Score> scores = scoreServiceImpl.getAllScores();
+	public ResponseEntity<List<?>> getAllScores(@RequestParam(required = false) String studentName) {
+		List<Score> scores = scoreServiceImpl.searchScore(studentName);
 		return ResponseEntity.ok(scores);
 	}
 
@@ -76,10 +77,4 @@ public class ScoreController {
 		return ResponseEntity.ok(scores);
 	}
 
-	// @GetMapping("/search/class")
-	// public ResponseEntity<List<Score>>
-	// searchScoresByClassName(@RequestParam("name") String className) {
-	// List<Score> scores = scoreService.searchScoresByClassName(className);
-	// return ResponseEntity.ok(scores);
-	// }
 }
