@@ -1,6 +1,8 @@
 package com.school.management.controller;
 
+import com.school.management.model.AcademicYear;
 import com.school.management.model.ScoreType;
+import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ScoreTypeServiceImpl;
 import com.school.management.service.ScoreTypeServiceImpl.ScoreTypeNotFoundException;
 
@@ -19,8 +21,8 @@ public class ScoreTypeController {
 	private ScoreTypeServiceImpl scoreTypeServiceImpl;
 
 	@GetMapping
-	public ResponseEntity<List<ScoreType>> getAllScoreTypes() {
-		List<ScoreType> scoreTypes = scoreTypeServiceImpl.getAllScoreTypes();
+	public ResponseEntity<List<ScoreType>> getScoreTypes(@RequestParam(required = false) String name) {
+		List<ScoreType> scoreTypes = scoreTypeServiceImpl.getAllScoreTypes(name);
 		return ResponseEntity.ok(scoreTypes);
 	}
 
@@ -37,8 +39,7 @@ public class ScoreTypeController {
 	@PostMapping
 	public ResponseEntity<?> createScoreType(@RequestBody ScoreType scoreType) {
 		try {
-			ScoreType createdScoreType = scoreTypeServiceImpl.createScoreType(scoreType);
-			return ResponseEntity.status(HttpStatus.CREATED).body(createdScoreType);
+			return ResponseEntity.ok(scoreTypeServiceImpl.createScoreType(scoreType));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -61,9 +62,10 @@ public class ScoreTypeController {
 	public ResponseEntity<?> deleteScoreType(@PathVariable("id") Long id) {
 		try {
 			scoreTypeServiceImpl.deleteScoreType(id);
-			return (ResponseEntity<?>) ResponseEntity.ok();
+			return ResponseEntity.ok().build();
 		} catch (ScoreTypeNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
 }

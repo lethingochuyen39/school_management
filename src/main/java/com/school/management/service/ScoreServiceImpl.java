@@ -76,12 +76,6 @@ public class ScoreServiceImpl implements ScoreService {
 		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
 				.orElseThrow(() -> new IllegalArgumentException("ScoreType not found with id: " + scoreTypeId));
 
-		// if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId,
-		// subjectId, scoreTypeId)) {
-		// throw new IllegalArgumentException("Score with the same Student, Subject, and
-		// ScoreType already exists");
-		// }
-
 		existingScore.setStudent(student);
 		existingScore.setSubject(subject);
 		existingScore.setScoreType(scoreType);

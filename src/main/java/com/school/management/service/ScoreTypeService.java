@@ -5,7 +5,6 @@ import com.school.management.model.ScoreType;
 import java.util.List;
 
 public interface ScoreTypeService {
-	List<ScoreType> getAllScoreTypes();
 
 	ScoreType getScoreTypeById(Long id);
 
@@ -13,5 +12,7 @@ public interface ScoreTypeService {
 
 	ScoreType updateScoreType(Long id, ScoreType scoreType);
 
-	void deleteScoreType(Long id);
+	boolean deleteScoreType(Long id);
+
+	List<ScoreType> getAllScoreTypes(String name);
 }
