@@ -52,8 +52,10 @@ public class StudentServiceImpl implements StudentService{
             throw new StudentException("Student "+student.getEmail()+" cant be found");
         }
         Classes classs = classesRepository.findByName(student.getClassName());
-        newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob()).setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage()).setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
-        studentRepository.save(newStudent);
+        newStudent.setClassName(classs);
+        // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob()).setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage()).setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
+        Student saveStudent = modelMapper.map(student, Student.class);
+        studentRepository.save(saveStudent);
         return student;
     }
 

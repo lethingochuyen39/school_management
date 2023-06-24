@@ -90,16 +90,16 @@ public class TeacherServiceImpl implements TeacherService {
         Long totalRowInStudent = teacherRepository.count();
         List <Teacher> list = teacherRepository.findByUser(null);
         // list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
-        list.stream().forEach(student -> {
+        list.stream().forEach(teacher -> {
             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
             String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
 // System.out.println( randomStr );
-            UserDto userDto = userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
+            UserDto userDto = userService.signup(new UserDto(teacher.getEmail(), randomStr, new RoleDto("TEACHER")));
             Optional<User> user = userRepository.findByEmail(userDto.getEmail());
             if (!user.isPresent()){
                 throw new TeacherNotFoundException("User not found: " + userDto.getEmail());
             }
-            teacherRepository.save(student.setUser(user.get()));
+            teacherRepository.save(teacher.setUser(user.get()));
         });
         return totalRowInStudent;
     }
