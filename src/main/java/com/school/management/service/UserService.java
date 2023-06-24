@@ -21,5 +21,5 @@ public interface UserService {
 
     User getByResetPasswordToken(String token);
 
-    Long generateAccount();
+    // Long generateAccount();
 }

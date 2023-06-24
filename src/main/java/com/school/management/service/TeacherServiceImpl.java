@@ -1,17 +1,32 @@
 package com.school.management.service;
 
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.school.management.dto.RoleDto;
+import com.school.management.dto.UserDto;
+import com.school.management.model.Student;
 import com.school.management.model.Teacher;
+import com.school.management.model.User;
 import com.school.management.repository.TeacherRepository;
+import com.school.management.repository.UserRepository;
+import com.school.management.service.StudentServiceImpl.StudentException;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
@@ -68,5 +83,24 @@ public class TeacherServiceImpl implements TeacherService {
         public TeacherNotFoundException(String message) {
             super(message);
         }
+    }
+
+    @Override
+    public Long generateAccount() {
+        Long totalRowInStudent = teacherRepository.count();
+        List <Teacher> list = teacherRepository.findByUser(null);
+        // list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
+        list.stream().forEach(student -> {
+            char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
+            String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
+// System.out.println( randomStr );
+            UserDto userDto = userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
+            Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+            if (!user.isPresent()){
+                throw new TeacherNotFoundException("User not found: " + userDto.getEmail());
+            }
+            teacherRepository.save(student.setUser(user.get()));
+        });
+        return totalRowInStudent;
     }
 }

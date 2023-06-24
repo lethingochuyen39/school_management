@@ -3,6 +3,7 @@ package com.school.management.service;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     RoleRepository roleRepository;
 
@@ -33,12 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private StudentService studentService;
 
     @Override
     public UserDto signup(UserDto userDto) {
@@ -156,13 +152,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public Long generateAccount() {
-        Long totalRowInStudent = studentRepository.count();
-        List <Student> list = studentRepository.findByUser(null);
-        list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
-        return totalRowInStudent;
-    }
 
     
 }
