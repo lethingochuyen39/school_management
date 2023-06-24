@@ -12,17 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.school.management.dto.ParentDTO;
 import com.school.management.dto.RoleDto;
 import com.school.management.dto.UserDto;
-import com.school.management.dto.ParentDTO;
-import com.school.management.model.Classes;
 import com.school.management.model.Parent;
-import com.school.management.model.Student;
 import com.school.management.model.User;
-import com.school.management.model.Parent;
-import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.ParentRepository;
 import com.school.management.repository.UserRepository;
-import com.school.management.service.ParentServiceImpl.ParentException;
-import com.school.management.service.StudentServiceImpl.StudentException;
 
 public class ParentServiceImpl implements ParentService{
     @Autowired
@@ -31,9 +24,6 @@ public class ParentServiceImpl implements ParentService{
     @Autowired
     private ModelMapper modelMapper;
     
-    @Autowired
-    private ClassesRepository classesRepository;
-
     @Autowired
     private UserService userService;
     

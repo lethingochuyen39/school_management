@@ -17,7 +17,6 @@ import com.school.management.dto.TokenRefreshDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.RefreshToken;
-import com.school.management.model.User;
 import com.school.management.service.EmailService;
 import com.school.management.service.RefreshTokenService;
 import com.school.management.service.UserService;

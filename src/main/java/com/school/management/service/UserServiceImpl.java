@@ -3,7 +3,6 @@ package com.school.management.service;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +13,9 @@ import com.school.management.dto.RoleDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.Role;
-import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.model.UserRole;
 import com.school.management.repository.RoleRepository;
-import com.school.management.repository.StudentRepository;
 import com.school.management.repository.UserRepository;
 
 @Service

@@ -3,7 +3,6 @@ package com.school.management.service;
 import java.util.List;
 
 import com.school.management.dto.StudentDTO;
-import com.school.management.model.Student;
 public interface StudentService {
     StudentDTO GetStudent(String email);
     StudentDTO UpdateProfile(StudentDTO student);

@@ -10,12 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.school.management.dto.RoleDto;
 import com.school.management.dto.UserDto;
-import com.school.management.model.Student;
 import com.school.management.model.Teacher;
 import com.school.management.model.User;
 import com.school.management.repository.TeacherRepository;
 import com.school.management.repository.UserRepository;
-import com.school.management.service.StudentServiceImpl.StudentException;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
