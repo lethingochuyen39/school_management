@@ -65,20 +65,6 @@ public class ScoreServiceImpl implements ScoreService {
 	public Score updateScore(Long id, ScoreDTO scoreDTO) {
 		Score existingScore = scoreRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy điểm với id: " + id));
-
-		Long studentId = scoreDTO.getStudentId();
-		Long subjectId = scoreDTO.getSubjectId();
-		Long scoreTypeId = scoreDTO.getScoreTypeId();
-
-		Student student = studentRepository.findById(studentId)
-				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy học sinh với id: " + studentId));
-		Subject subject = subjectRepository.findById(subjectId)
-				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy môn học với id: " + subjectId));
-		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
-				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy loại điểm với id: " + scoreTypeId));
-		existingScore.setStudent(student);
-		existingScore.setSubject(subject);
-		existingScore.setScoreType(scoreType);
 		existingScore.setScore(scoreDTO.getScore());
 
 		return scoreRepository.save(existingScore);

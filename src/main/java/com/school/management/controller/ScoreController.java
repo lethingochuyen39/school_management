@@ -2,7 +2,6 @@ package com.school.management.controller;
 
 import com.school.management.dto.ScoreDTO;
 import com.school.management.model.Score;
-import com.school.management.model.ScoreType;
 import com.school.management.service.ScoreServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class ScoreController {
 		}
 	}
 
-	@PostMapping("/add")
+	@PostMapping()
 	public ResponseEntity<?> createScore(@RequestBody ScoreDTO scoreDTO) {
 		try {
 			Score createdScore = scoreServiceImpl.createScore(scoreDTO);
