@@ -19,30 +19,30 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Teachers")
-public class Teacher implements Serializable{
+public class Teacher implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String name;
 
-	@Column(name = "gender")
+	@Column(name = "gender", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String gender;
 
 	@Column(name = "dob")
 	private LocalDate dob;
 
-	@Column(name = "email")
+	@Column(name = "email", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String email;
 
-	@Column(name = "address")
+	@Column(name = "address", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String address;
 
-	@Column(name = "phone")
+	@Column(name = "phone", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String phone;
 
-	@Column(name = "status")
+	@Column(name = "status", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String status;
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -53,7 +53,8 @@ public class Teacher implements Serializable{
 	// @Column(name = "image")
 	// private String image;
 
-	// @Column(name = "file_name", nullable = false, columnDefinition = "NVARCHAR(255)")
+	// @Column(name = "file_name", nullable = false, columnDefinition =
+	// "NVARCHAR(255)")
 	// private String fileName;
 
 	// @Column(name = "file_path", columnDefinition = "NVARCHAR(MAX)")

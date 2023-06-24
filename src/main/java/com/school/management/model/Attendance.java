@@ -21,7 +21,7 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", nullable = false, columnDefinition = "NVARCHAR(255)")
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,6 +32,6 @@ public class Attendance {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String status;
 }
