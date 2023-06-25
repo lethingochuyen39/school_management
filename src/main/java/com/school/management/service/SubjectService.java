@@ -2,20 +2,19 @@ package com.school.management.service;
 
 import java.util.List;
 
-import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
 
 public interface SubjectService {
 
-    Subject createSubject(SubjectDto subject);
+    Subject createSubject(Subject subject);
 
-    Subject updateSubject(Long id, SubjectDto subject);
+    Subject updateSubject(Long id, Subject subject);
 
     boolean deleteSubject(Long id);
 
-    List<SubjectDto> getAllSubject();
+    List<Subject> getAllSubject();
 
     // SubjectDto getSubjectById(Long id);
 
-    List<SubjectDto> getSubjectByName(String name);
+    List<Subject> getSubjectByName(String name);
 }
