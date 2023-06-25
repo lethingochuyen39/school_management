@@ -61,7 +61,7 @@ public class StudentController {
         }
     }
 
-    @PostMapping("/giveAccessAccount")
+    @PostMapping("/student/giveAccessAccount")
     public ResponseEntity<?> giveAccessAccount() {
         try {
             return ResponseEntity.ok(studentService.generateAccount());

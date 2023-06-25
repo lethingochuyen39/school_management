@@ -27,4 +27,6 @@ public class ParentDTO {
 	private String phone;
 
 	private String image;
+	
+	private String studentEmail;
 }

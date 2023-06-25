@@ -61,7 +61,7 @@ public class ParentController {
         }
     }
 
-    @PostMapping("/giveAccessAccount")
+    @PostMapping("/parent/giveAccessAccount")
     public ResponseEntity<?> giveAccessAccount() {
         try {
             return ResponseEntity.ok(ParentService.generateAccount());

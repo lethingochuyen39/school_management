@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.school.management.dto.ParentDTO;
 import com.school.management.dto.RoleDto;
@@ -16,7 +17,7 @@ import com.school.management.model.Parent;
 import com.school.management.model.User;
 import com.school.management.repository.ParentRepository;
 import com.school.management.repository.UserRepository;
-
+@Service
 public class ParentServiceImpl implements ParentService{
     @Autowired
     private ParentRepository parentRepository;
@@ -73,7 +74,7 @@ public class ParentServiceImpl implements ParentService{
             throw new ParentException("Parent already exists");
         }
         Parent newParent = modelMapper.map(parent,Parent.class);
-        
+        newParent.setStudent(null);
         parentRepository.save(newParent);
         return parent;
     }
