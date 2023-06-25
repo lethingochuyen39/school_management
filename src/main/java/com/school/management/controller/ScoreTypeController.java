@@ -1,13 +1,10 @@
 package com.school.management.controller;
 
-import com.school.management.model.AcademicYear;
 import com.school.management.model.ScoreType;
-import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ScoreTypeServiceImpl;
 import com.school.management.service.ScoreTypeServiceImpl.ScoreTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
