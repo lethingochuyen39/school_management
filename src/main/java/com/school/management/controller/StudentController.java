@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.StudentDTO;
+import com.school.management.model.Student;
 import com.school.management.service.StudentService;
+import com.school.management.service.StudentServiceImpl;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private StudentServiceImpl studentServiceImpl;
 
     @GetMapping("/allStudent")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
@@ -60,6 +65,13 @@ public class StudentController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // huyen
+    @GetMapping("/api/classes/{classId}/students")
+    public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId) {
+        List<Student> studentClass = studentServiceImpl.findByClassId(classId);
+        return ResponseEntity.ok(studentClass);
     }
 
 }

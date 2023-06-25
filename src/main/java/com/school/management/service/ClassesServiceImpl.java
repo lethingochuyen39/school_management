@@ -90,7 +90,7 @@ public class ClassesServiceImpl implements ClassesService {
         for (var i : list) {
             ClassesDto dto = new ClassesDto();
             dto.setDescription(i.getDescription()).setName(i.getName()).setTeacher(i.getTeacher())
-                    .setAcademicYear(i.getAcademicYear()).setGrade(i.getGrade());
+                    .setAcademicYear(i.getAcademicYear()).setGrade(i.getGrade()).setId(i.getId());
             listDto.add(dto);
         }
         return listDto;

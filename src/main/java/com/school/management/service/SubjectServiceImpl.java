@@ -62,7 +62,7 @@ public class SubjectServiceImpl implements SubjectService {
         List<SubjectDto> listDto = new ArrayList<>();
         for (var i : list) {
             SubjectDto dto = new SubjectDto();
-            dto.setName(i.getName()).setTeacher(i.getTeacher());
+            dto.setName(i.getName()).setTeacher(i.getTeacher()).setId(i.getId());
             listDto.add(dto);
         }
         return listDto;
@@ -92,4 +92,5 @@ public class SubjectServiceImpl implements SubjectService {
             super(message);
         }
     }
+
 }
