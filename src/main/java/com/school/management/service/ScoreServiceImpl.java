@@ -96,4 +96,10 @@ public class ScoreServiceImpl implements ScoreService {
 			return searchScoresByStudentName(studentName);
 		}
 	}
+
+	@Override
+	public List<Score> findByClassId(Long classId) {
+		return scoreRepository.findByClassId(classId);
+	}
+
 }
