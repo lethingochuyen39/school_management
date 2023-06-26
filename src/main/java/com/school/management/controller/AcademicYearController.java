@@ -3,6 +3,7 @@ package com.school.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,9 @@ public class AcademicYearController {
 			return ResponseEntity.ok().body(createdAcademicYear);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage()); // Thông báo lỗi nếu không thể tạo AcademicYear
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Đã xảy ra lỗi trong quá trình tạo năm học.");
 		}
 	}
 
