@@ -33,6 +33,13 @@ public class ScoreTypeServiceImpl implements ScoreTypeService {
 		if (scoreTypeRepository.existsByName(scoreType.getName())) {
 			throw new IllegalArgumentException("Loại điểm cùng tên đã tồn tại.");
 		}
+		if (scoreType.getCoefficient() == null) {
+			throw new IllegalArgumentException("Vui lòng nhập Hệ số.");
+		}
+
+		if (scoreType.getCoefficient() < 0) {
+			throw new IllegalArgumentException("Hệ số phải là số không âm.");
+		}
 		return scoreTypeRepository.save(scoreType);
 	}
 
@@ -46,7 +53,16 @@ public class ScoreTypeServiceImpl implements ScoreTypeService {
 			throw new IllegalArgumentException("Loại điểm cùng tên đã tồn tại.");
 		}
 
+		if (scoreType.getCoefficient() == null) {
+			throw new IllegalArgumentException("Vui lòng nhập Hệ số.");
+		}
+
+		if (scoreType.getCoefficient() < 0) {
+			throw new IllegalArgumentException("Hệ số phải là số không âm.");
+		}
+
 		existingScoreType.setName(scoreType.getName());
+		existingScoreType.setCoefficient(scoreType.getCoefficient());
 		return scoreTypeRepository.save(existingScoreType);
 	}
 

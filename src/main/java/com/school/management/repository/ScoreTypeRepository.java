@@ -1,6 +1,5 @@
 package com.school.management.repository;
 
-import com.school.management.model.AcademicYear;
 import com.school.management.model.ScoreType;
 
 import java.util.List;
