@@ -23,7 +23,7 @@ public class Document implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "file_name", nullable = false, columnDefinition = "NVARCHAR(255)")
+	@Column(name = "file_name", columnDefinition = "NVARCHAR(255)")
 	private String fileName;
 
 	@Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
@@ -35,7 +35,7 @@ public class Document implements Serializable {
 	@Column(name = "file_path", columnDefinition = "NVARCHAR(MAX)")
 	private String filePath;
 
-	@JsonIgnore
+	// @JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "uploaded_by")
 	private User uploadedBy;

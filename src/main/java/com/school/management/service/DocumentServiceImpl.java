@@ -6,7 +6,10 @@ import com.school.management.repository.DocumentRepository;
 import com.school.management.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -66,30 +69,30 @@ public class DocumentServiceImpl implements DocumentService {
 
 			return filePath;
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to save file.");
+			throw new RuntimeException("Thất bại.");
 		}
 	}
 
 	@Override
 	public Document getDocumentById(Long id) {
 		return documentRepository.findById(id)
-				.orElseThrow(() -> new DocumentNotFoundException("Document not found with id: " + id));
+				.orElseThrow(() -> new DocumentNotFoundException("Không tìm thấy tài liệu vơi id: " + id));
 	}
 
 	@Override
 	public Document updateDocument(Long id, Document document, MultipartFile file) {
 		if (!documentRepository.existsById(id)) {
-			throw new DocumentNotFoundException("Document not found with id: " + id);
+			throw new DocumentNotFoundException("Không tìm thấy tài liệu vơi id: " + id);
 		}
 
 		validateDocumentFields(document);
 
 		Document existingDocument = documentRepository.findById(id)
-				.orElseThrow(() -> new DocumentNotFoundException("Document not found with id: " + id));
+				.orElseThrow(() -> new DocumentNotFoundException("Không tìm thấy tài liệu vơi id: " + id));
 
 		String newTitle = document.getTitle();
 		if (!existingDocument.getTitle().equals(newTitle) && documentRepository.existsByTitle(newTitle)) {
-			throw new IllegalArgumentException("Document with the same title already exists.");
+			throw new IllegalArgumentException("Tiêu đề đã tồn tại.");
 		}
 
 		existingDocument.setTitle(newTitle);
@@ -132,6 +135,15 @@ public class DocumentServiceImpl implements DocumentService {
 	public class DocumentNotFoundException extends RuntimeException {
 		public DocumentNotFoundException(String message) {
 			super(message);
+		}
+	}
+
+	@Override
+	public List<Document> searchDocument(String title) {
+		if (title == null || title.trim().isEmpty()) {
+			return getAllDocuments();
+		} else {
+			return searchDocumentsByTitle(title);
 		}
 	}
 
