@@ -18,4 +18,6 @@ public interface DocumentService {
 	List<Document> getAllDocuments();
 
 	List<Document> searchDocumentsByTitle(String title);
+
+	List<Document> searchDocument(String title);
 }

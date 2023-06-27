@@ -106,19 +106,14 @@ public class DocumentController {
 	}
 
 	@GetMapping(path = "/{id}/download")
-	public ResponseEntity<?> download(@RequestParam Long id, @RequestParam String fileName)
-			throws MalformedURLException {
-
+	public ResponseEntity<?> download(@PathVariable Long id) {
 		try {
 			Document document = documentServiceImpl.getDocumentById(id);
-			// Tạo đường dẫn tới file
 			String filePath = document.getFilePath();
 			Path file = Paths.get(filePath);
 			Resource resource = new UrlResource(file.toUri());
 
-			// Kiểm tra xem file có tồn tại và có thể đọc được không
 			if (resource.exists() && resource.isReadable()) {
-				// Trả về dữ liệu file và header cho việc tải xuống
 				return ResponseEntity.ok()
 						.header(HttpHeaders.CONTENT_DISPOSITION,
 								"attachment; filename=\"" + resource.getFilename() + "\"")
@@ -128,11 +123,10 @@ public class DocumentController {
 				return ResponseEntity.notFound().build();
 			}
 		} catch (DocumentNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		} catch (MalformedURLException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-
 	}
+
 }
