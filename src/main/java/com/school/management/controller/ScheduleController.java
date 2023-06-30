@@ -25,7 +25,7 @@ public class ScheduleController {
 	@Autowired
 	private ScheduleServiceImpl scheduleServiceImpl;
 
-	@PostMapping("/add")
+	@PostMapping()
 	public ResponseEntity<?> createSchedule(@RequestBody ScheduleDto scheduleDto) {
 		try {
 			ScheduleDto createSchedule = scheduleServiceImpl.creaSchedule(scheduleDto);
@@ -56,8 +56,8 @@ public class ScheduleController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Schedule>> getAllScheduls() {
-		List<Schedule> schedules = scheduleServiceImpl.getAllSchedules();
+	public ResponseEntity<List<?>> getAllScheduls(@RequestParam(required = false) String className) {
+		List<Schedule> schedules = scheduleServiceImpl.searchSchedule(className);
 		return ResponseEntity.ok(schedules);
 	}
 

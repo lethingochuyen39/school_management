@@ -35,15 +35,16 @@ public class Schedule implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate endDate;
 
-	@Column(name = "semester", nullable = false)
-	private Integer semester;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "class_id", nullable = false)
-	@JsonIgnore
+	// @JsonIgnore
 	private Classes classes;
 
 	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonProperty("scheduleDetails")
 	private List<ScheduleDetail> scheduleDetails;
+
+	// @Column(name = "semester")
+	// private Integer semester;
+
 }

@@ -1,7 +1,6 @@
 package com.school.management.service;
 
 import com.school.management.dto.ScoreDTO;
-import com.school.management.model.AcademicYear;
 import com.school.management.model.Score;
 import com.school.management.model.ScoreType;
 import com.school.management.model.Student;
