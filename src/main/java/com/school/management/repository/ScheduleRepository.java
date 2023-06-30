@@ -11,7 +11,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 	List<Schedule> findByClassesNameContainingIgnoreCase(String className);
 
-	boolean existsBySemesterAndClassesId(Integer semester, Long classesId);
+	boolean existsByClassesId(Long classesId);
 
 	boolean existsByClassesIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartDateGreaterThanAndEndDateLessThan(
 			Long classesId, LocalDate startDate, LocalDate endDate, LocalDate newStartDate, LocalDate newEndDate);

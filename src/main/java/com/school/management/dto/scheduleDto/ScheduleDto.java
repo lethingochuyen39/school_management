@@ -16,7 +16,7 @@ public class ScheduleDto {
 	private Long id;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	private Integer semester;
+	// private Integer semester;
 	private Long classesId;
 	private List<ScheduleDetailDto> scheduleDetails;
 

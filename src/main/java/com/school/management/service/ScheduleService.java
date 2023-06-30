@@ -18,4 +18,6 @@ public interface ScheduleService {
 	ScheduleDto updateSchedule(Long scheduleId, ScheduleDto scheduleDto);
 
 	List<Schedule> getSchedulesByClassName(String className);
+
+	List<Schedule> searchSchedule(String className);
 }

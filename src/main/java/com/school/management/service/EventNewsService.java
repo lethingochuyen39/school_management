@@ -18,4 +18,9 @@ public interface EventNewsService {
 	List<EventNews> getAllEventNews();
 
 	List<EventNews> searchEventNewsByTitle(String title);
+
+	List<EventNews> searchNews(String title);
+
+	void updateNewsStatus(EventNews news, Integer isActive);
+
 }

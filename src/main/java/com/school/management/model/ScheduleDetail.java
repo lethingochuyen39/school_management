@@ -2,6 +2,7 @@ package com.school.management.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -31,17 +32,19 @@ public class ScheduleDetail implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subject_id", nullable = false)
-	@JsonIgnore
+	// @JsonIgnore
+	@JsonBackReference
 	private Subject subject;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
+	// @JsonIgnore
+	@JsonBackReference
 	@JoinColumn(name = "teacher_id", nullable = false)
 	private Teacher teacher;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "schedule_id", nullable = false)
-	@JsonIgnore
+	@JsonBackReference
 	private Schedule schedule;
 
 }
