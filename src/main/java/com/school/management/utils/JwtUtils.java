@@ -41,10 +41,11 @@ public class JwtUtils {
         String token = Jwts.builder().setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET).compact();
-
+        Long id = userRepository.findByEmail(login).get().getId();
         AccessTokenDto accessToken = new AccessTokenDto();
         accessToken.setRoles(roles);
         accessToken.setToken(token);
+        accessToken.setId(id);
         accessToken.setRefreshToken(refreshTokenService.createRefreshToken(login).getToken());
         return accessToken;
 
