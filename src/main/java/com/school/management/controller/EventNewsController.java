@@ -78,15 +78,13 @@ public class EventNewsController {
 	}
 
 	@PutMapping("/isActive/{id}")
-	public ResponseEntity<?> updateEventNews(@PathVariable("id") Long id, @RequestBody Integer isActive) {
+	public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
 		try {
-
-			boolean isActiveBoolean = isActive != null && isActive.equals(1);
-			eventNewsServiceImpl.updateNewsStatus(id, isActiveBoolean);
-			return ResponseEntity.ok().build();
+			EventNews updatedEventNews = eventNewsServiceImpl.updateNewsStatus(id);
+			return ResponseEntity.ok(updatedEventNews);
 		} catch (EventNewsNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

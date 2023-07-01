@@ -139,24 +139,15 @@ public class EventNewsServiceImpl implements EventNewsService {
 	}
 
 	@Override
-	public void updateNewsStatus(EventNews news, Integer isActive) {
-		if (isActive.equals(0)) { // Sử dụng equals() để so sánh giá trị Integer
-			news.setIsActive(false);
-		} else {
-			news.setIsActive(true);
-		}
-		eventNewsRepository.save(news);
-	}
-
-	public void updateNewsStatus(Long id, boolean isActive) {
-		// Lấy mục tin tức từ cơ sở dữ liệu dựa trên id
-		EventNews news = eventNewsRepository.findById(id)
+	public EventNews updateNewsStatus(Long id) {
+		EventNews existingEventNews = eventNewsRepository.findById(id)
 				.orElseThrow(() -> new EventNewsNotFoundException("Không tìm thấy tin tức với id: " + id));
 
-		// Cập nhật trạng thái của mục tin tức
-		news.setIsActive(isActive);
+		boolean isActive = existingEventNews.getIsActive();
+		existingEventNews.setIsActive(!isActive);
+		existingEventNews.setUpdatedAt(LocalDateTime.now());
 
-		// Lưu mục tin tức đã được cập nhật vào cơ sở dữ liệu
-		eventNewsRepository.save(news);
+		return eventNewsRepository.save(existingEventNews);
 	}
+
 }
