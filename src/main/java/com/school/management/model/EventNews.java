@@ -27,7 +27,7 @@ public class EventNews {
 	@Column(name = "image_name", columnDefinition = "NVARCHAR(255)")
 	private String imageName;
 
-	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "content", nullable = false, columnDefinition = "NVARCHAR(MAX)")
 	private String content;
 
 	@Column(name = "image_path", columnDefinition = "NVARCHAR(255)")
