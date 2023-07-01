@@ -21,6 +21,6 @@ public interface EventNewsService {
 
 	List<EventNews> searchNews(String title);
 
-	void updateNewsStatus(EventNews news, Integer isActive);
+	EventNews updateNewsStatus(Long id);
 
 }
