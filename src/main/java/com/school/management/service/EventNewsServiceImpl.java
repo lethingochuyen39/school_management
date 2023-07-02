@@ -16,6 +16,7 @@ import java.util.List;
 @Service
 public class EventNewsServiceImpl implements EventNewsService {
 	private static final String UPLOAD_FOLDER = "uploads/news/";
+	private static final String PUBLIC_IMAGE_FOLDER = "D:/Desktop/project/ui/school-ui/public/images/";
 
 	@Autowired
 	private EventNewsRepository eventNewsRepository;
@@ -106,21 +107,36 @@ public class EventNewsServiceImpl implements EventNewsService {
 
 	private String saveImage(MultipartFile image) {
 		try {
-			Path uploadPath = Path.of(UPLOAD_FOLDER).toAbsolutePath().normalize();
+			Path publicImagePath = Path.of(PUBLIC_IMAGE_FOLDER).toAbsolutePath().normalize();
 
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
+			if (!Files.exists(publicImagePath)) {
+				Files.createDirectories(publicImagePath);
 			}
 
 			String imageName = image.getOriginalFilename();
-			String imagePath = uploadPath + "/" + imageName;
+			String imageExtension = getFileExtension(imageName);
+			String newImageName = generateUniqueFileName(imageExtension);
+			String publicImagePathStr = PUBLIC_IMAGE_FOLDER + newImageName;
 
-			Files.copy(image.getInputStream(), Path.of(imagePath), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(image.getInputStream(), Path.of(publicImagePathStr), StandardCopyOption.REPLACE_EXISTING);
 
-			return imagePath;
+			return "images/" + newImageName;
 		} catch (IOException e) {
 			throw new RuntimeException("Lỗi.");
 		}
+	}
+
+	private String getFileExtension(String fileName) {
+		int dotIndex = fileName.lastIndexOf('.');
+		if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+			return fileName.substring(dotIndex + 1);
+		}
+		return "";
+	}
+
+	private String generateUniqueFileName(String fileExtension) {
+		String fileName = LocalDateTime.now().toString().replace(":", "-");
+		return fileName + "." + fileExtension;
 	}
 
 	public class EventNewsNotFoundException extends RuntimeException {
