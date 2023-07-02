@@ -5,27 +5,45 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.school.management.dto.EvaluationRecordDto;
 import com.school.management.model.EvaluationRecord;
+import com.school.management.model.Student;
 import com.school.management.repository.EvaluationRecordRepository;
+import com.school.management.repository.StudentRepository;
 
 @Service
 public class EvaluationRecordServiceImpl implements EvaluationRecordService{
 
     @Autowired 
     private EvaluationRecordRepository evaluationRecordRepository; 
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Override
-    public EvaluationRecord createEvaluationRecord(EvaluationRecord evaluationRecord) {
-        if (evaluationRecord.getStudent() == null || evaluationRecord.getDisciplineReason() == null 
-            || evaluationRecord.getAchievement() == null || evaluationRecord.getDate() == null) {
-			throw new IllegalArgumentException("Student Id, Discipline Reason, start date, and end date are required.");
-		}
+    public EvaluationRecord createEvaluationRecord(EvaluationRecordDto evaluationRecordDto) {
+        Long studentId = evaluationRecordDto.getStudentId();
 
-		if (evaluationRecordRepository.existsById(evaluationRecord.getId())) {
-			throw new IllegalArgumentException("Evaluation Record with the same id already exists.");
-		}
+        Student student = studentRepository.findById(studentId)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        
+        EvaluationRecord evaluationRecord = new EvaluationRecord();
+        evaluationRecord.setStudent(student);
+        evaluationRecord.setDisciplineReason(evaluationRecordDto.getDisciplineReason());
+        evaluationRecord.setAchievement(evaluationRecordDto.getAchievement());
+        evaluationRecord.setDate(evaluationRecordDto.getDate());
 
-		return evaluationRecordRepository.save(evaluationRecord);
+        return evaluationRecordRepository.save(evaluationRecord);
+    }
+
+    @Override
+    public EvaluationRecord updateEvaluationRecord(Long id, EvaluationRecordDto evaluationRecordDto) {
+        EvaluationRecord exitingEvaluationRecord = evaluationRecordRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Evaluation Record not found with id: " + id));
+        exitingEvaluationRecord.setDisciplineReason(evaluationRecordDto.getDisciplineReason());
+        exitingEvaluationRecord.setAchievement(evaluationRecordDto.getAchievement());
+        exitingEvaluationRecord.setDate(evaluationRecordDto.getDate());
+
+        return evaluationRecordRepository.save(exitingEvaluationRecord);
     }
 
     @Override
@@ -37,29 +55,6 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService{
     @Override
     public List<EvaluationRecord> getEvaluationRecordByStudentId(Long studentId) {
         return evaluationRecordRepository.findByStudentId(studentId);
-    }
-
-    @Override
-    public EvaluationRecord updateEvaluationRecord(Long id, EvaluationRecord evaluationRecord) {
-        if (!evaluationRecordRepository.existsById(id)) {
-            throw new EvaluationRecordNotFoundException("Evaluation Record not found with id: " + id);
-        }
-
-        if (evaluationRecord.getStudent() == null || evaluationRecord.getDisciplineReason() == null 
-            || evaluationRecord.getAchievement() == null || evaluationRecord.getDate() == null) {
-			throw new IllegalArgumentException("Student Id, Discipline Reason, start date, and end date are required.");
-		}
-
-        EvaluationRecord existingEvaluationRecord = evaluationRecordRepository.findById(id)
-                .orElseThrow(() -> new EvaluationRecordNotFoundException("Evaluation Record not found with id: " + id));
-
-        if (existingEvaluationRecord != null && !existingEvaluationRecord.getId().equals(evaluationRecord.getId())) {
-            if (evaluationRecordRepository.existsById(evaluationRecord.getId())) {
-                throw new IllegalArgumentException("Evaluation Record is already exists.");
-            }
-        }
-        evaluationRecord.setId(id);
-        return evaluationRecordRepository.save(evaluationRecord);
     }
 
     @Override
