@@ -45,18 +45,7 @@ public class ReportCardServiceImpl implements ReportCardService{
     public ReportCard updateReportCard(Long id, ReportCardDto reportCardDto) {
         ReportCard existingReportCard = reportCardRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Report Card not found with id: " + id));
-
-        Long studentId = reportCardDto.getStudentId();
-        Long academicYearId = reportCardDto.getAcademicYearId();
-
-        Student student = studentRepository.findById(studentId)
-            .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        AcademicYear academicYear = academicYearRespository.findById(academicYearId)
-            .orElseThrow(() -> new IllegalArgumentException("Academic Year not found with id: " + academicYearId));
-        
-        existingReportCard.setStudent(student);
         existingReportCard.setAverageScore(reportCardDto.getAverageScore());
-        existingReportCard.setAcademicYear(academicYear);
 
         return reportCardRepository.save(existingReportCard);
     }
