@@ -4,16 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.school.management.dto.ReportCardDto;
 import com.school.management.model.ReportCard;
 import com.school.management.service.ReportCardServiceImpl;
 
@@ -24,9 +17,9 @@ public class ReportCardController {
     private ReportCardServiceImpl ReportCardServiceImpl;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createReportCard(@RequestBody ReportCard reportCard) {
+    public ResponseEntity<?> createReportCard(@RequestBody ReportCardDto reportCardDto) {
         try {
-            ReportCard createdReportCard = ReportCardServiceImpl.createReportCard(reportCard);
+            ReportCard createdReportCard = ReportCardServiceImpl.createReportCard(reportCardDto);
             return ResponseEntity.ok().body(createdReportCard);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -45,9 +38,9 @@ public class ReportCardController {
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateReportCard(@PathVariable Long id,
-			@RequestBody ReportCard reportCard) {
+			@RequestBody ReportCardDto reportCardDto) {
 		try {
-			ReportCard updatedReportCards = ReportCardServiceImpl.updateReportCard(id, reportCard);
+			ReportCard updatedReportCards = ReportCardServiceImpl.updateReportCard(id, reportCardDto);
 			return ResponseEntity.ok(updatedReportCards);
 		} catch (ReportCardServiceImpl.ReportCardNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
