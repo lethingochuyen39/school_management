@@ -1,18 +1,30 @@
 package com.school.management.controller;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.school.management.dto.StudentDTO;
+import com.school.management.model.Student;
 import com.school.management.service.StudentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
@@ -67,6 +79,33 @@ public class StudentController {
             return ResponseEntity.ok(studentService.generateAccount());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/import")
+    public ResponseEntity<?> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
+    
+        try (// List<StudentDTO> tempStudentList = new ArrayList<StudentDTO>();
+        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream())) {
+            XSSFSheet worksheet = workbook.getSheetAt(0);
+            
+            for(int i=2;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+                XSSFRow row = worksheet.getRow(i);
+                StudentDTO tempStudent = new StudentDTO();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                String date = row.getCell(2).toString();
+                LocalDate localDate = LocalDate.parse(date, formatter);
+                tempStudent.setAddress(row.getCell(3).toString()).setClassName(row.getCell(7).toString()).setDob(localDate).setEmail(row.getCell(2).toString()).setGender(row.getCell(1).toString()).setImage(null).setName(row.getCell(0).toString()).setPhone(row.getCell(5).toString()).setStatus("pending");
+                // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
+                // tempStudent.setContent(row.getCell(1).getStringCellValue());
+                // tempStudentList.add(tempStudent);   
+                studentService.AddStudent(tempStudent);
+            }
+            return ResponseEntity.ok("Student list added successfully");
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body("Student list added failed");
         }
     }
     
