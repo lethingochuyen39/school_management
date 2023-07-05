@@ -16,51 +16,60 @@ import java.util.List;
 @Service
 public class EventNewsServiceImpl implements EventNewsService {
 	private static final String UPLOAD_FOLDER = "uploads/news/";
+	private static final String PUBLIC_IMAGE_FOLDER = "D:/Desktop/project/ui/school-ui/public/images/";
 
 	@Autowired
 	private EventNewsRepository eventNewsRepository;
 
 	@Override
-	public EventNews createEventNews(EventNews eventNews, MultipartFile image) {
-		validateEventNewsFields(eventNews);
-
+	public EventNews createEventNews(EventNews eventNews,
+			MultipartFile image) {
 		String title = eventNews.getTitle();
-		if (eventNewsRepository.existsByTitle(title)) {
-			throw new IllegalArgumentException("EventNews with the same title already exists.");
+		if (title == null || title.isEmpty()) {
+			throw new IllegalArgumentException("Tiêu đề là bắt buộc.");
 		}
 
-		String imageName = image.getOriginalFilename();
-		String imagePath = saveImage(image);
+		if (eventNewsRepository.existsByTitle(title)) {
+			throw new IllegalArgumentException("Tên tiêu đề đã tồn tại.");
+		}
 
-		eventNews.setImageName(imageName);
-		eventNews.setImagePath(imagePath);
+		if (image != null) {
+			String imageName = image.getOriginalFilename();
+			String imagePath = saveImage(image);
+
+			eventNews.setImageName(imageName);
+			eventNews.setImagePath(imagePath);
+		}
+
 		eventNews.setIsActive(true);
 		eventNews.setCreatedAt(LocalDateTime.now());
 		eventNews.setUpdatedAt(LocalDateTime.now());
-
 		return eventNewsRepository.save(eventNews);
 	}
 
 	@Override
 	public EventNews getEventNewsById(Long id) {
 		return eventNewsRepository.findById(id)
-				.orElseThrow(() -> new EventNewsNotFoundException("EventNews not found with id: " + id));
+				.orElseThrow(() -> new EventNewsNotFoundException("Không tìm thấy tin tức với id: " + id));
 	}
 
 	@Override
 	public EventNews updateEventNews(Long id, EventNews eventNews, MultipartFile image) {
 		if (!eventNewsRepository.existsById(id)) {
-			throw new EventNewsNotFoundException("EventNews not found with id: " + id);
+			throw new EventNewsNotFoundException("Không tìm thấy tin tức với id: " + id);
 		}
 
-		validateEventNewsFields(eventNews);
+		String title = eventNews.getTitle();
+		if (title == null || title.isEmpty()) {
+			throw new IllegalArgumentException("Tiêu đề là bắt buộc.");
+		}
 
 		EventNews existingEventNews = eventNewsRepository.findById(id)
-				.orElseThrow(() -> new EventNewsNotFoundException("EventNews not found with id: " + id));
+				.orElseThrow(() -> new EventNewsNotFoundException("Không tìm thấy tin tức với id: " + id));
 
 		String newTitle = eventNews.getTitle();
 		if (!existingEventNews.getTitle().equals(newTitle) && eventNewsRepository.existsByTitle(newTitle)) {
-			throw new IllegalArgumentException("EventNews with the same title already exists.");
+			throw new IllegalArgumentException("Tên tiêu đề đã tồn tại.");
 		}
 
 		existingEventNews.setTitle(newTitle);
@@ -98,28 +107,36 @@ public class EventNewsServiceImpl implements EventNewsService {
 
 	private String saveImage(MultipartFile image) {
 		try {
-			Path uploadPath = Path.of(UPLOAD_FOLDER).toAbsolutePath().normalize();
+			Path publicImagePath = Path.of(PUBLIC_IMAGE_FOLDER).toAbsolutePath().normalize();
 
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
+			if (!Files.exists(publicImagePath)) {
+				Files.createDirectories(publicImagePath);
 			}
 
 			String imageName = image.getOriginalFilename();
-			String imagePath = uploadPath + "/" + imageName;
+			String imageExtension = getFileExtension(imageName);
+			String newImageName = generateUniqueFileName(imageExtension);
+			String publicImagePathStr = PUBLIC_IMAGE_FOLDER + newImageName;
 
-			Files.copy(image.getInputStream(), Path.of(imagePath), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(image.getInputStream(), Path.of(publicImagePathStr), StandardCopyOption.REPLACE_EXISTING);
 
-			return imagePath;
+			return "images/" + newImageName;
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to save image.");
+			throw new RuntimeException("Lỗi.");
 		}
 	}
 
-	private void validateEventNewsFields(EventNews eventNews) {
-		String title = eventNews.getTitle();
-		if (title == null || title.isEmpty()) {
-			throw new IllegalArgumentException("Title is required.");
+	private String getFileExtension(String fileName) {
+		int dotIndex = fileName.lastIndexOf('.');
+		if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+			return fileName.substring(dotIndex + 1);
 		}
+		return "";
+	}
+
+	private String generateUniqueFileName(String fileExtension) {
+		String fileName = LocalDateTime.now().toString().replace(":", "-");
+		return fileName + "." + fileExtension;
 	}
 
 	public class EventNewsNotFoundException extends RuntimeException {
@@ -127,4 +144,26 @@ public class EventNewsServiceImpl implements EventNewsService {
 			super(message);
 		}
 	}
+
+	@Override
+	public List<EventNews> searchNews(String title) {
+		if (title == null || title.trim().isEmpty()) {
+			return getAllEventNews();
+		} else {
+			return searchEventNewsByTitle(title);
+		}
+	}
+
+	@Override
+	public EventNews updateNewsStatus(Long id) {
+		EventNews existingEventNews = eventNewsRepository.findById(id)
+				.orElseThrow(() -> new EventNewsNotFoundException("Không tìm thấy tin tức với id: " + id));
+
+		boolean isActive = existingEventNews.getIsActive();
+		existingEventNews.setIsActive(!isActive);
+		existingEventNews.setUpdatedAt(LocalDateTime.now());
+
+		return eventNewsRepository.save(existingEventNews);
+	}
+
 }

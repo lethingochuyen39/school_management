@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,27 +25,36 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "Schedule")
 public class Schedule implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "start_date", nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate startDate;
+	@ManyToOne
+	// @NotNull
+	@JoinColumn(name = "day_of_week_id")
+	private DayOfWeek dayOfWeek;
 
-	@Column(name = "end_date", nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate endDate;
+	@ManyToOne
+	// @NotNull
+	@JoinColumn(name = "lesson_id")
+	private Lesson lesson;
 
-	@Column(name = "semester", nullable = false)
-	private Integer semester;
+	@ManyToOne
+	@JoinColumn(name = "subject_id")
+	private Subject subject;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "class_id", nullable = false)
-	@JsonIgnore
+	@ManyToOne
+	// @NotNull
+	@JoinColumn(name = "class_id")
 	private Classes classes;
 
-	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonProperty("scheduleDetails")
-	private List<ScheduleDetail> scheduleDetails;
+	@ManyToOne
+	@JoinColumn(name = "teacher_id")
+	private Teacher teacher;
+
+	// @NotBlank
+	@Enumerated(EnumType.STRING)
+	private ScheduleStatus status;
+
 }

@@ -3,6 +3,7 @@ package com.school.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.model.AcademicYear;
@@ -30,6 +32,9 @@ public class AcademicYearController {
 			return ResponseEntity.ok().body(createdAcademicYear);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage()); // Thông báo lỗi nếu không thể tạo AcademicYear
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Đã xảy ra lỗi trong quá trình tạo năm học.");
 		}
 	}
 
@@ -67,7 +72,7 @@ public class AcademicYearController {
 		}
 	}
 
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<AcademicYear>> getAllAcademicYears() {
 		List<AcademicYear> academicYears = academicYearServiceImpl.getAllAcademicYears();
 		return ResponseEntity.ok(academicYears);
@@ -78,4 +83,10 @@ public class AcademicYearController {
 		List<AcademicYear> academicYears = academicYearServiceImpl.getAcademicYearsByName(name);
 		return ResponseEntity.ok(academicYears);
 	}
+
+	@GetMapping()
+	public List<AcademicYear> searchAcademicYears(@RequestParam(required = false) String name) {
+		return academicYearServiceImpl.searchAcademicYears(name);
+	}
+
 }

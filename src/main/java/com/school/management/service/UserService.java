@@ -20,6 +20,6 @@ public interface UserService {
     UserDto updateResetPasswordToken(String token, String password);
 
     User getByResetPasswordToken(String token);
-
     // Long generateAccount();
+
 }

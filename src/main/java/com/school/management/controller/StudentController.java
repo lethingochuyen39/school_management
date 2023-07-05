@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-    
+
     @GetMapping("/allStudent")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.ok(studentService.GetAllStudent());
@@ -75,6 +75,7 @@ public class StudentController {
         }
     }
 
+
     @PostMapping("/giveAccessAccount")
     public ResponseEntity<?> giveAccessAccount() {
         try {
@@ -111,4 +112,13 @@ public class StudentController {
         }
     }
     
+
+    // huyen
+    @GetMapping("/api/classes/{classId}/students")
+    public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId) {
+        List<Student> studentClass = studentServiceImpl.findByClassId(classId);
+        return ResponseEntity.ok(studentClass);
+    }
+
+
 }

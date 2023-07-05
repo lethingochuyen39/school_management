@@ -16,12 +16,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject createSubject(Subject subject) {
         if (subject.getName() == null || subject.getTeacher() == null) {
-            throw new IllegalArgumentException("Subject and Teacher are required.");
-        }
-
-        if (subjectRepository.existsByName(subject.getName())
-                && subjectRepository.existsByTeacher(subject.getTeacher())) {
-            throw new IllegalArgumentException("Subject and Teacher are already exists.");
+            throw new IllegalArgumentException("Lack of information.");
         }
 
         return subjectRepository.save(subject);
@@ -30,31 +25,28 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject updateSubject(Long id, Subject subject) {
         if (!subjectRepository.existsById(id)) {
-            throw new SubjectNotFoundException("Subject not found with id: " + id);
-        }
+			throw new SubjectNotFoundException("Metric not found with id: " + id);
+		}
 
-        if (subject.getName() == null || subject.getTeacher() == null) {
-            throw new IllegalArgumentException("Subject and Teacher are required.");
-        }
+		if (subject.getName() == null || subject.getTeacher() == null) {
+			throw new IllegalArgumentException("Name, description, value, and year are required.");
+		}
 
-        Subject existingSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new SubjectNotFoundException("Subject not found with id: " + id));
+		Subject existingSubject = subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Metric not found with id: " + id));
 
-        if (existingSubject != null && !existingSubject.getName().equals(subject.getName())
-                && !existingSubject.getTeacher().equals(subject.getTeacher())) {
-            if (subjectRepository.existsByName(subject.getName())
-                    && subjectRepository.existsByTeacher(subject.getTeacher())) {
-                throw new IllegalArgumentException("Subject and Teacher are already exists.");
-            }
-        }
-        subject.setId(id);
-        return subjectRepository.save(subject);
+		if (existingSubject != null && !existingSubject.getName().equals(subject.getName())) {
+			if (subjectRepository.existsByName(subject.getName())) {
+				throw new IllegalArgumentException("Academic year with the same name already exists.");
+			}
+		}
+		subject.setId(id);
+		return subjectRepository.save(subject);
     }
 
     @Override
     public boolean deleteSubject(Long id) {
         if (!subjectRepository.existsById(id)) {
-			throw new SubjectNotFoundException("Subject not found with id: " + id);
+			throw new SubjectNotFoundException("Metric not found with id: " + id);
 		}
 		subjectRepository.deleteById(id);
 		return true;
@@ -63,12 +55,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<Subject> getAllSubject() {
         return subjectRepository.findAll();
-    }
-
-    @Override
-    public Subject getSubjectById(Long id) {
-        return subjectRepository.findById(id)
-                .orElseThrow(() -> new SubjectNotFoundException("Class not found with id: " + id));
     }
 
     @Override

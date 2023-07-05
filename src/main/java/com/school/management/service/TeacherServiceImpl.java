@@ -28,26 +28,59 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
-        if (teacher.getName() == null || teacher.getGender() == null || teacher.getDob() == null
-                || teacher.getEmail() == null || teacher.getAddress() == null || teacher.getPhone() == null
-                || teacher.getStatus() == null || teacher.getImage() == null || teacher.getUser() == null) {
-            throw new IllegalArgumentException(
-                    "Name, Gender, Dob, Email, Address, Phone, Status, Images are required.");
+        if (teacher.getName() == null || teacher.getGender() == null ||
+                teacher.getDob() == null
+                || teacher.getEmail() == null || teacher.getAddress() == null ||
+                teacher.getPhone() == null
+                || teacher.getStatus() == null) {
+            throw new IllegalArgumentException("Name, description, value, and year are required.");
         }
+
+        if (teacherRepository.existsByEmail(teacher.getEmail()) && teacherRepository.existsByPhone(teacher.getPhone())) {
+            throw new IllegalArgumentException("This email and phone have already used.");
+
+        }
+
+        if (teacherRepository.existsByEmail(teacher.getEmail())) {
+            throw new IllegalArgumentException("This email have already used.");
+
+        }
+
+        if (teacherRepository.existsByPhone(teacher.getPhone())) {
+            throw new IllegalArgumentException("This phone have already used.");
+        }
+
         return teacherRepository.save(teacher);
     }
 
     @Override
     public Teacher updateTeacher(Long id, Teacher teacher) {
         if (!teacherRepository.existsById(id)) {
-            throw new TeacherNotFoundException("Teacher not found with id: " + id);
+            throw new TeacherNotFoundException("Metric not found with id: " + id);
         }
 
-        if (teacher.getName() == null || teacher.getGender() == null || teacher.getDob() == null
-                || teacher.getEmail() == null || teacher.getAddress() == null || teacher.getPhone() == null
-                || teacher.getStatus() == null || teacher.getImage() == null || teacher.getUser() == null) {
-            throw new IllegalArgumentException("Subject and Teacher are required.");
+        if (teacher.getName() == null || teacher.getGender() == null ||
+                teacher.getDob() == null
+                || teacher.getEmail() == null || teacher.getAddress() == null ||
+                teacher.getPhone() == null
+                || teacher.getStatus() == null) {
+            throw new IllegalArgumentException("Name, description, value, and year are required.");
         }
+
+        if (teacherRepository.existsByEmail(teacher.getEmail()) && teacherRepository.existsByPhone(teacher.getPhone())) {
+            throw new IllegalArgumentException("This email and phone have already used.");
+
+        }
+
+        if (teacherRepository.existsByEmail(teacher.getEmail())) {
+            throw new IllegalArgumentException("This email have already used.");
+
+        }
+
+        if (teacherRepository.existsByPhone(teacher.getPhone())) {
+            throw new IllegalArgumentException("This phone have already used.");
+        }
+
         teacher.setId(id);
         return teacherRepository.save(teacher);
     }
@@ -55,21 +88,15 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public boolean deleteTeacher(Long id) {
         if (!teacherRepository.existsById(id)) {
-			throw new TeacherNotFoundException("Teacher not found with id: " + id);
-		}
-		teacherRepository.deleteById(id);
-		return true;
+            throw new TeacherNotFoundException("Metric not found with id: " + id);
+        }
+        teacherRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public List<Teacher> getAllTeacher() {
         return teacherRepository.findAll();
-    }
-
-    @Override
-    public Teacher getTeacherById(Long id) {
-        return teacherRepository.findById(id)
-                .orElseThrow(() -> new TeacherNotFoundException("Class not found with id: " + id));
     }
 
     @Override
@@ -82,6 +109,7 @@ public class TeacherServiceImpl implements TeacherService {
             super(message);
         }
     }
+
 
     @Override
     public Long generateAccount() {
@@ -101,4 +129,62 @@ public class TeacherServiceImpl implements TeacherService {
         });
         return totalRowInStudent;
     }
+
+    // private static final String UPLOAD_FOLDER = "uploads/teachers/";
+
+    // @Autowired
+    // private TeacherRepository teacherRepository;
+
+    // @Override
+    // public Teacher createTeacher(Teacher teacher, MultipartFile file, Long
+    // uploadedById) {
+    // validateTeacher(teacher); // Validate teacher fields
+
+    // String fileName = file.getOriginalFilename();
+    // String filePath = saveFile(file);
+
+    // teacher.setFilePath(filePath);
+    // teacher.setFileName(fileName);
+    // return teacherRepository.save(teacher);
+    // }
+
+    // @Override
+    // public Teacher updateTeacher(Long id, Teacher teacher, MultipartFile file) {
+    // if (!teacherRepository.existsById(id)) {
+    // throw new TeacherNotFoundException("Teacher not found with id: " + id);
+    // }
+
+    // validateTeacher(teacher); // Validate teacher fields
+
+    // teacher.setId(id);
+
+    // String fileName = file.getOriginalFilename();
+    // String filePath = saveFile(file);
+
+    // teacher.setFilePath(filePath);
+    // teacher.setFileName(fileName);
+
+    // return teacherRepository.save(teacher);
+    // }
+
+    // private String saveFile(MultipartFile file) {
+    // try {
+    // Path uploadPath = Path.of(UPLOAD_FOLDER).toAbsolutePath().normalize();
+
+    // if (!Files.exists(uploadPath)) {
+    // Files.createDirectories(uploadPath);
+    // }
+
+    // String fileName = file.getOriginalFilename();
+    // String filePath = uploadPath + "/" + fileName;
+
+    // Files.copy(file.getInputStream(), Path.of(filePath),
+    // StandardCopyOption.REPLACE_EXISTING);
+
+    // return filePath;
+    // } catch (IOException e) {
+    // throw new RuntimeException("Failed to save file.");
+    // }
+    // }
+
 }

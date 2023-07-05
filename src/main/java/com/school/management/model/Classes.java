@@ -19,10 +19,10 @@ public class Classes {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = true, columnDefinition = "NVARCHAR(255)")
 	private String description;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +33,7 @@ public class Classes {
 	@JoinColumn(name = "academic_year_id", nullable = false)
 	private AcademicYear academicYear;
 
-	@Column(name = "grade")
+	@Column(name = "grade", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String grade;
 
 }

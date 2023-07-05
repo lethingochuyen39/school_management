@@ -19,4 +19,8 @@ public interface ScoreService {
 	List<Score> searchScoresByStudentName(String studentName);
 
 	List<Score> searchScoresByStudentId(Long studentId);
+
+	List<Score> searchScore(String studentName);
+
+	List<Score> findByClassId(Long classId);
 }

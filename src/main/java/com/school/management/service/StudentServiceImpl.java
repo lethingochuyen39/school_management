@@ -18,9 +18,11 @@ import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
+
 import com.school.management.repository.UserRepository;
+
 @Service
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
@@ -47,6 +49,7 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public StudentDTO UpdateProfile(StudentDTO student) {
         Student newStudent = studentRepository.findByEmail(student.getEmail());
+
         if(newStudent == null) {
             throw new StudentException("Student "+student.getEmail()+" cant be found");
         }
@@ -55,31 +58,46 @@ public class StudentServiceImpl implements StudentService{
         // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob()).setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage()).setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
         Student saveStudent = modelMapper.map(student, Student.class);
         studentRepository.save(saveStudent);
+
+       // if (newStudent == null) {
+        //    throw new StudentNotFoundException("Student " + student.getEmail() + " cant be found");
+        //}
+        //Classes classs = classesRepository.findByName(student.getClassName());
+       // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob())
+                //.setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage())
+                //.setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
+        //studentRepository.save(newStudent);
+
         return student;
     }
 
     @Override
     public List<StudentDTO> GetAllStudent() {
         List<StudentDTO> students = new ArrayList<>();
-        studentRepository.findAll().stream().forEach(student->students.add(modelMapper.map(student, StudentDTO.class)));
+        studentRepository.findAll().stream()
+                .forEach(student -> students.add(modelMapper.map(student, StudentDTO.class)));
         return students;
     }
 
     @Override
     public String DeleteStudent(String email) {
         Student deleteStudent = studentRepository.findByEmail(email);
+
         if(deleteStudent == null) {
             throw new StudentException("Student " + email + " cant be found");
+
         }
         studentRepository.delete(deleteStudent);
         return "Delete Successfully";
     }
+
     @Override
     public StudentDTO AddStudent(StudentDTO student) {
         Student existStudent = studentRepository.findByEmail(student.getEmail());
         if (existStudent != null) {
             throw new StudentException("Student already exists");
         }
+
         Student newStudent = modelMapper.map(student,Student.class);
         Classes classes = classesRepository.findByName(student.getClassName());
         if (classes == null) {
@@ -125,5 +143,15 @@ public class StudentServiceImpl implements StudentService{
             studentRepository.save(student.setUser(user.get()));
         });
         return totalRowInStudent;
+        //Student newStudent = modelMapper.map(student, Student.class);
+        //studentRepository.save(newStudent);
+        //return student;
+    //}
+
+
+    // huyen
+    public List<Student> findByClassId(Long classId) {
+        return studentRepository.findByClassId(classId);
+
     }
 }

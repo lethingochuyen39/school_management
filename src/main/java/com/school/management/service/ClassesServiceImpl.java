@@ -16,12 +16,9 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public Classes createClasses(Classes classes) {
         if (classes.getName() == null || classes.getDescription() == null
-                || classes.getAcademicYear() == null || classes.getTeacher() == null || classes.getGrade() == null) {
-            throw new IllegalArgumentException("Name, Description, Academic Year, Teacher and Grade are required.");
-        }
-
-        if (classesRepository.existsByName(classes.getName())) {
-            throw new IllegalArgumentException("Class is already exists.");
+                || classes.getAcademicYear() == null || classes.getTeacher() == null
+                || classes.getGrade() == null) {
+            throw new IllegalArgumentException("Name, description, value, and year are required.");
         }
 
         return classesRepository.save(classes);
@@ -30,40 +27,40 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public Classes getClassesById(Long id) {
         return classesRepository.findById(id)
-                .orElseThrow(() -> new ClassesNotFoundException("Class not found with id: " + id));
-
+				.orElseThrow(() -> new ClassesNotFoundException("Metric not found with id: " + id));
     }
 
     @Override
     public Classes updateClasses(Long id, Classes classes) {
         if (!classesRepository.existsById(id)) {
-            throw new ClassesNotFoundException("Class not found with id: " + id);
-        }
+			throw new ClassesNotFoundException("Metric not found with id: " + id);
+		}
 
-        if (classes.getName() == null || classes.getDescription() == null
-                || classes.getAcademicYear() == null || classes.getTeacher() == null || classes.getGrade() == null) {
-            throw new IllegalArgumentException("Name, Description, Academic Year, Teacher and Grade are required.");
-        }
+		if (classes.getName() == null || classes.getDescription() == null
+                || classes.getAcademicYear() == null || classes.getTeacher() == null
+                || classes.getGrade() == null) {
+			throw new IllegalArgumentException("Name, description, value, and year are required.");
+		}
 
-        Classes existingClasses = classesRepository.findById(id)
-                .orElseThrow(() -> new ClassesNotFoundException("Class not found with id: " + id));
+		// Classes existingClasses = classesRepository.findById(id)
+		// 		.orElseThrow(() -> new ClassesNotFoundException("Metric not found with id: " + id));
 
-        if (existingClasses != null && !existingClasses.getName().equals(classes.getName())) {
-            if (classesRepository.existsByName(classes.getName())) {
-                throw new IllegalArgumentException("Class is already exists.");
-            }
-        }
-        classes.setId(id);
-        return classesRepository.save(classes);
+		// if (existingClasses != null && !existingClasses.getName().equals(classes.getName()) && !existingClasses.getName().equals(classes.getTeacher())) {
+		// 	if (classesRepository.existsByName(classes.getName())) {
+		// 		throw new IllegalArgumentException("Academic year with the same name already exists.");
+		// 	}
+		// }
+		classes.setId(id);
+		return classesRepository.save(classes);
     }
 
     @Override
     public boolean deleteClasses(Long id) {
         if (!classesRepository.existsById(id)) {
-            throw new ClassesNotFoundException("Class not found with id: " + id);
-        }
-        classesRepository.deleteById(id);
-        return true;
+			throw new ClassesNotFoundException("Metric not found with id: " + id);
+		}
+		classesRepository.deleteById(id);
+		return true;
     }
 
     @Override

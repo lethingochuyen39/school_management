@@ -13,8 +13,8 @@ public interface ClassesRepository extends JpaRepository<Classes, Long> {
 
     List<Classes> findByNameContainingIgnoreCase(String name);
 
-    @Query("SELECT COUNT(s) > 0 FROM Schedule s WHERE s.classes.id = :classId AND s.semester = :semester")
-    boolean hasSchedule(@Param("classId") Long classId, @Param("semester") Integer semester);
+    @Query("SELECT COUNT(s) > 0 FROM Schedule s WHERE s.classes.id = :classId")
+    boolean hasSchedule(@Param("classId") Long classId);
 
     Classes findByName(String Name);
 }

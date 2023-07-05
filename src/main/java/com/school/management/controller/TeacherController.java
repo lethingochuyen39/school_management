@@ -14,29 +14,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.model.Teacher;
+import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
 
 @RestController
 @RequestMapping("/api/teachers")
 public class TeacherController {
     @Autowired
-    private TeacherServiceImpl teacherServiceImpl;
+    private TeacherService teacherService;
 
     @PostMapping("/create")
+    // public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher, @RequestPart("file") MultipartFile file,
+	// 		@RequestParam("uploadedById") Long uploadedById) {
     public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher) {
         try {
-            Teacher createdTeacher = teacherServiceImpl.createTeacher(teacher);
-            return ResponseEntity.ok().body(createdTeacher);
+            //teacherService.createTeacher(teacher, file, uploadedById);
+            teacherService.createTeacher(teacher);
+            return ResponseEntity.ok().body(teacher);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/update/{id}")
+    // public ResponseEntity<?> updateTeacher(@PathVariable Long id,
+    //         @RequestBody Teacher teacher, @RequestPart("file") MultipartFile file) {
     public ResponseEntity<?> updateTeacher(@PathVariable Long id,
             @RequestBody Teacher teacher) {
         try {
-            Teacher updatedTeacher = teacherServiceImpl.updateTeacher(id, teacher);
+            Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
             return ResponseEntity.ok(updatedTeacher);
         } catch (TeacherServiceImpl.TeacherNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -48,7 +54,7 @@ public class TeacherController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTeacher(@PathVariable Long id) {
         try {
-            teacherServiceImpl.deleteTeacher(id);
+            teacherService.deleteTeacher(id);
             return ResponseEntity.ok().build();
         } catch (TeacherServiceImpl.TeacherNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -57,23 +63,23 @@ public class TeacherController {
 
     @GetMapping
     public ResponseEntity<List<Teacher>> getAllTeacher() {
-        List<Teacher> teacher = teacherServiceImpl.getAllTeacher();
+        List<Teacher> teacher = teacherService.getAllTeacher();
         return ResponseEntity.ok(teacher);
     }
 
-    @GetMapping("/findById/{id}")
-    public ResponseEntity<?> getTeacherById(@PathVariable Long id) {
-        try {
-            Teacher teacher = teacherServiceImpl.getTeacherById(id);
-            return ResponseEntity.ok(teacher);
-        } catch (TeacherServiceImpl.TeacherNotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @GetMapping("/findById/{email}")
+    // public ResponseEntity<?> getTeacherById(@PathVariable String email) {
+    //     try {
+    //         TeacherDto teacher = teacherService.getTeacherByEmail(email);
+    //         return ResponseEntity.ok(teacher);
+    //     } catch (TeacherServiceImpl.TeacherNotFoundException e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 
     @GetMapping("/findByName/{name}")
     public ResponseEntity<List<Teacher>> getTeacherByName(@PathVariable(value = "name") String name) {
-        List<Teacher> teacher = teacherServiceImpl.getTeacherByName(name);
+        List<Teacher> teacher = teacherService.getTeacherByName(name);
         return ResponseEntity.ok(teacher);
     }
 }

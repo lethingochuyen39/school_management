@@ -35,7 +35,7 @@ public class ScoreServiceImpl implements ScoreService {
 	@Override
 	public Score getScoreById(Long id) {
 		return scoreRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Score not found with id: " + id));
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy điểm với id: " + id));
 	}
 
 	@Override
@@ -45,11 +45,11 @@ public class ScoreServiceImpl implements ScoreService {
 		Long scoreTypeId = scoreDTO.getScoreTypeId();
 
 		Student student = studentRepository.findById(studentId)
-				.orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy học sinh với id: " + studentId));
 		Subject subject = subjectRepository.findById(subjectId)
-				.orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + subjectId));
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy môn học với id: " + subjectId));
 		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
-				.orElseThrow(() -> new IllegalArgumentException("ScoreType not found with id: " + scoreTypeId));
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy loại điểm với id: " + scoreTypeId));
 
 		Score score = new Score();
 		score.setStudent(student);
@@ -63,28 +63,7 @@ public class ScoreServiceImpl implements ScoreService {
 	@Override
 	public Score updateScore(Long id, ScoreDTO scoreDTO) {
 		Score existingScore = scoreRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Score not found with id: " + id));
-
-		Long studentId = scoreDTO.getStudentId();
-		Long subjectId = scoreDTO.getSubjectId();
-		Long scoreTypeId = scoreDTO.getScoreTypeId();
-
-		Student student = studentRepository.findById(studentId)
-				.orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-		Subject subject = subjectRepository.findById(subjectId)
-				.orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + subjectId));
-		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
-				.orElseThrow(() -> new IllegalArgumentException("ScoreType not found with id: " + scoreTypeId));
-
-		// if (scoreRepository.existsByStudentIdAndSubjectIdAndScoreTypeId(studentId,
-		// subjectId, scoreTypeId)) {
-		// throw new IllegalArgumentException("Score with the same Student, Subject, and
-		// ScoreType already exists");
-		// }
-
-		existingScore.setStudent(student);
-		existingScore.setSubject(subject);
-		existingScore.setScoreType(scoreType);
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy điểm với id: " + id));
 		existingScore.setScore(scoreDTO.getScore());
 
 		return scoreRepository.save(existingScore);
@@ -93,7 +72,7 @@ public class ScoreServiceImpl implements ScoreService {
 	@Override
 	public void deleteScore(Long id) {
 		if (!scoreRepository.existsById(id)) {
-			throw new IllegalArgumentException("Score not found with id: " + id);
+			throw new IllegalArgumentException("Không tìm thấy điểm với id: " + id);
 		}
 		scoreRepository.deleteById(id);
 	}
@@ -107,4 +86,19 @@ public class ScoreServiceImpl implements ScoreService {
 	public List<Score> searchScoresByStudentId(Long studentId) {
 		return scoreRepository.findByStudentId(studentId);
 	}
+
+	@Override
+	public List<Score> searchScore(String studentName) {
+		if (studentName == null || studentName.trim().isEmpty()) {
+			return getAllScores();
+		} else {
+			return searchScoresByStudentName(studentName);
+		}
+	}
+
+	@Override
+	public List<Score> findByClassId(Long classId) {
+		return scoreRepository.findByClassId(classId);
+	}
+
 }
