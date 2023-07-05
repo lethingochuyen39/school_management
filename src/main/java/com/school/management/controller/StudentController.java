@@ -24,10 +24,12 @@ import com.school.management.service.StudentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
+@RequestMapping("/api/student")
 public class StudentController {
     @Autowired
     private StudentService studentService;
@@ -37,7 +39,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.GetAllStudent());
     }
 
-    @GetMapping("/student")
+    @GetMapping("/")
     public ResponseEntity<?> getStudent(@RequestBody String email) {
         try {
             return ResponseEntity.ok(studentService.GetStudent(email));
@@ -73,7 +75,7 @@ public class StudentController {
         }
     }
 
-    @PostMapping("/student/giveAccessAccount")
+    @PostMapping("/giveAccessAccount")
     public ResponseEntity<?> giveAccessAccount() {
         try {
             return ResponseEntity.ok(studentService.generateAccount());
@@ -90,10 +92,10 @@ public class StudentController {
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream())) {
             XSSFSheet worksheet = workbook.getSheetAt(0);
             
-            for(int i=2;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+            for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
                 XSSFRow row = worksheet.getRow(i);
                 StudentDTO tempStudent = new StudentDTO();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
                 String date = row.getCell(2).toString();
                 LocalDate localDate = LocalDate.parse(date, formatter);
                 tempStudent.setAddress(row.getCell(3).toString()).setClassName(row.getCell(7).toString()).setDob(localDate).setEmail(row.getCell(2).toString()).setGender(row.getCell(1).toString()).setImage(null).setName(row.getCell(0).toString()).setPhone(row.getCell(5).toString()).setStatus("pending");
@@ -105,7 +107,7 @@ public class StudentController {
             return ResponseEntity.ok("Student list added successfully");
         }
         catch(Exception e){
-            return ResponseEntity.badRequest().body("Student list added failed");
+            return ResponseEntity.badRequest().body("Student list added failed, "+e.getMessage());
         }
     }
     
