@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Student;
 import com.school.management.service.StudentService;
+import com.school.management.service.StudentServiceImpl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-
+  // huyen
+    @Autowired
+    private StudentServiceImpl studentServiceImpl;
+    
     @GetMapping("/allStudent")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.ok(studentService.GetAllStudent());
