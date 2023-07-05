@@ -31,7 +31,12 @@ public class EmailServiceImpl implements EmailService {
 	// private UserService userService;
 
 	@Override
-	public String sendSimpleMail(String email, String link) throws MessagingException, UnsupportedEncodingException{
+	public String sendSimpleMail(String email, String link, String token) throws MessagingException, UnsupportedEncodingException{
+		
+		Optional<User> findUser = userRepository.findByEmail(email);
+		if(findUser.isPresent()){
+			userRepository.save(findUser.get().setResetPasswordToken(token));
+		}
 		try {
 			MimeMessage message = emailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message);
