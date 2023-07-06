@@ -99,5 +99,8 @@ public class UserController {
         return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
 	}
 
-    
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@RequestBody String email){
+        return ResponseEntity.ok(userService.deleteAccount(email));
+    }
 }

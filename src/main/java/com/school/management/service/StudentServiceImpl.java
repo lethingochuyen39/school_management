@@ -146,12 +146,32 @@ public class StudentServiceImpl implements StudentService {
         //Student newStudent = modelMapper.map(student, Student.class);
         //studentRepository.save(newStudent);
         //return student;
-    //}
+    }
 
 
     // huyen
     public List<Student> findByClassId(Long classId) {
         return studentRepository.findByClassId(classId);
-
     }
+
+    @Override
+    public String ConfirmStudent(StudentDTO studentDTO) {
+        Student student = studentRepository.findByEmail(studentDTO.getEmail());
+        Student confirmStudent = modelMapper.map(studentDTO, Student.class);
+        confirmStudent.setClassName(student.getClassName()).setUser(null);
+        if(student.equals(confirmStudent)){
+            char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
+            String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
+// System.out.println( randomStr );
+            userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
+            User user = userRepository.findByEmail(student.getEmail()).get();
+            student.setUser(user);
+            student.setStatus("active");
+            studentRepository.save(student);
+            return "Confirmed Successfully";
+        }else{
+            throw new StudentException("Wrong information, if the system wrong please mail to longpntts2109002@fpt.edu.vn");
+        }
+    }
+
 }
