@@ -79,14 +79,16 @@ public class StudentController {
         }
     }
 
-    @PostMapping("/giveAccessAccount")
-    public ResponseEntity<?> giveAccessAccount() {
-        try {
-            return ResponseEntity.ok(studentService.generateAccount());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+
+
+    // @PostMapping("/giveAccessAccount")
+    // public ResponseEntity<?> giveAccessAccount() {
+    //     try {
+    //         return ResponseEntity.ok(studentService.generateAccount());
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 
     @PostMapping("/import")
     public ResponseEntity<?> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile)
@@ -122,6 +124,15 @@ public class StudentController {
     public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId) {
         List<Student> studentClass = studentServiceImpl.findByClassId(classId);
         return ResponseEntity.ok(studentClass);
+    }
+
+    @PostMapping("/student/confirm")
+    public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
+        try {
+            return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
