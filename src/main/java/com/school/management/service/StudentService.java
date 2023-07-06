@@ -10,6 +10,6 @@ public interface StudentService {
     String DeleteStudent(String email);
     StudentDTO AddStudent(StudentDTO student);
     // Student GiveAccessAccount(String email,Student student);
-    Long generateAccount();
+    // Long generateAccount();
     String ConfirmStudent(StudentDTO studentDTO);
 }

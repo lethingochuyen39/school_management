@@ -80,14 +80,14 @@ public class StudentController {
     }
 
 
-    @PostMapping("/giveAccessAccount")
-    public ResponseEntity<?> giveAccessAccount() {
-        try {
-            return ResponseEntity.ok(studentService.generateAccount());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @PostMapping("/giveAccessAccount")
+    // public ResponseEntity<?> giveAccessAccount() {
+    //     try {
+    //         return ResponseEntity.ok(studentService.generateAccount());
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 
 
     @PostMapping("/import")

@@ -14,8 +14,8 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     List<Teacher> findByNameContainingIgnoreCase(String name);
 
 
-    @Query("SELECT u FROM Teacher u WHERE u.user = :user")
-    List<Teacher> findByUser(@Param("user") User user);
+    // @Query("SELECT u FROM Teacher u WHERE u.user = :user")
+    Teacher findByUser(User user);
 
     Teacher findByEmail(String string);
 

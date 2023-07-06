@@ -126,27 +126,27 @@ public class StudentServiceImpl implements StudentService {
     //     //     throw new StudentException("Student " +email+ " does not exist");
     //     // }
     // }
-    @Override
-    public Long generateAccount() {
-        Long totalRowInStudent = studentRepository.count();
-        List <Student> list = studentRepository.findByUser(null);
-        // list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
-        list.stream().forEach(student -> {
-            char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
-            String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
-// System.out.println( randomStr );
-            UserDto userDto = userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
-            Optional<User> user = userRepository.findByEmail(userDto.getEmail());
-            if (!user.isPresent()){
-                throw new StudentException("User not found: " + userDto.getEmail());
-            }
-            studentRepository.save(student.setUser(user.get()));
-        });
-        return totalRowInStudent;
-        //Student newStudent = modelMapper.map(student, Student.class);
-        //studentRepository.save(newStudent);
-        //return student;
-    }
+//     @Override
+//     public Long generateAccount() {
+//         Long totalRowInStudent = studentRepository.count();
+//         List <Student> list = studentRepository.findByUser(null);
+//         // list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
+//         list.stream().forEach(student -> {
+//             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
+//             String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
+// // System.out.println( randomStr );
+//             UserDto userDto = userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
+//             Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+//             if (!user.isPresent()){
+//                 throw new StudentException("User not found: " + userDto.getEmail());
+//             }
+//             studentRepository.save(student.setUser(user.get()));
+//         });
+//         return totalRowInStudent;
+//         //Student newStudent = modelMapper.map(student, Student.class);
+//         //studentRepository.save(newStudent);
+//         //return student;
+//     }
 
 
     // huyen
