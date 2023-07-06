@@ -16,4 +16,7 @@ public interface ClassesService {
     List<Classes> getAllClasses();
 
     List<Classes> getClassesByName(String name);
+
+    // huyen
+    List<Classes> getClassesByTeacherId(Long teacherId);
 }

@@ -25,31 +25,32 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject updateSubject(Long id, Subject subject) {
         if (!subjectRepository.existsById(id)) {
-			throw new SubjectNotFoundException("Metric not found with id: " + id);
-		}
+            throw new SubjectNotFoundException("Metric not found with id: " + id);
+        }
 
-		if (subject.getName() == null || subject.getTeacher() == null) {
-			throw new IllegalArgumentException("Name, description, value, and year are required.");
-		}
+        if (subject.getName() == null || subject.getTeacher() == null) {
+            throw new IllegalArgumentException("Name, description, value, and year are required.");
+        }
 
-		Subject existingSubject = subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Metric not found with id: " + id));
+        Subject existingSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException("Metric not found with id: " + id));
 
-		if (existingSubject != null && !existingSubject.getName().equals(subject.getName())) {
-			if (subjectRepository.existsByName(subject.getName())) {
-				throw new IllegalArgumentException("Academic year with the same name already exists.");
-			}
-		}
-		subject.setId(id);
-		return subjectRepository.save(subject);
+        if (existingSubject != null && !existingSubject.getName().equals(subject.getName())) {
+            if (subjectRepository.existsByName(subject.getName())) {
+                throw new IllegalArgumentException("Academic year with the same name already exists.");
+            }
+        }
+        subject.setId(id);
+        return subjectRepository.save(subject);
     }
 
     @Override
     public boolean deleteSubject(Long id) {
         if (!subjectRepository.existsById(id)) {
-			throw new SubjectNotFoundException("Metric not found with id: " + id);
-		}
-		subjectRepository.deleteById(id);
-		return true;
+            throw new SubjectNotFoundException("Metric not found with id: " + id);
+        }
+        subjectRepository.deleteById(id);
+        return true;
     }
 
     @Override
@@ -66,5 +67,11 @@ public class SubjectServiceImpl implements SubjectService {
         public SubjectNotFoundException(String message) {
             super(message);
         }
+    }
+
+    // huyen
+    @Override
+    public List<Subject> getSubjectsByTeacherId(Long teacherId) {
+        return subjectRepository.findByTeacherId(teacherId);
     }
 }
