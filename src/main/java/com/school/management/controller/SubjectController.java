@@ -76,4 +76,10 @@ public class SubjectController {
         List<Subject> subject = subjectService.getSubjectByName(name);
         return ResponseEntity.ok(subject);
     }
+
+    // huyen
+    @GetMapping("/teacher/{teacherId}")
+    public List<Subject> getSubjectsByTeacherId(@PathVariable Long teacherId) {
+        return subjectService.getSubjectsByTeacherId(teacherId);
+    }
 }

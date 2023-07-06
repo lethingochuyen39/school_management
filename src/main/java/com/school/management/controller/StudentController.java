@@ -34,10 +34,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-  // huyen
+    // huyen
     @Autowired
     private StudentServiceImpl studentServiceImpl;
-    
+
     @GetMapping("/allStudent")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.ok(studentService.GetAllStudent());
@@ -79,7 +79,6 @@ public class StudentController {
         }
     }
 
-
     @PostMapping("/giveAccessAccount")
     public ResponseEntity<?> giveAccessAccount() {
         try {
@@ -89,40 +88,40 @@ public class StudentController {
         }
     }
 
-
     @PostMapping("/import")
-    public ResponseEntity<?> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
-    
+    public ResponseEntity<?> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile)
+            throws IOException {
+
         try (// List<StudentDTO> tempStudentList = new ArrayList<StudentDTO>();
-        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream())) {
+                XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream())) {
             XSSFSheet worksheet = workbook.getSheetAt(0);
-            
-            for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+
+            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
                 XSSFRow row = worksheet.getRow(i);
                 StudentDTO tempStudent = new StudentDTO();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
                 String date = row.getCell(2).toString();
                 LocalDate localDate = LocalDate.parse(date, formatter);
-                tempStudent.setAddress(row.getCell(3).toString()).setClassName(row.getCell(7).toString()).setDob(localDate).setEmail(row.getCell(2).toString()).setGender(row.getCell(1).toString()).setImage(null).setName(row.getCell(0).toString()).setPhone(row.getCell(5).toString()).setStatus("pending");
+                tempStudent.setAddress(row.getCell(3).toString()).setClassName(row.getCell(7).toString())
+                        .setDob(localDate).setEmail(row.getCell(2).toString()).setGender(row.getCell(1).toString())
+                        .setImage(null).setName(row.getCell(0).toString()).setPhone(row.getCell(5).toString())
+                        .setStatus("pending");
                 // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
                 // tempStudent.setContent(row.getCell(1).getStringCellValue());
-                // tempStudentList.add(tempStudent);   
+                // tempStudentList.add(tempStudent);
                 studentService.AddStudent(tempStudent);
             }
             return ResponseEntity.ok("Student list added successfully");
-        }
-        catch(Exception e){
-            return ResponseEntity.badRequest().body("Student list added failed, "+e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Student list added failed, " + e.getMessage());
         }
     }
-    
 
     // huyen
-    @GetMapping("/api/classes/{classId}/students")
+    @GetMapping("/classes/{classId}/students")
     public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId) {
         List<Student> studentClass = studentServiceImpl.findByClassId(classId);
         return ResponseEntity.ok(studentClass);
     }
-
 
 }
