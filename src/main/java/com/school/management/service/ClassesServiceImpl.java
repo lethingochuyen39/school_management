@@ -5,53 +5,66 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.school.management.dto.ClassesDto;
+import com.school.management.model.AcademicYear;
 import com.school.management.model.Classes;
+import com.school.management.model.Teacher;
+import com.school.management.repository.AcademicYearRespository;
 import com.school.management.repository.ClassesRepository;
+import com.school.management.repository.TeacherRepository;
 
 @Service
 public class ClassesServiceImpl implements ClassesService {
     @Autowired
     private ClassesRepository classesRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
+    @Autowired
+    private AcademicYearRespository academicYearRepository;
 
     @Override
-    public Classes createClasses(Classes classes) {
-        if (classes.getName() == null || classes.getDescription() == null
-                || classes.getAcademicYear() == null || classes.getTeacher() == null
-                || classes.getGrade() == null) {
-            throw new IllegalArgumentException("Name, description, value, and year are required.");
-        }
+    public Classes createClasses(ClassesDto classesDto) {
+        Long teacherId = classesDto.getTeacherId();
+        Long academicYearId = classesDto.getAcademicYearId();
 
-        return classesRepository.save(classes);
+        Teacher teacher = teacherRepository.findById(teacherId)
+            .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teacherId));
+        AcademicYear academicYear = academicYearRepository.findById(academicYearId)
+            .orElseThrow(() -> new IllegalArgumentException("AcademicYear not found with id: " + academicYearId));
+        
+        Classes classes = new Classes();
+        classes.setName(classesDto.getName());
+        classes.setDescription(classesDto.getDescription());
+        classes.setGrade(classesDto.getGrade());
+        classes.setTeacher(teacher);
+        classes.setAcademicYear(academicYear);
+
+        return classesRepository.save(classes); 
     }
 
     @Override
     public Classes getClassesById(Long id) {
         return classesRepository.findById(id)
-				.orElseThrow(() -> new ClassesNotFoundException("Metric not found with id: " + id));
+				.orElseThrow(() -> new ClassesNotFoundException("Class not found with id: " + id));
     }
 
     @Override
-    public Classes updateClasses(Long id, Classes classes) {
-        if (!classesRepository.existsById(id)) {
-			throw new ClassesNotFoundException("Metric not found with id: " + id);
-		}
+    public Classes updateClasses(Long id, ClassesDto classesDto) {
+        Long teacherId = classesDto.getTeacherId();
+        Long academicYearId = classesDto.getAcademicYearId();
+        Classes exitingClasses = classesRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + id));
+            Teacher teacher = teacherRepository.findById(teacherId)
+            .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teacherId));
+        AcademicYear academicYear = academicYearRepository.findById(academicYearId)
+            .orElseThrow(() -> new IllegalArgumentException("AcademicYear not found with id: " + academicYearId));
+        exitingClasses.setName(classesDto.getName());
+        exitingClasses.setDescription(classesDto.getDescription());
+        exitingClasses.setGrade(classesDto.getGrade());
+        exitingClasses.setTeacher(teacher);
+        exitingClasses.setAcademicYear(academicYear);
 
-		if (classes.getName() == null || classes.getDescription() == null
-                || classes.getAcademicYear() == null || classes.getTeacher() == null
-                || classes.getGrade() == null) {
-			throw new IllegalArgumentException("Name, description, value, and year are required.");
-		}
-
-		// Classes existingClasses = classesRepository.findById(id)
-		// 		.orElseThrow(() -> new ClassesNotFoundException("Metric not found with id: " + id));
-
-		// if (existingClasses != null && !existingClasses.getName().equals(classes.getName()) && !existingClasses.getName().equals(classes.getTeacher())) {
-		// 	if (classesRepository.existsByName(classes.getName())) {
-		// 		throw new IllegalArgumentException("Academic year with the same name already exists.");
-		// 	}
-		// }
-		classes.setId(id);
-		return classesRepository.save(classes);
+        return classesRepository.save(exitingClasses);
     }
 
     @Override
