@@ -20,4 +20,5 @@ public interface TeacherService {
 
     List<Teacher> getTeacherByName(String name);
 
+    Long generateAccount();
 }

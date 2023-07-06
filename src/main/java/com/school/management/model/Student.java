@@ -54,7 +54,7 @@ public class Student {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
-	@JoinColumn(name = "user_id", unique = true, nullable = false)
+	@JoinColumn(name = "user_id", unique = true, nullable = true)
 	private User user;
 
 }

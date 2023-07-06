@@ -2,6 +2,7 @@ package com.school.management.dto;
 
 import java.time.LocalDate;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,12 +11,10 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
-public class StudentDTO {
-	// huyen
-	private Long id;
-
-	private String name;
+public class ParentDTO {
+    private String name;
 
 	private String gender;
 
@@ -27,9 +26,7 @@ public class StudentDTO {
 
 	private String phone;
 
-	private String status;
-
 	private String image;
-
-	private String className;
+	
+	private String studentEmail;
 }
