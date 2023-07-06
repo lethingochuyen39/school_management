@@ -35,7 +35,7 @@ public class DocumentServiceImpl implements DocumentService {
 
 		String title = document.getTitle();
 		if (documentRepository.existsByTitle(title)) {
-			throw new IllegalArgumentException("Document with the same title already exists.");
+			throw new IllegalArgumentException("Tiêu đề đã tồn tại.");
 		}
 
 		String fileName = file.getOriginalFilename();
@@ -47,7 +47,7 @@ public class DocumentServiceImpl implements DocumentService {
 		document.setUpdatedAt(LocalDateTime.now());
 
 		User uploadedBy = userRepository.findById(uploadedById)
-				.orElseThrow(() -> new DocumentNotFoundException("User not found with id: " + uploadedById));
+				.orElseThrow(() -> new DocumentNotFoundException("Không tìm thấy user: " + uploadedById));
 
 		document.setUploadedBy(uploadedBy);
 
@@ -69,7 +69,7 @@ public class DocumentServiceImpl implements DocumentService {
 
 			return filePath;
 		} catch (IOException e) {
-			throw new RuntimeException("Thất bại.");
+			throw new RuntimeException("Không thể lưu tệp.");
 		}
 	}
 
@@ -128,7 +128,7 @@ public class DocumentServiceImpl implements DocumentService {
 	private void validateDocumentFields(Document document) {
 		String title = document.getTitle();
 		if (title == null || title.isEmpty()) {
-			throw new IllegalArgumentException("Title is required.");
+			throw new IllegalArgumentException("Tiêu đề là bắt buộc.");
 		}
 	}
 

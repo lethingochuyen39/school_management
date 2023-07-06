@@ -7,4 +7,5 @@ import com.school.management.model.Lesson;
 
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
+	Lesson findByName(String name);
 }

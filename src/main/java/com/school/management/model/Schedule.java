@@ -1,16 +1,7 @@
 package com.school.management.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,29 +22,24 @@ public class Schedule implements Serializable {
 	private Long id;
 
 	@ManyToOne
-	// @NotNull
-	@JoinColumn(name = "day_of_week_id")
+	@JoinColumn(name = "day_of_week_id", nullable = false)
 	private DayOfWeek dayOfWeek;
 
 	@ManyToOne
-	// @NotNull
-	@JoinColumn(name = "lesson_id")
+	@JoinColumn(name = "lesson_id", nullable = false)
 	private Lesson lesson;
-
 	@ManyToOne
-	@JoinColumn(name = "subject_id")
+	@JoinColumn(name = "subject_id", nullable = false)
 	private Subject subject;
 
 	@ManyToOne
-	// @NotNull
-	@JoinColumn(name = "class_id")
+	@JoinColumn(name = "class_id", nullable = false)
 	private Classes classes;
 
 	@ManyToOne
-	@JoinColumn(name = "teacher_id")
+	@JoinColumn(name = "teacher_id", nullable = false)
 	private Teacher teacher;
 
-	// @NotBlank
 	@Enumerated(EnumType.STRING)
 	private ScheduleStatus status;
 

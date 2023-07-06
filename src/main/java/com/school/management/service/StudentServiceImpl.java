@@ -35,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private ModelMapper modelMapper;
-    
+
     @Autowired
     private UserService userService;
 
@@ -50,8 +50,8 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO UpdateProfile(StudentDTO student) {
         Student newStudent = studentRepository.findByEmail(student.getEmail());
 
-        if(newStudent == null) {
-            throw new StudentException("Student "+student.getEmail()+" cant be found");
+        if (newStudent == null) {
+            throw new StudentException("Student " + student.getEmail() + " cant be found");
         }
         Classes classs = classesRepository.findByName(student.getClassName());
         newStudent.setClassName(classs);
@@ -59,14 +59,15 @@ public class StudentServiceImpl implements StudentService {
         Student saveStudent = modelMapper.map(student, Student.class);
         studentRepository.save(saveStudent);
 
-       // if (newStudent == null) {
-        //    throw new StudentNotFoundException("Student " + student.getEmail() + " cant be found");
-        //}
-        //Classes classs = classesRepository.findByName(student.getClassName());
-       // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob())
-                //.setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage())
-                //.setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
-        //studentRepository.save(newStudent);
+        // if (newStudent == null) {
+        // throw new StudentNotFoundException("Student " + student.getEmail() + " cant
+        // be found");
+        // }
+        // Classes classs = classesRepository.findByName(student.getClassName());
+        // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob())
+        // .setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage())
+        // .setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
+        // studentRepository.save(newStudent);
 
         return student;
     }
@@ -83,7 +84,7 @@ public class StudentServiceImpl implements StudentService {
     public String DeleteStudent(String email) {
         Student deleteStudent = studentRepository.findByEmail(email);
 
-        if(deleteStudent == null) {
+        if (deleteStudent == null) {
             throw new StudentException("Student " + email + " cant be found");
 
         }
@@ -98,7 +99,7 @@ public class StudentServiceImpl implements StudentService {
             throw new StudentException("Student already exists");
         }
 
-        Student newStudent = modelMapper.map(student,Student.class);
+        Student newStudent = modelMapper.map(student, Student.class);
         Classes classes = classesRepository.findByName(student.getClassName());
         if (classes == null) {
             throw new StudentException("Class is not found");
@@ -106,26 +107,30 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(newStudent.setClassName(classes));
         return student;
     }
+
     public class StudentException extends RuntimeException {
-		public StudentException(String message) {
-			super(message);
-		}
-	}
+        public StudentException(String message) {
+            super(message);
+        }
+    }
+
     // @Override
     // public Student GiveAccessAccount(String email,Student student) {
-    //     Optional<User> user = userRepository.findByEmail(email);
-    //     return student.setUser(user.get());
-    //     // if (student.getUser() != null) {
-    //     //     throw new StudentException("Student has already been added the user " + student.getUser().getEmail());
-    //     // }
-    //     // if (user.isPresent()&&student!=null) {
-    //     //     student.setUser(user.get());
-    //     //     studentRepository.save(student);
-    //     //     return student;
-    //     // } else {
-    //     //     throw new StudentException("Student " +email+ " does not exist");
-    //     // }
+    // Optional<User> user = userRepository.findByEmail(email);
+    // return student.setUser(user.get());
+    // // if (student.getUser() != null) {
+    // // throw new StudentException("Student has already been added the user " +
+    // student.getUser().getEmail());
+    // // }
+    // // if (user.isPresent()&&student!=null) {
+    // // student.setUser(user.get());
+    // // studentRepository.save(student);
+    // // return student;
+    // // } else {
+    // // throw new StudentException("Student " +email+ " does not exist");
+    // // }
     // }
+  
 //     @Override
 //     public Long generateAccount() {
 //         Long totalRowInStudent = studentRepository.count();
@@ -147,6 +152,7 @@ public class StudentServiceImpl implements StudentService {
 //         //studentRepository.save(newStudent);
 //         //return student;
 //     }
+
 
 
     // huyen
