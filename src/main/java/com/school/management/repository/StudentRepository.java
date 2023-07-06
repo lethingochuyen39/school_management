@@ -13,8 +13,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Student findByEmail(String email);
 
 
-    @Query("SELECT u FROM Student u WHERE u.user = :user")
-    List<Student> findByUser(@Param("user") User user);
+    // @Query("SELECT u FROM Student u WHERE u.user = :user")
+    Student findByUser( User user);
 
     // huyen
     @Query("SELECT s FROM Student s WHERE s.className.id = :classId")

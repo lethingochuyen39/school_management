@@ -147,4 +147,18 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public String deleteAccount(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isPresent()){
+            userRepository.delete(user.get());
+            return "User is deleted successfully";
+        }
+        else{
+            return "User is not found";
+        }
+    }
+
+    
 }

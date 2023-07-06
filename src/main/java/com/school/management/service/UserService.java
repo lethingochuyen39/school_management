@@ -22,4 +22,5 @@ public interface UserService {
     User getByResetPasswordToken(String token);
     // Long generateAccount();
 
+    String deleteAccount(String email);
 }
