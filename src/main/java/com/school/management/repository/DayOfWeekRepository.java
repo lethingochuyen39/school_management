@@ -7,4 +7,5 @@ import com.school.management.model.DayOfWeek;
 
 @Repository
 public interface DayOfWeekRepository extends JpaRepository<DayOfWeek, Long> {
+	DayOfWeek findByName(String name);
 }
