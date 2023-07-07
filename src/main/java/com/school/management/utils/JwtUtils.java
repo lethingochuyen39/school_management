@@ -62,7 +62,8 @@ public class JwtUtils {
         accessToken.setUid(uid);
         if(student != null){
             id = student.getId();
-        }else{
+        }
+        if(teacher!= null){
             id = teacher.getId();
         }
         accessToken.setId(id);
