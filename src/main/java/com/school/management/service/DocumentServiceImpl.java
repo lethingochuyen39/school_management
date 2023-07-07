@@ -38,8 +38,8 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new IllegalArgumentException("Tiêu đề đã tồn tại.");
 		}
 
-		String fileName = file.getOriginalFilename();
 		String filePath = saveFile(file);
+		String fileName = generateUniqueFileName(file.getOriginalFilename());
 
 		document.setFilePath(filePath);
 		document.setFileName(fileName);
@@ -61,8 +61,7 @@ public class DocumentServiceImpl implements DocumentService {
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
-
-			String fileName = file.getOriginalFilename();
+			String fileName = generateUniqueFileName(file.getOriginalFilename());
 			String filePath = uploadPath + "/" + fileName;
 
 			Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
@@ -71,6 +70,13 @@ public class DocumentServiceImpl implements DocumentService {
 		} catch (IOException e) {
 			throw new RuntimeException("Không thể lưu tệp.");
 		}
+	}
+
+	private String generateUniqueFileName(String originalFilename) {
+		String timestamp = String.valueOf(System.currentTimeMillis());
+		String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+		String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
+		return fileName + "_" + timestamp + extension;
 	}
 
 	@Override
