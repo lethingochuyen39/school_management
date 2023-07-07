@@ -41,7 +41,7 @@ public class EventNewsServiceImpl implements EventNewsService {
 			eventNews.setImagePath(imagePath);
 		}
 
-		eventNews.setIsActive(true);
+		eventNews.setIsActive(eventNews.getIsActive());
 		eventNews.setCreatedAt(LocalDateTime.now());
 		eventNews.setUpdatedAt(LocalDateTime.now());
 		return eventNewsRepository.save(eventNews);
