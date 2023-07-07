@@ -40,6 +40,8 @@ public class ScoreController {
 			return ResponseEntity.ok(createdScore);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
@@ -49,6 +51,8 @@ public class ScoreController {
 			Score updatedScore = scoreServiceImpl.updateScore(id, scoreDTO);
 			return ResponseEntity.ok(updatedScore);
 		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 

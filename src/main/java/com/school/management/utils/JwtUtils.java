@@ -60,10 +60,13 @@ public class JwtUtils {
         accessToken.setRoles(roles);
         accessToken.setToken(token);
         accessToken.setUid(uid);
-        if(student != null){
+        if (student != null) {
             id = student.getId();
-        }else{
+        }
+        if (teacher != null) {
             id = teacher.getId();
+        } else {
+            id = uid;
         }
         accessToken.setId(id);
         accessToken.setRefreshToken(refreshTokenService.createRefreshToken(login).getToken());

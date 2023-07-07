@@ -51,6 +51,12 @@ public class ScoreServiceImpl implements ScoreService {
 		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy loại điểm với id: " + scoreTypeId));
 
+		Score existingScore = scoreRepository.findByStudentAndSubjectAndScoreType(student, subject, scoreType);
+		if (existingScore != null) {
+			throw new IllegalArgumentException(
+					"Điểm số đã tồn tại cho học sinh và môn học này với loại điểm tương ứng.");
+		}
+
 		Score score = new Score();
 		score.setStudent(student);
 		score.setSubject(subject);
