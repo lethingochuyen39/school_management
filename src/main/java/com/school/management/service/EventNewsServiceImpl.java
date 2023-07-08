@@ -75,7 +75,7 @@ public class EventNewsServiceImpl implements EventNewsService {
 		existingEventNews.setTitle(newTitle);
 		existingEventNews.setContent(eventNews.getContent());
 		existingEventNews.setIsActive(eventNews.getIsActive());
-		existingEventNews.setUpdatedAt(LocalDateTime.now());
+		existingEventNews.setUpdatedAt(eventNews.getUpdatedAt());
 
 		if (image != null && !image.isEmpty()) {
 			String imagePath = saveImage(image);

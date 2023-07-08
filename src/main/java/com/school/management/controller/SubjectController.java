@@ -78,7 +78,7 @@ public class SubjectController {
     }
 
     // huyen
-    @GetMapping("/teacher/{teacherId}")
+    @GetMapping("/teachers/{teacherId}")
     public List<Subject> getSubjectsByTeacherId(@PathVariable Long teacherId) {
         return subjectService.getSubjectsByTeacherId(teacherId);
     }
