@@ -90,4 +90,10 @@ public class ScheduleController {
 		}
 	}
 
+	@GetMapping("/teachers/{teacherId}")
+	public ResponseEntity<List<Schedule>> getTeacherSchedule(@PathVariable Long teacherId) {
+		List<Schedule> schedule = scheduleServiceImpl.getTeacherSchedule(teacherId);
+		return ResponseEntity.ok(schedule);
+	}
+
 }

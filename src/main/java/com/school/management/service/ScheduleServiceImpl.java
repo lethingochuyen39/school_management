@@ -190,4 +190,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return scheduleRepository.save(existingSchedule);
 	}
 
+	@Override
+	public List<Schedule> getTeacherSchedule(Long teacherId) {
+		return scheduleRepository.findByTeacherId(teacherId);
+	}
+
 }
