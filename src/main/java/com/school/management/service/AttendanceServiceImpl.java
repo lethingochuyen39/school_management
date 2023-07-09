@@ -35,7 +35,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         Attendance attendance = new Attendance();
         attendance.setStudent(student);
-        attendance.setClassName(classes);
+        attendance.setClasses(classes);
         attendance.setDate(attendance.getDate());
         attendance.setStatus(attendanceDto.getStatus());
 
@@ -62,7 +62,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 		
 
 		existingAttendance.setStudent(student);
-		existingAttendance.setClassName(classes);
+		existingAttendance.setClasses(classes);
 		existingAttendance.setDate(attendanceDto.getDate());
         existingAttendance.setStatus(attendanceDto.getStatus());
 
