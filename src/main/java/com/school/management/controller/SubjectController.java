@@ -62,15 +62,15 @@ public class SubjectController {
         return ResponseEntity.ok(subject);
     }
 
-    // @GetMapping("/findById/{id}")
-    // public ResponseEntity<?> getSubjectById(@PathVariable Long id) {
-    // try {
-    // SubjectDto subject = subjectServiceImpl.getSubjectById(id);
-    // return ResponseEntity.ok(subject);
-    // } catch (SubjectServiceImpl.SubjectNotFoundException e) {
-    // return ResponseEntity.badRequest().body(e.getMessage());
-    // }
-    // }
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> getSubjectById(@PathVariable Long id) {
+        try {
+            Subject subject = subjectService.getSubjectById(id);
+            return ResponseEntity.ok(subject);
+        } catch (SubjectServiceImpl.SubjectNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/findByName/{name}")
     public ResponseEntity<List<Subject>> getSubjectByName(@PathVariable(value = "name") String name) {
