@@ -1,5 +1,7 @@
 package com.school.management.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +13,9 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ClassesDto {
-    private String name;
-    private String description;
-    private String grade;
-    private Long teacherId;
-    private Long academicYearId;
+public class AttendanceDto {
+    private LocalDate date;
+    private String status;
+    private Long classId;
+    private Long studentId;
 }

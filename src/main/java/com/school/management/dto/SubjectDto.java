@@ -12,9 +12,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class SubjectDto {
-    private Long id;
-
     private String name;
-
     private Long teacherId;
 }

@@ -1,21 +1,44 @@
 package com.school.management.service;
 
-import com.school.management.model.Attendance;
-import com.school.management.repository.AttendanceRepository;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.school.management.dto.AttendanceDto;
+import com.school.management.model.Attendance;
+import com.school.management.model.Classes;
+import com.school.management.model.Student;
+import com.school.management.repository.AttendanceRepository;
+import com.school.management.repository.ClassesRepository;
+import com.school.management.repository.StudentRepository;
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private ClassesRepository classesRepository;
 
     @Override
-    public Attendance createAttendance(Attendance attendance) {
+    public Attendance createAttendance(AttendanceDto attendanceDto) {
+        Long studentId = attendanceDto.getStudentId();
+        Long classId = attendanceDto.getClassId();
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        Classes classes = classesRepository.findById(classId)
+                .orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + classId));
+
+        Attendance attendance = new Attendance();
+        attendance.setStudent(student);
+        attendance.setClassName(classes);
+        attendance.setDate(attendance.getDate());
+        attendance.setStatus(attendanceDto.getStatus());
+
         return attendanceRepository.save(attendance);
     }
 
@@ -25,13 +48,25 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Attendance updateAttendance(Long id, Attendance attendance) {
-        Attendance existingAttendance = attendanceRepository.findById(id).orElse(null);
-        if (existingAttendance != null) {
-            attendance.setId(existingAttendance.getId());
-            return attendanceRepository.save(attendance);
-        }
-        return null;
+    public Attendance updateAttendance(Long id, AttendanceDto attendanceDto) {
+		Attendance existingAttendance = attendanceRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
+
+		Long studentId = attendanceDto.getStudentId();
+		Long classId = attendanceDto.getClassId();
+
+		Student student = studentRepository.findById(studentId)
+				.orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+		Classes classes = classesRepository.findById(classId)
+				.orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + classId));
+		
+
+		existingAttendance.setStudent(student);
+		existingAttendance.setClassName(classes);
+		existingAttendance.setDate(attendanceDto.getDate());
+        existingAttendance.setStatus(attendanceDto.getStatus());
+
+		return attendanceRepository.save(existingAttendance);
     }
 
     @Override

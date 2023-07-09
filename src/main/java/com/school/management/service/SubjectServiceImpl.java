@@ -63,6 +63,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    public Subject getSubjectById(Long id) {
+        return subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject not found with id: " + id));
+
+    }
+
+    @Override
     public List<Subject> getSubjectByName(String name) {
         return subjectRepository.findByNameContainingIgnoreCase(name);
     }

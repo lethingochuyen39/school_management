@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.school.management.dto.AttendanceDto;
 import com.school.management.model.Attendance;
 import com.school.management.service.AttendanceService;
 
@@ -17,8 +18,8 @@ public class AttendanceController {
     private AttendanceService attendanceService;
 
     @PostMapping("/create")
-    public ResponseEntity<Attendance> createAttendance(@RequestBody Attendance attendance) {
-        Attendance createdAttendance = attendanceService.createAttendance(attendance);
+    public ResponseEntity<Attendance> createAttendance(@RequestBody AttendanceDto attendanceDto) {
+        Attendance createdAttendance = attendanceService.createAttendance(attendanceDto);
         return ResponseEntity.ok(createdAttendance);
     }
 
@@ -33,8 +34,9 @@ public class AttendanceController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Attendance> updateAttendance(@PathVariable("id") Long id, @RequestBody Attendance attendance) {
-        Attendance updatedAttendance = attendanceService.updateAttendance(id, attendance);
+    public ResponseEntity<Attendance> updateAttendance(@PathVariable("id") Long id,
+            @RequestBody AttendanceDto attendanceDto) {
+        Attendance updatedAttendance = attendanceService.updateAttendance(id, attendanceDto);
         if (updatedAttendance != null) {
             return ResponseEntity.ok(updatedAttendance);
         } else {
