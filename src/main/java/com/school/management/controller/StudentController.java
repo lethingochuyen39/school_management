@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.school.management.dto.StudentDTO;
+import com.school.management.model.Classes;
 import com.school.management.model.Student;
 import com.school.management.service.StudentService;
 import com.school.management.service.StudentServiceImpl;
@@ -79,15 +80,13 @@ public class StudentController {
         }
     }
 
-
-
     // @PostMapping("/giveAccessAccount")
     // public ResponseEntity<?> giveAccessAccount() {
-    //     try {
-    //         return ResponseEntity.ok(studentService.generateAccount());
-    //     } catch (Exception e) {
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
+    // try {
+    // return ResponseEntity.ok(studentService.generateAccount());
+    // } catch (Exception e) {
+    // return ResponseEntity.badRequest().body(e.getMessage());
+    // }
     // }
 
     @PostMapping("/import")
@@ -132,6 +131,17 @@ public class StudentController {
             return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // huyen
+    @GetMapping("/{studentId}/class")
+    public ResponseEntity<?> getClassByStudentId(@PathVariable Long studentId) {
+        Classes foundClass = studentService.findClassByStudentId(studentId);
+        if (foundClass != null) {
+            return ResponseEntity.ok(foundClass);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
