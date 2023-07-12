@@ -1,16 +1,12 @@
 package com.school.management.service;
 
-import java.security.SecureRandom;
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.school.management.dto.TeacherDto;
 import com.school.management.model.Teacher;
-import com.school.management.model.User;
 import com.school.management.repository.TeacherRepository;
 import com.school.management.repository.UserRepository;
 
@@ -30,7 +26,6 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher createTeacher(TeacherDto teacherDto) {
         // Long userId = teacherDto.getUserId();
-
         // User user = userRepository.findById(userId)
         // .orElseThrow(() -> new IllegalArgumentException("User not found with id: " +
         // userId));
@@ -50,13 +45,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher updateTeacher(Long id, TeacherDto teacherDto) {
-
-        // Long userId = teacherDto.getUserId();
-
-        // User user = userRepository.findById(userId)
-        // .orElseThrow(() -> new IllegalArgumentException("User not found with id: " +
-        // userId));
-
         Teacher exitingTeacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + id));
 

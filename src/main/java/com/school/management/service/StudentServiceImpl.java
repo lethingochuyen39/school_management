@@ -3,7 +3,6 @@ package com.school.management.service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -18,7 +17,6 @@ import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
-
 import com.school.management.repository.UserRepository;
 
 @Service

@@ -1,23 +1,20 @@
 package com.school.management.service;
 
-import com.school.management.model.Document;
-import com.school.management.model.User;
-import com.school.management.repository.DocumentRepository;
-import com.school.management.repository.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.school.management.model.Document;
+import com.school.management.model.User;
+import com.school.management.repository.DocumentRepository;
+import com.school.management.repository.UserRepository;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {

@@ -3,7 +3,6 @@ package com.school.management.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
