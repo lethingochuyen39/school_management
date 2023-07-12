@@ -70,10 +70,10 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public boolean deleteClasses(Long id) {
         if (!classesRepository.existsById(id)) {
-			throw new ClassesNotFoundException("Metric not found with id: " + id);
-		}
-		classesRepository.deleteById(id);
-		return true;
+            throw new ClassesNotFoundException("Metric not found with id: " + id);
+        }
+        classesRepository.deleteById(id);
+        return true;
     }
 
     @Override
@@ -90,5 +90,11 @@ public class ClassesServiceImpl implements ClassesService {
         public ClassesNotFoundException(String message) {
             super(message);
         }
+    }
+
+    // huyen
+    @Override
+    public List<Classes> getClassesByTeacherId(Long teacherId) {
+        return classesRepository.findAllByTeacherId(teacherId);
     }
 }

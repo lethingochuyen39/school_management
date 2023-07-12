@@ -18,8 +18,8 @@ public class ScoreController {
 	private ScoreServiceImpl scoreServiceImpl;
 
 	@GetMapping
-	public ResponseEntity<List<Score>> getAllScores() {
-		List<Score> scores = scoreServiceImpl.getAllScores();
+	public ResponseEntity<List<?>> getAllScores(@RequestParam(required = false) String studentName) {
+		List<Score> scores = scoreServiceImpl.searchScore(studentName);
 		return ResponseEntity.ok(scores);
 	}
 
@@ -33,12 +33,14 @@ public class ScoreController {
 		}
 	}
 
-	@PostMapping("/add")
+	@PostMapping()
 	public ResponseEntity<?> createScore(@RequestBody ScoreDTO scoreDTO) {
 		try {
 			Score createdScore = scoreServiceImpl.createScore(scoreDTO);
 			return ResponseEntity.ok(createdScore);
 		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
@@ -49,6 +51,8 @@ public class ScoreController {
 			Score updatedScore = scoreServiceImpl.updateScore(id, scoreDTO);
 			return ResponseEntity.ok(updatedScore);
 		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 
@@ -76,10 +80,10 @@ public class ScoreController {
 		return ResponseEntity.ok(scores);
 	}
 
-	// @GetMapping("/search/class")
-	// public ResponseEntity<List<Score>>
-	// searchScoresByClassName(@RequestParam("name") String className) {
-	// List<Score> scores = scoreService.searchScoresByClassName(className);
-	// return ResponseEntity.ok(scores);
-	// }
+	@GetMapping("/class-scores/{classId}")
+	public ResponseEntity<List<Score>> searchClassScores(@RequestParam("classId") Long classId) {
+		List<Score> scores = scoreServiceImpl.findByClassId(classId);
+		return ResponseEntity.ok(scores);
+	}
+
 }

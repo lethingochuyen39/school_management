@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,16 +34,19 @@ public class DocumentController {
 	@Autowired
 	private DocumentServiceImpl documentServiceImpl;
 
-	@PostMapping("/add")
+	@PostMapping()
 	public ResponseEntity<?> createDocument(@ModelAttribute Document document, @RequestPart("file") MultipartFile file,
 			@RequestParam("uploadedById") Long uploadedById) {
 		try {
 			Document addDocument = documentServiceImpl.createDocument(document, file, uploadedById);
 			return ResponseEntity.ok(addDocument);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (DocumentNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 
 	}
@@ -57,16 +61,25 @@ public class DocumentController {
 		}
 	}
 
-	@PutMapping("/edit/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> updateDocument(@PathVariable("id") Long id,
-			@ModelAttribute Document document, @RequestPart("file") MultipartFile file) {
+			@ModelAttribute Document document, @RequestParam(value = "file", required = false) MultipartFile file) {
 		try {
-			Document updatedDocument = documentServiceImpl.updateDocument(id, document, file);
-			return ResponseEntity.ok(updatedDocument);
+			Document updatedDocument;
+			if (file != null) {
+				updatedDocument = documentServiceImpl.updateDocument(id, document, file);
+			} else {
+				updatedDocument = documentServiceImpl.updateDocument(id, document, null); // Truyền giá trị null cho
+																							// file
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).body(updatedDocument);
 		} catch (DocumentNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(e.getMessage());
 		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
@@ -81,8 +94,8 @@ public class DocumentController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Document>> getAllDocuments() {
-		List<Document> documents = documentServiceImpl.getAllDocuments();
+	public ResponseEntity<List<Document>> getAllDocuments(@RequestParam(required = false) String title) {
+		List<Document> documents = documentServiceImpl.searchDocument(title);
 		return ResponseEntity.ok(documents);
 	}
 
@@ -93,19 +106,14 @@ public class DocumentController {
 	}
 
 	@GetMapping(path = "/{id}/download")
-	public ResponseEntity<?> download(@RequestParam Long id, @RequestParam String fileName)
-			throws MalformedURLException {
-
+	public ResponseEntity<?> download(@PathVariable Long id) {
 		try {
 			Document document = documentServiceImpl.getDocumentById(id);
-			// Tạo đường dẫn tới file
 			String filePath = document.getFilePath();
 			Path file = Paths.get(filePath);
 			Resource resource = new UrlResource(file.toUri());
 
-			// Kiểm tra xem file có tồn tại và có thể đọc được không
 			if (resource.exists() && resource.isReadable()) {
-				// Trả về dữ liệu file và header cho việc tải xuống
 				return ResponseEntity.ok()
 						.header(HttpHeaders.CONTENT_DISPOSITION,
 								"attachment; filename=\"" + resource.getFilename() + "\"")
@@ -115,10 +123,10 @@ public class DocumentController {
 				return ResponseEntity.notFound().build();
 			}
 		} catch (DocumentNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		} catch (MalformedURLException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-
 	}
+
 }

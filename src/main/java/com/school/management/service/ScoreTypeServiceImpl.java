@@ -14,20 +14,33 @@ public class ScoreTypeServiceImpl implements ScoreTypeService {
 	private ScoreTypeRepository scoreTypeRepository;
 
 	@Override
-	public List<ScoreType> getAllScoreTypes() {
-		return scoreTypeRepository.findAll();
+	public List<ScoreType> getAllScoreTypes(String name) {
+		if (name != null && !name.isEmpty()) {
+			return scoreTypeRepository.findByNameContainingIgnoreCase(name);
+		} else {
+			return scoreTypeRepository.findAll();
+		}
 	}
 
 	@Override
 	public ScoreType getScoreTypeById(Long id) {
 		return scoreTypeRepository.findById(id)
-				.orElseThrow(() -> new ScoreTypeNotFoundException("ScoreType not found with id: " + id));
+				.orElseThrow(() -> new ScoreTypeNotFoundException("Không tìm thấy loại điểm có id: " + id));
 	}
 
 	@Override
 	public ScoreType createScoreType(ScoreType scoreType) {
+		if (scoreType.getCoefficient() == null) {
+			throw new IllegalArgumentException("Vui lòng nhập Hệ số.");
+		}
+		if (scoreTypeRepository.findByName(scoreType.getName()) != null) {
+			throw new IllegalArgumentException("Tên loại điểm đã tồn tại.");
+		}
 		if (scoreTypeRepository.existsByName(scoreType.getName())) {
-			throw new IllegalArgumentException("ScoreType with the same name already exists.");
+			throw new IllegalArgumentException("Loại điểm đã tồn tại.");
+		}
+		if (scoreType.getCoefficient() < 0) {
+			throw new IllegalArgumentException("Hệ số phải là số không âm.");
 		}
 		return scoreTypeRepository.save(scoreType);
 	}
@@ -35,23 +48,33 @@ public class ScoreTypeServiceImpl implements ScoreTypeService {
 	@Override
 	public ScoreType updateScoreType(Long id, ScoreType scoreType) {
 		ScoreType existingScoreType = scoreTypeRepository.findById(id)
-				.orElseThrow(() -> new ScoreTypeNotFoundException("ScoreType not found with id: " + id));
+				.orElseThrow(() -> new ScoreTypeNotFoundException("Không tìm thấy loại diểm có id: " + id));
 
 		if (!existingScoreType.getName().equals(scoreType.getName()) &&
 				scoreTypeRepository.existsByName(scoreType.getName())) {
-			throw new IllegalArgumentException("ScoreType with the same name already exists.");
+			throw new IllegalArgumentException("Loại điểm đã tồn tại.");
+		}
+
+		if (scoreType.getCoefficient() == null) {
+			throw new IllegalArgumentException("Vui lòng nhập Hệ số.");
+		}
+
+		if (scoreType.getCoefficient() < 0) {
+			throw new IllegalArgumentException("Hệ số phải là số không âm.");
 		}
 
 		existingScoreType.setName(scoreType.getName());
+		existingScoreType.setCoefficient(scoreType.getCoefficient());
 		return scoreTypeRepository.save(existingScoreType);
 	}
 
 	@Override
-	public void deleteScoreType(Long id) {
+	public boolean deleteScoreType(Long id) {
 		if (!scoreTypeRepository.existsById(id)) {
-			throw new ScoreTypeNotFoundException("ScoreType not found with id: " + id);
+			throw new ScoreTypeNotFoundException("Không tìm thấy loại điểm có id: " + id);
 		}
 		scoreTypeRepository.deleteById(id);
+		return true;
 	}
 
 	public class ScoreTypeNotFoundException extends RuntimeException {

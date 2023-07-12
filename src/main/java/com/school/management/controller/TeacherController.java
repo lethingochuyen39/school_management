@@ -25,6 +25,10 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    // huyen
+    @Autowired
+    private ClassesServiceImpl classesServiceImpl;
+
     @PostMapping("/create")
     public ResponseEntity<?> createTeacher(@RequestBody TeacherDto teacherDto) {
         try {
@@ -88,5 +92,10 @@ public class TeacherController {
         } catch (AcademicYearServiceImpl.AcademicYearNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    // huyen
+    @GetMapping("/{teacherId}/classes")
+    public ResponseEntity<List<?>> getClassesByTeacherId(@PathVariable Long teacherId) {
+        List<Classes> classes = classesServiceImpl.getClassesByTeacherId(teacherId);
+        return ResponseEntity.ok(classes);
     }
 }

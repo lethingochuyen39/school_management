@@ -12,7 +12,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.school.management.dto.AccessTokenDto;
+import com.school.management.model.Student;
+import com.school.management.model.Teacher;
 import com.school.management.model.User;
+import com.school.management.repository.ParentRepository;
+import com.school.management.repository.StudentRepository;
+import com.school.management.repository.TeacherRepository;
 import com.school.management.repository.UserRepository;
 import com.school.management.service.RefreshTokenService;
 
@@ -27,6 +32,10 @@ public class JwtUtils {
     private RefreshTokenService refreshTokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     public AccessTokenDto generateToken(Authentication auth) {
 
@@ -41,10 +50,25 @@ public class JwtUtils {
         String token = Jwts.builder().setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET).compact();
+        User userlogin = userRepository.findByEmail(login).get();
+        Long uid = userlogin.getId();
+        Long id = null;
+        Student student = studentRepository.findByUser(userlogin);
+        Teacher teacher = teacherRepository.findByUser(userlogin);
 
         AccessTokenDto accessToken = new AccessTokenDto();
         accessToken.setRoles(roles);
         accessToken.setToken(token);
+        accessToken.setUid(uid);
+        if (student != null) {
+            id = student.getId();
+        }
+        if (teacher != null) {
+            id = teacher.getId();
+        } else {
+            id = uid;
+        }
+        accessToken.setId(id);
         accessToken.setRefreshToken(refreshTokenService.createRefreshToken(login).getToken());
         return accessToken;
 

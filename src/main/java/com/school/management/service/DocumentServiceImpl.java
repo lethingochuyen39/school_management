@@ -6,7 +6,10 @@ import com.school.management.repository.DocumentRepository;
 import com.school.management.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -32,11 +35,11 @@ public class DocumentServiceImpl implements DocumentService {
 
 		String title = document.getTitle();
 		if (documentRepository.existsByTitle(title)) {
-			throw new IllegalArgumentException("Document with the same title already exists.");
+			throw new IllegalArgumentException("Tiêu đề đã tồn tại.");
 		}
 
-		String fileName = file.getOriginalFilename();
 		String filePath = saveFile(file);
+		String fileName = generateUniqueFileName(file.getOriginalFilename());
 
 		document.setFilePath(filePath);
 		document.setFileName(fileName);
@@ -44,7 +47,7 @@ public class DocumentServiceImpl implements DocumentService {
 		document.setUpdatedAt(LocalDateTime.now());
 
 		User uploadedBy = userRepository.findById(uploadedById)
-				.orElseThrow(() -> new DocumentNotFoundException("User not found with id: " + uploadedById));
+				.orElseThrow(() -> new DocumentNotFoundException("Không tìm thấy user: " + uploadedById));
 
 		document.setUploadedBy(uploadedBy);
 
@@ -58,38 +61,44 @@ public class DocumentServiceImpl implements DocumentService {
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
-
-			String fileName = file.getOriginalFilename();
+			String fileName = generateUniqueFileName(file.getOriginalFilename());
 			String filePath = uploadPath + "/" + fileName;
 
 			Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
 
 			return filePath;
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to save file.");
+			throw new RuntimeException("Không thể lưu tệp.");
 		}
+	}
+
+	private String generateUniqueFileName(String originalFilename) {
+		String timestamp = String.valueOf(System.currentTimeMillis());
+		String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+		String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
+		return fileName + "_" + timestamp + extension;
 	}
 
 	@Override
 	public Document getDocumentById(Long id) {
 		return documentRepository.findById(id)
-				.orElseThrow(() -> new DocumentNotFoundException("Document not found with id: " + id));
+				.orElseThrow(() -> new DocumentNotFoundException("Không tìm thấy tài liệu vơi id: " + id));
 	}
 
 	@Override
 	public Document updateDocument(Long id, Document document, MultipartFile file) {
 		if (!documentRepository.existsById(id)) {
-			throw new DocumentNotFoundException("Document not found with id: " + id);
+			throw new DocumentNotFoundException("Không tìm thấy tài liệu vơi id: " + id);
 		}
 
 		validateDocumentFields(document);
 
 		Document existingDocument = documentRepository.findById(id)
-				.orElseThrow(() -> new DocumentNotFoundException("Document not found with id: " + id));
+				.orElseThrow(() -> new DocumentNotFoundException("Không tìm thấy tài liệu vơi id: " + id));
 
 		String newTitle = document.getTitle();
 		if (!existingDocument.getTitle().equals(newTitle) && documentRepository.existsByTitle(newTitle)) {
-			throw new IllegalArgumentException("Document with the same title already exists.");
+			throw new IllegalArgumentException("Tiêu đề đã tồn tại.");
 		}
 
 		existingDocument.setTitle(newTitle);
@@ -125,13 +134,22 @@ public class DocumentServiceImpl implements DocumentService {
 	private void validateDocumentFields(Document document) {
 		String title = document.getTitle();
 		if (title == null || title.isEmpty()) {
-			throw new IllegalArgumentException("Title is required.");
+			throw new IllegalArgumentException("Tiêu đề là bắt buộc.");
 		}
 	}
 
 	public class DocumentNotFoundException extends RuntimeException {
 		public DocumentNotFoundException(String message) {
 			super(message);
+		}
+	}
+
+	@Override
+	public List<Document> searchDocument(String title) {
+		if (title == null || title.trim().isEmpty()) {
+			return getAllDocuments();
+		} else {
+			return searchDocumentsByTitle(title);
 		}
 	}
 

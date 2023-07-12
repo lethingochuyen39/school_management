@@ -17,7 +17,6 @@ import com.school.management.dto.TokenRefreshDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.RefreshToken;
-import com.school.management.model.User;
 import com.school.management.service.EmailService;
 import com.school.management.service.RefreshTokenService;
 import com.school.management.service.UserService;
@@ -81,8 +80,8 @@ public class UserController {
             try {
                 if(userService.checkUserExistByEmail(email)){
                     String resetPasswordLink =  Utility.getSiteURL(request) +"/reset_password?token="+ token;
-                    userService.updateResetPasswordToken(token,email);
-                    return ResponseEntity.ok(emailService.sendSimpleMail(email, resetPasswordLink));
+                    // userService.updateResetPasswordToken(token,email);
+                    return ResponseEntity.ok(emailService.sendSimpleMail(email, resetPasswordLink,token));
                 }
                 else{
                     return ResponseEntity.badRequest().body("Cannot find user");
@@ -96,8 +95,12 @@ public class UserController {
 
     @PostMapping("/reset_password")
 	public ResponseEntity<?> resetPassword(@RequestParam("token") String token,@RequestBody String password) {
-        User user = userService.getByResetPasswordToken(token);
-        userService.updatePassword(user, password);
+        // userService.updatePassword(user, password);
         return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
 	}
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteAccount(@RequestBody String email){
+        return ResponseEntity.ok(userService.deleteAccount(email));
+    }
 }

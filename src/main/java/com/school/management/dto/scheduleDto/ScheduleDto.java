@@ -3,6 +3,8 @@ package com.school.management.dto.scheduleDto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.school.management.model.ScheduleStatus;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +15,13 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class ScheduleDto {
-	private Long id;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private Integer semester;
-	private Long classesId;
-	private List<ScheduleDetailDto> scheduleDetails;
+
+	private Long dayOfWeekId;
+	private Long lessonId;
+	private Long subjectId;
+	private Long classId;
+	private Long teacherId;
+
+	private ScheduleStatus status;
 
 }

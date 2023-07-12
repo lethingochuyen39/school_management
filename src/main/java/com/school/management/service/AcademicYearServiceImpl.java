@@ -58,7 +58,10 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 
 	@Override
 	public AcademicYear updateAcademicYear(Long id, AcademicYear academicYear) {
-
+		if (academicYear.getName() == null || academicYear.getStartDate() == null
+				|| academicYear.getEndDate() == null || academicYear.getName().isEmpty()) {
+			throw new IllegalArgumentException("Tên, ngày bắt đầu và ngày kết thúc là bắt buộc.");
+		}
 		if (!academicYearRepository.existsById(id)) {
 			throw new AcademicYearNotFoundException("Không tìm thấy năm học với id: " + id);
 		}
@@ -94,7 +97,9 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 						|| (academicYear.getEndDate().isAfter(existingStartDate)
 								&& academicYear.getEndDate().isBefore(existingEndDate))
 						|| (academicYear.getStartDate().isEqual(existingStartDate)
-								&& academicYear.getEndDate().isEqual(existingEndDate))) {
+								&& academicYear.getEndDate().isEqual(existingEndDate))
+						|| (academicYear.getStartDate().isBefore(existingStartDate)
+								&& academicYear.getEndDate().isAfter(existingEndDate))) {
 					throw new IllegalArgumentException("Thời gian năm học trùng lặp với năm học đã tồn tại.");
 				}
 			}
@@ -129,6 +134,15 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 	public class AcademicYearNotFoundException extends RuntimeException {
 		public AcademicYearNotFoundException(String message) {
 			super(message);
+		}
+	}
+
+	@Override
+	public List<AcademicYear> searchAcademicYears(String name) {
+		if (name == null || name.trim().isEmpty()) {
+			return getAllAcademicYears(); // Trả về toàn bộ danh sách nếu name là null, rỗng hoặc không có giá trị
+		} else {
+			return getAcademicYearsByName(name); // Trả về danh sách các AcademicYear theo name nếu có giá trị
 		}
 	}
 

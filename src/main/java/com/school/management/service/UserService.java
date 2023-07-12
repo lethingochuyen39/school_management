@@ -17,10 +17,10 @@ public interface UserService {
 
     List<User> getAllUser();
 
-    UserDto updateResetPasswordToken(String token, String email);
+    UserDto updateResetPasswordToken(String token, String password);
 
     User getByResetPasswordToken(String token);
+    // Long generateAccount();
 
-    void updatePassword(User customer, String newPassword);
-
+    String deleteAccount(String email);
 }

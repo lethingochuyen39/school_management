@@ -18,4 +18,6 @@ public interface AcademicYearService {
 
 	List<AcademicYear> getAcademicYearsByName(String name);
 
+	List<AcademicYear> searchAcademicYears(String name);
+
 }

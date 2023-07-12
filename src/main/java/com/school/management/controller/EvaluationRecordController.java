@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.EvaluationRecordDto;
 import com.school.management.model.EvaluationRecord;
 import com.school.management.service.EvaluationRecordServiceImpl;
 
@@ -24,9 +25,9 @@ public class EvaluationRecordController {
     private EvaluationRecordServiceImpl evaluationRecordServiceImpl;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createEvaluationRecord(@RequestBody EvaluationRecord classes) {
+    public ResponseEntity<?> createEvaluationRecord(@RequestBody EvaluationRecordDto evaluationRecordDto) {
         try {
-            EvaluationRecord createdEvaluationRecord = evaluationRecordServiceImpl.createEvaluationRecord(classes);
+            EvaluationRecord createdEvaluationRecord = evaluationRecordServiceImpl.createEvaluationRecord(evaluationRecordDto);
             return ResponseEntity.ok().body(createdEvaluationRecord);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -45,10 +46,10 @@ public class EvaluationRecordController {
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateEvaluationRecord(@PathVariable Long id,
-			@RequestBody EvaluationRecord classes) {
+			@RequestBody EvaluationRecordDto evaluationRecordDto) {
 		try {
-			EvaluationRecord updatedClasses = evaluationRecordServiceImpl.updateEvaluationRecord(id, classes);
-			return ResponseEntity.ok(updatedClasses);
+			EvaluationRecord updatedEvaluationRecord = evaluationRecordServiceImpl.updateEvaluationRecord(id, evaluationRecordDto);
+			return ResponseEntity.ok(updatedEvaluationRecord);
 		} catch (EvaluationRecordServiceImpl.EvaluationRecordNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (IllegalArgumentException e) {
@@ -68,8 +69,8 @@ public class EvaluationRecordController {
 
 	@GetMapping
 	public ResponseEntity<List<EvaluationRecord>> getEvaluationRecord() {
-		List<EvaluationRecord> classes = evaluationRecordServiceImpl.getEvaluationRecords();
-		return ResponseEntity.ok(classes);
+		List<EvaluationRecord> evaluationRecord = evaluationRecordServiceImpl.getEvaluationRecords();
+		return ResponseEntity.ok(evaluationRecord);
 	}
 
 	@GetMapping("/search/studentId")

@@ -79,4 +79,10 @@ public class SubjectServiceImpl implements SubjectService {
             super(message);
         }
     }
+
+    // huyen
+    @Override
+    public List<Subject> getSubjectsByTeacherId(Long teacherId) {
+        return subjectRepository.findByTeacherId(teacherId);
+    }
 }

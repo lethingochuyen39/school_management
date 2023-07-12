@@ -1,6 +1,5 @@
 package com.school.management.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,13 +19,13 @@ public class Classes {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = true, columnDefinition = "NVARCHAR(255)")
 	private String description;
 
-	@ManyToOne(fetch = FetchType.LAZY)	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "teacher_id", nullable = false)
 	private Teacher teacher;
 
@@ -34,7 +33,7 @@ public class Classes {
 	@JoinColumn(name = "academic_year_id", nullable = false)
 	private AcademicYear academicYear;
 
-	@Column(name = "grade")
+	@Column(name = "grade", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String grade;
 
 }
