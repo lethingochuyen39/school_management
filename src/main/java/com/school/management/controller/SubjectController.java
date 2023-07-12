@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
 import com.school.management.service.SubjectService;
 import com.school.management.service.SubjectServiceImpl;
@@ -24,9 +25,9 @@ public class SubjectController {
     private SubjectService subjectService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createSubject(@RequestBody Subject subject) {
+    public ResponseEntity<?> createSubject(@RequestBody SubjectDto subjectDto) {
         try {
-            return ResponseEntity.ok(subjectService.createSubject(subject));
+            return ResponseEntity.ok(subjectService.createSubject(subjectDto));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -34,9 +35,9 @@ public class SubjectController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateSubject(@PathVariable Long id,
-            @RequestBody Subject subject) {
+            @RequestBody SubjectDto subjectDto) {
         try {
-            Subject updatedSubject = subjectService.updateSubject(id, subject);
+            Subject updatedSubject = subjectService.updateSubject(id, subjectDto);
             return ResponseEntity.ok(updatedSubject);
         } catch (SubjectServiceImpl.SubjectNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -61,15 +62,15 @@ public class SubjectController {
         return ResponseEntity.ok(subject);
     }
 
-    // @GetMapping("/findById/{id}")
-    // public ResponseEntity<?> getSubjectById(@PathVariable Long id) {
-    // try {
-    // SubjectDto subject = subjectServiceImpl.getSubjectById(id);
-    // return ResponseEntity.ok(subject);
-    // } catch (SubjectServiceImpl.SubjectNotFoundException e) {
-    // return ResponseEntity.badRequest().body(e.getMessage());
-    // }
-    // }
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> getSubjectById(@PathVariable Long id) {
+        try {
+            Subject subject = subjectService.getSubjectById(id);
+            return ResponseEntity.ok(subject);
+        } catch (SubjectServiceImpl.SubjectNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/findByName/{name}")
     public ResponseEntity<List<Subject>> getSubjectByName(@PathVariable(value = "name") String name) {

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.management.model.Classes;
+import com.school.management.dto.TeacherDto;
 import com.school.management.model.Teacher;
-import com.school.management.service.ClassesServiceImpl;
+import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
 
@@ -30,26 +30,20 @@ public class TeacherController {
     private ClassesServiceImpl classesServiceImpl;
 
     @PostMapping("/create")
-    // public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher,
-    // @RequestPart("file") MultipartFile file,
-    // @RequestParam("uploadedById") Long uploadedById) {
-    public ResponseEntity<?> createTeacher(@RequestBody Teacher teacher) {
+    public ResponseEntity<?> createTeacher(@RequestBody TeacherDto teacherDto) {
         try {
-            // teacherService.createTeacher(teacher, file, uploadedById);
-            teacherService.createTeacher(teacher);
-            return ResponseEntity.ok().body(teacher);
+            Teacher createdTeacher = teacherService.createTeacher(teacherDto);
+            return ResponseEntity.ok().body(createdTeacher);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/update/{id}")
-    // public ResponseEntity<?> updateTeacher(@PathVariable Long id,
-    // @RequestBody Teacher teacher, @RequestPart("file") MultipartFile file) {
     public ResponseEntity<?> updateTeacher(@PathVariable Long id,
-            @RequestBody Teacher teacher) {
+            @RequestBody TeacherDto teacherDto) {
         try {
-            Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
+            Teacher updatedTeacher = teacherService.updateTeacher(id, teacherDto);
             return ResponseEntity.ok(updatedTeacher);
         } catch (TeacherServiceImpl.TeacherNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -90,6 +84,14 @@ public class TeacherController {
         return ResponseEntity.ok(teacher);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTeacherById(@PathVariable Long id) {
+        try {
+            Teacher teacher = teacherService.getTeacherById(id);
+            return ResponseEntity.ok(teacher);
+        } catch (AcademicYearServiceImpl.AcademicYearNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     // huyen
     @GetMapping("/{teacherId}/classes")
     public ResponseEntity<List<?>> getClassesByTeacherId(@PathVariable Long teacherId) {

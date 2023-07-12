@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.ClassesDto;
 import com.school.management.model.Classes;
 import com.school.management.service.ClassesService;
 import com.school.management.service.ClassesServiceImpl;
@@ -23,15 +24,15 @@ public class ClassesController {
 	@Autowired
 	private ClassesService classesService;
 
-	@PostMapping("/create")
-	public ResponseEntity<?> createClasses(@RequestBody Classes classes) {
-		try {
-			Classes createdClasses = classesService.createClasses(classes);
-			return ResponseEntity.ok().body(createdClasses);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
+    @PostMapping("/create")
+    public ResponseEntity<?> createClasses(@RequestBody ClassesDto classesDto) {
+        try {
+            Classes createdClasses = classesService.createClasses(classesDto);
+            return ResponseEntity.ok().body(createdClasses);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<?> getClassesById(@PathVariable Long id) {
@@ -45,9 +46,9 @@ public class ClassesController {
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateClasses(@PathVariable Long id,
-			@RequestBody Classes classes) {
+			@RequestBody ClassesDto classesDto) {
 		try {
-			Classes updatedClasses = classesService.updateClasses(id, classes);
+			Classes updatedClasses = classesService.updateClasses(id, classesDto);
 			return ResponseEntity.ok(updatedClasses);
 		} catch (ClassesServiceImpl.ClassesNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
