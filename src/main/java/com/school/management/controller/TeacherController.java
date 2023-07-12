@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.TeacherDto;
+import com.school.management.model.Classes;
 import com.school.management.model.Teacher;
 import com.school.management.service.AcademicYearServiceImpl;
+import com.school.management.service.ClassesServiceImpl;
 import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
 
@@ -92,6 +94,8 @@ public class TeacherController {
         } catch (AcademicYearServiceImpl.AcademicYearNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
     // huyen
     @GetMapping("/{teacherId}/classes")
     public ResponseEntity<List<?>> getClassesByTeacherId(@PathVariable Long teacherId) {
