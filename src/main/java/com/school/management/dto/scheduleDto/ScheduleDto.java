@@ -1,8 +1,5 @@
 package com.school.management.dto.scheduleDto;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.school.management.model.ScheduleStatus;
 
 import lombok.Getter;

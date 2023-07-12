@@ -1,15 +1,11 @@
 package com.school.management;
 
-import java.time.LocalTime;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.school.management.model.DayOfWeek;
-import com.school.management.model.Lesson;
 import com.school.management.model.Role;
 import com.school.management.model.UserRole;
 import com.school.management.repository.DayOfWeekRepository;
