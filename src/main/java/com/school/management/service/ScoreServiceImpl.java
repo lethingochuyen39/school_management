@@ -1,10 +1,12 @@
 package com.school.management.service;
 
 import com.school.management.dto.ScoreDTO;
+import com.school.management.model.Classes;
 import com.school.management.model.Score;
 import com.school.management.model.ScoreType;
 import com.school.management.model.Student;
 import com.school.management.model.Subject;
+import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.ScoreRepository;
 import com.school.management.repository.ScoreTypeRepository;
 import com.school.management.repository.StudentRepository;
@@ -26,6 +28,8 @@ public class ScoreServiceImpl implements ScoreService {
 	private SubjectRepository subjectRepository;
 	@Autowired
 	private ScoreTypeRepository scoreTypeRepository;
+	@Autowired
+	private ClassesRepository classesRepository;
 
 	@Override
 	public List<Score> getAllScores() {
@@ -43,6 +47,8 @@ public class ScoreServiceImpl implements ScoreService {
 		Long studentId = scoreDTO.getStudentId();
 		Long subjectId = scoreDTO.getSubjectId();
 		Long scoreTypeId = scoreDTO.getScoreTypeId();
+		Long classId = scoreDTO.getClassId();
+		Integer semester = scoreDTO.getSemester();
 
 		Student student = studentRepository.findById(studentId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy học sinh với id: " + studentId));
@@ -50,17 +56,20 @@ public class ScoreServiceImpl implements ScoreService {
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy môn học với id: " + subjectId));
 		ScoreType scoreType = scoreTypeRepository.findById(scoreTypeId)
 				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy loại điểm với id: " + scoreTypeId));
-
-		if (scoreRepository.findByStudentAndSubjectAndScoreType(student, subject, scoreType) != null) {
+		Classes classes = classesRepository.findById(classId)
+				.orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp học với id: " + classId));
+		if (scoreRepository.findByStudentAndSubjectAndScoreTypeAndSemesterAndClasses(
+				student, subject, scoreType, semester, classes) != null) {
 			throw new IllegalArgumentException(
-					"Điểm số đã tồn tại cho học sinh và môn học này với loại điểm tương ứng.");
+					"Điểm số đã tồn tại cho học sinh, môn học, lớp học và học kì tương ứng.");
 		}
-
 		Score score = new Score();
 		score.setStudent(student);
 		score.setSubject(subject);
 		score.setScoreType(scoreType);
 		score.setScore(scoreDTO.getScore());
+		score.setSemester(semester);
+		score.setClasses(classes);
 
 		return scoreRepository.save(score);
 	}

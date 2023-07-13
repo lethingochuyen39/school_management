@@ -1,5 +1,6 @@
 package com.school.management.repository;
 
+import com.school.management.model.Classes;
 import com.school.management.model.Score;
 import com.school.management.model.ScoreType;
 import com.school.management.model.Student;
@@ -19,6 +20,7 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
 	@Query("SELECT sc FROM Score sc WHERE sc.student.className.id = :classId")
 	List<Score> findByClassId(@Param("classId") Long classId);
 
-	Score findByStudentAndSubjectAndScoreType(Student student, Subject subject, ScoreType scoreType);
+	Score findByStudentAndSubjectAndScoreTypeAndSemesterAndClasses(
+			Student student, Subject subject, ScoreType scoreType, Integer semester, Classes classes);
 
 }
