@@ -23,4 +23,9 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
 	Score findByStudentAndSubjectAndScoreTypeAndSemesterAndClasses(
 			Student student, Subject subject, ScoreType scoreType, Integer semester, Classes classes);
 
+	List<Score> findByClassesIdAndSemesterAndStudentId(Long classId, Integer semester, Long studentId);
+
+	List<Score> findByStudentIdAndClassesIdAndSubjectIdAndScoreTypeId(Long studentId, Long classId,
+			Long subjectId, Long scoreTypeId);
+
 }
