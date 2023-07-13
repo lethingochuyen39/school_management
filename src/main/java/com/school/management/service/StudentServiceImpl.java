@@ -191,4 +191,10 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findClassByStudentId(studentId);
     }
 
+    // huyen
+    @Override
+    public List<Classes> findAllClassByStudentId(Long studentId) {
+        return studentRepository.findClassesByStudentId(studentId);
+    }
+
 }

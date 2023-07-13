@@ -25,4 +25,7 @@ public class ScoreType {
 	@Column(name = "coefficient", nullable = false)
 	private Integer coefficient;
 
+	@Column(name = "description", nullable = false, columnDefinition = "NVARCHAR(255)")
+	private String description;
+
 }

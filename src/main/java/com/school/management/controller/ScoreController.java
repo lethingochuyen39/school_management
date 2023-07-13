@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @RestController
@@ -84,6 +86,26 @@ public class ScoreController {
 	public ResponseEntity<List<Score>> searchClassScores(@RequestParam("classId") Long classId) {
 		List<Score> scores = scoreServiceImpl.findByClassId(classId);
 		return ResponseEntity.ok(scores);
+	}
+
+	@GetMapping("/semester")
+	public List<Score> getScoresByClassAndSemesterAndStudent(
+			@RequestParam("classId") Long classId,
+			@RequestParam("semester") Integer semester,
+			@RequestParam("studentId") Long studentId) {
+		return scoreServiceImpl.getScoresByClassAndSemesterAndStudentId(classId, semester, studentId);
+	}
+
+	@GetMapping("/average")
+	public ResponseEntity<BigDecimal> getAverageScoreByStudentClassAndSubjectAndScoreType(
+			@RequestParam("studentId") Long studentId,
+			@RequestParam("classId") Long classId,
+			@RequestParam("subjectId") Long subjectId,
+			@RequestParam("scoreTypeId") Long scoreTypeId,
+			@RequestParam("semester") Integer semester) {
+		BigDecimal averageScore = scoreServiceImpl.calculateAverageScoreByStudentClassAndSubjectAndScoreType(
+				studentId, classId, subjectId, scoreTypeId, semester);
+		return ResponseEntity.ok(averageScore);
 	}
 
 }
