@@ -1,11 +1,15 @@
 package com.school.management;
 
+import java.time.LocalTime;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.school.management.model.DayOfWeek;
+import com.school.management.model.Lesson;
 import com.school.management.model.Role;
 import com.school.management.model.ScoreType;
 import com.school.management.model.UserRole;
@@ -63,93 +67,91 @@ public class ManagementApplication {
 				roleRepository.save(teacherRole);
 			}
 
-			// // huyen
-			// // if (dayOfWeekRepository.count() == 0) {
-			// // addDayOfWeek(dayOfWeekRepository, "Thứ 2");
-			// // addDayOfWeek(dayOfWeekRepository, "Thứ 3");
-			// // addDayOfWeek(dayOfWeekRepository, "Thứ 4");
-			// // addDayOfWeek(dayOfWeekRepository, "Thứ 5");
-			// // addDayOfWeek(dayOfWeekRepository, "Thứ 6");
+			// huyen
+			if (dayOfWeekRepository.count() == 0) {
+				addDayOfWeek(dayOfWeekRepository, "Thứ 2");
+				addDayOfWeek(dayOfWeekRepository, "Thứ 3");
+				addDayOfWeek(dayOfWeekRepository, "Thứ 4");
+				addDayOfWeek(dayOfWeekRepository, "Thứ 5");
+				addDayOfWeek(dayOfWeekRepository, "Thứ 6");
 
-			// // }
+			}
 
-			// // if (lessonRepository.count() == 0) {
-			// // addLesson(lessonRepository, "Tiết 1", "07:00:00", "07:45:00");
-			// // addLesson(lessonRepository, "Tiết 2", "07:50:00", "08:35:00");
-			// // addLesson(lessonRepository, "Tiết 3", "09:00:00", "09:45:00");
-			// // addLesson(lessonRepository, "Tiết 4", "09:50:00", "10:35:00");
-			// // addLesson(lessonRepository, "Tiết 5", "10:40:00", "11:25:00");
-			// // addLesson(lessonRepository, "Tiết 6", "13:00:00", "13:45:00");
-			// // addLesson(lessonRepository, "Tiết 7", "13:50:00", "14:35:00");
-			// // addLesson(lessonRepository, "Tiết 8", "15:00:00", "15:45:00");
-			// // addLesson(lessonRepository, "Tiết 9", "15:50:00", "16:35:00");
-			// // addLesson(lessonRepository, "Tiết 10", "16:40:00", "17:25:00");
-			// // }
+			if (lessonRepository.count() == 0) {
+				addLesson(lessonRepository, "Tiết 1", "07:00:00", "07:45:00");
+				addLesson(lessonRepository, "Tiết 2", "07:50:00", "08:35:00");
+				addLesson(lessonRepository, "Tiết 3", "09:00:00", "09:45:00");
+				addLesson(lessonRepository, "Tiết 4", "09:50:00", "10:35:00");
+				addLesson(lessonRepository, "Tiết 5", "10:40:00", "11:25:00");
+				addLesson(lessonRepository, "Tiết 6", "13:00:00", "13:45:00");
+				addLesson(lessonRepository, "Tiết 7", "13:50:00", "14:35:00");
+				addLesson(lessonRepository, "Tiết 8", "15:00:00", "15:45:00");
+				addLesson(lessonRepository, "Tiết 9", "15:50:00", "16:35:00");
+				addLesson(lessonRepository, "Tiết 10", "16:40:00", "17:25:00");
+			}
 
-			// if (scoreTypeRepository.count() == 0) {
+			if (scoreTypeRepository.count() == 0) {
 
-			// ScoreType scoreType1 = new ScoreType();
-			// scoreType1.setName("KTTX1");
-			// scoreType1.setCoefficient(1);
-			// scoreType1.setDescription("Kiểm tra thường xuyên 1");
-			// scoreTypeRepository.save(scoreType1);
+				ScoreType scoreType1 = new ScoreType();
+				scoreType1.setName("KTTX1");
+				scoreType1.setCoefficient(1);
+				scoreType1.setDescription("Kiểm tra thường xuyên 1");
+				scoreTypeRepository.save(scoreType1);
 
-			// ScoreType scoreType2 = new ScoreType();
-			// scoreType2.setName("KTTX2");
-			// scoreType2.setCoefficient(1);
-			// scoreType2.setDescription("Kiểm tra thường xuyên 2");
-			// scoreTypeRepository.save(scoreType2);
+				ScoreType scoreType2 = new ScoreType();
+				scoreType2.setName("KTTX2");
+				scoreType2.setCoefficient(1);
+				scoreType2.setDescription("Kiểm tra thường xuyên 2");
+				scoreTypeRepository.save(scoreType2);
 
-			// ScoreType scoreType3 = new ScoreType();
-			// scoreType3.setName("KTTX3");
-			// scoreType3.setCoefficient(1);
-			// scoreType3.setDescription("Kiểm tra thường xuyên 3");
-			// scoreTypeRepository.save(scoreType3);
+				ScoreType scoreType3 = new ScoreType();
+				scoreType3.setName("KTTX3");
+				scoreType3.setCoefficient(1);
+				scoreType3.setDescription("Kiểm tra thường xuyên 3");
+				scoreTypeRepository.save(scoreType3);
 
-			// ScoreType scoreType4 = new ScoreType();
-			// scoreType4.setName("KTTX4");
-			// scoreType4.setCoefficient(1);
-			// scoreType4.setDescription("Kiểm tra thường xuyên 4");
-			// scoreTypeRepository.save(scoreType4);
+				ScoreType scoreType4 = new ScoreType();
+				scoreType4.setName("KTTX4");
+				scoreType4.setCoefficient(1);
+				scoreType4.setDescription("Kiểm tra thường xuyên 4");
+				scoreTypeRepository.save(scoreType4);
 
-			// ScoreType scoreType5 = new ScoreType();
-			// scoreType5.setName("KTGK");
-			// scoreType5.setCoefficient(2);
-			// scoreType5.setDescription("Kiểm tra giữa kì");
-			// scoreTypeRepository.save(scoreType5);
+				ScoreType scoreType5 = new ScoreType();
+				scoreType5.setName("KTGK");
+				scoreType5.setCoefficient(2);
+				scoreType5.setDescription("Kiểm tra giữa kì");
+				scoreTypeRepository.save(scoreType5);
 
-			// ScoreType scoreType6 = new ScoreType();
-			// scoreType6.setName("KTCK");
-			// scoreType6.setCoefficient(3);
-			// scoreType6.setDescription("Kiểm tra cuối kì");
-			// scoreTypeRepository.save(scoreType6);
+				ScoreType scoreType6 = new ScoreType();
+				scoreType6.setName("KTCK");
+				scoreType6.setCoefficient(3);
+				scoreType6.setDescription("Kiểm tra cuối kì");
+				scoreTypeRepository.save(scoreType6);
 
-			// System.out.println("Đã thêm dữ liệu mặc định vào bảng ScoreType");
-			// }
+				System.out.println("Đã thêm dữ liệu mặc định vào bảng ScoreType");
+			}
 		};
 	}
 
 	// huyen
-	// private void addDayOfWeek(DayOfWeekRepository dayOfWeekRepository, String
-	// name) {
-	// DayOfWeek dayOfWeek = dayOfWeekRepository.findByName(name);
-	// if (dayOfWeek == null) {
-	// dayOfWeek = new DayOfWeek();
-	// dayOfWeek.setName(name);
-	// dayOfWeekRepository.save(dayOfWeek);
-	// }
-	// }
+	private void addDayOfWeek(DayOfWeekRepository dayOfWeekRepository, String name) {
+		DayOfWeek dayOfWeek = dayOfWeekRepository.findByName(name);
+		if (dayOfWeek == null) {
+			dayOfWeek = new DayOfWeek();
+			dayOfWeek.setName(name);
+			dayOfWeekRepository.save(dayOfWeek);
+		}
+	}
 
-	// private void addLesson(LessonRepository lessonRepository, String name, String
-	// startTime, String endTime) {
-	// Lesson lesson = lessonRepository.findByName(name);
-	// if (lesson == null) {
-	// lesson = new Lesson();
-	// lesson.setName(name);
-	// lesson.setStartTime(LocalTime.parse(startTime));
-	// lesson.setEndTime(LocalTime.parse(endTime));
-	// lessonRepository.save(lesson);
-	// }
-	// }
+	private void addLesson(LessonRepository lessonRepository, String name, String startTime, String endTime) {
+		Lesson lesson = lessonRepository.findByName(name);
+		if (lesson == null) {
+			lesson = new Lesson();
+			lesson.setName(name);
+			lesson.setStartTime(LocalTime.parse(startTime));
+			lesson.setEndTime(LocalTime.parse(endTime));
+			lessonRepository.save(lesson);
+		}
+	}
 
 }
