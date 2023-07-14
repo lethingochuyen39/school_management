@@ -26,7 +26,7 @@ public class ReportCardServiceImpl implements ReportCardService{
     @Override
     public ReportCard createReportCard(ReportCardDto reportCardDto) {
         Long studentId = reportCardDto.getStudentId();
-        long academicYearId = reportCardDto.getAcademicYearId();
+        Long academicYearId = reportCardDto.getAcademicYearId();
 
         Student student = studentRepository.findById(studentId)
             .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
@@ -35,7 +35,9 @@ public class ReportCardServiceImpl implements ReportCardService{
         
         ReportCard reportCard = new ReportCard();
         reportCard.setStudent(student);
-        reportCard.setAverageScore(reportCardDto.getAverageScore());
+        reportCard.setViolate(reportCardDto.getViolate());
+        reportCard.setDescription(reportCardDto.getDescription());
+        reportCard.setDate(reportCardDto.getDate());
         reportCard.setAcademicYear(academicYear);
 
         return reportCardRepository.save(reportCard);
@@ -45,7 +47,9 @@ public class ReportCardServiceImpl implements ReportCardService{
     public ReportCard updateReportCard(Long id, ReportCardDto reportCardDto) {
         ReportCard existingReportCard = reportCardRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Report Card not found with id: " + id));
-        existingReportCard.setAverageScore(reportCardDto.getAverageScore());
+        existingReportCard.setViolate(reportCardDto.getViolate());
+        existingReportCard.setDescription(reportCardDto.getDescription());
+        existingReportCard.setDate(reportCardDto.getDate());
 
         return reportCardRepository.save(existingReportCard);
     }

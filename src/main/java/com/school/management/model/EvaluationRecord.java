@@ -25,10 +25,10 @@ public class EvaluationRecord {
 	@JoinColumn(name = "student_id", nullable = false)
 	private Student student;
 
-	@Column(name = "discipline_reason", length = 255)
+	@Column(name = "discipline_reason", columnDefinition = "NVARCHAR(255)")
 	private String disciplineReason;
 
-	@Column(name = "achievement", length = 255)
+	@Column(name = "achievement", columnDefinition = "NVARCHAR(255)")
 	private String achievement;
 
 	@Column(name = "date")
