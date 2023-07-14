@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.ForgotPassRequest;
 import com.school.management.dto.LoginRequest;
+import com.school.management.dto.ResetPassRequest;
 import com.school.management.dto.TokenRefreshDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
@@ -95,8 +96,9 @@ public class UserController {
 	}
 
     @PostMapping("/reset_password")
-	public ResponseEntity<?> resetPassword(@RequestParam("token") String token,@RequestBody String password) {
+	public ResponseEntity<?> resetPassword(@RequestParam("token") String token,@RequestBody ResetPassRequest resetPassRequest) {
         // userService.updatePassword(user, password);
+        String password = resetPassRequest.getPassword();
         return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
 	}
 
