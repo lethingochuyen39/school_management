@@ -48,8 +48,9 @@ public class EmailServiceImpl implements EmailService {
             + "<br>"
             + "<p>Ignore this email if you do remember your password, "
             + "or you have not made the request.</p>";
-			if (user == null)
+			if (user == null){
 				return null;
+			}
 			// Creating a simple mail message
 			// SimpleMailMessage mailMessage = new SimpleMailMessage();
 			
