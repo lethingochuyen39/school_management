@@ -4,11 +4,18 @@ import com.school.management.model.EventNews;
 import com.school.management.service.EventNewsServiceImpl;
 import com.school.management.service.EventNewsServiceImpl.EventNewsNotFoundException;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -16,6 +23,7 @@ import java.util.List;
 public class EventNewsController {
 	@Autowired
 	private EventNewsServiceImpl eventNewsServiceImpl;
+	private static final String UPLOAD_FOLDER = "uploads/news/";
 
 	@PostMapping()
 	public ResponseEntity<?> createEventNews(@ModelAttribute EventNews eventNews,
@@ -87,5 +95,4 @@ public class EventNewsController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-
 }
