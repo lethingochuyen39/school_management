@@ -83,4 +83,18 @@ public class ReportCardServiceImpl implements ReportCardService{
             super(message);
         }
     }
+
+    @Override
+    public List<ReportCard> searchReportCardsByViolate(String violate) {
+        return reportCardRepository.findByViolateContainingIgnoreCase(violate);
+    }
+
+    @Override
+    public List<ReportCard> searchReportCards(String violate) {
+        if (violate == null || violate.trim().isEmpty()) {
+			return getReportCard();
+		} else {
+			return searchReportCardsByViolate(violate);
+		}
+    }   
 }
