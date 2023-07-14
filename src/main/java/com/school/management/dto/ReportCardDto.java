@@ -1,6 +1,6 @@
 package com.school.management.dto;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ReportCardDto {
     private Long studentId;
-    private BigDecimal averageScore;
+    private String violate;
+    private String description;
+    private LocalDate date;
     private Long academicYearId;
 
 }

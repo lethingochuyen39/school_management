@@ -8,4 +8,6 @@ import com.school.management.model.ReportCard;
 
 public interface ReportCardRepository extends JpaRepository<ReportCard, Long>{
     List<ReportCard> findByStudentId(Long studentId);
+
+    List<ReportCard> findByViolateContainingIgnoreCase(String violate);
 }

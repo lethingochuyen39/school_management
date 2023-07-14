@@ -18,6 +18,10 @@ public interface EvaluationRecordService {
 
 	List<EvaluationRecord> getEvaluationRecords();
 
+	List<EvaluationRecord> searchEvaluationRecordsByAchievement(String achievement);
+
+	List<EvaluationRecord> searchEvaluationRecords(String achievement);
+
 	// List<EvaluationRecord> getEvaluationRecordsByName(String name);
     
 }
