@@ -8,20 +8,17 @@ import org.springframework.stereotype.Service;
 import com.school.management.dto.TeacherDto;
 import com.school.management.model.Teacher;
 import com.school.management.repository.TeacherRepository;
-import com.school.management.repository.UserRepository;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
+
+    // @Autowired
+    // private UserService userService;
+
     // @Autowired
     // private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
     public Teacher createTeacher(TeacherDto teacherDto) {
