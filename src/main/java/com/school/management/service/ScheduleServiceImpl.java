@@ -1,6 +1,8 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -126,6 +128,29 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Schedule schedule = scheduleRepository.findById(scheduleId)
 				.orElseThrow(() -> new IllegalArgumentException("Thời khóa biểu không tồn tại"));
 
+		// Kiểm tra nếu giáo viên, môn học, tiết và thứ đã được cung cấp
+		if (schedule.getTeacher() != null && schedule.getSubject() != null && schedule.getLesson() != null
+				&& schedule.getDayOfWeek() != null && schedule.getClasses() != null) {
+
+			// Lấy danh sách các thời khóa biểu có cùng tiết, thứ, giáo viên và môn học
+			List<Schedule> conflictingSchedules = scheduleRepository.findByLessonAndDayOfWeekAndTeacherAndSubject(
+					schedule.getLesson(), schedule.getDayOfWeek(), schedule.getTeacher(), schedule.getSubject());
+
+			// Lọc ra các thời khóa biểu đang ở trạng thái active
+			// Lọc ra các thời khóa biểu đang ở trạng thái active của các lớp khác
+			List<Schedule> activeConflictingSchedules = conflictingSchedules.stream()
+					.filter(s -> s.getStatus() == ScheduleStatus.Active
+							&& !s.getClasses().equals(schedule.getClasses()))
+					.collect(Collectors.toList());
+
+			// Kiểm tra nếu có ít nhất một thời khóa biểu active đang tồn tại
+			if (!activeConflictingSchedules.isEmpty()) {
+				// Không cho phép cập nhật trạng thái nếu đã có thời khóa biểu active tồn tại
+				throw new IllegalStateException(
+						"Không thể cập nhật trạng thái thời khóa biểu vì đã có thời khóa biểu active tồn tại.");
+			}
+		}
+
 		schedule.setStatus(status);
 		return scheduleRepository.save(schedule);
 	}
@@ -168,13 +193,29 @@ public class ScheduleServiceImpl implements ScheduleService {
 				|| scheduleDTO.getSubjectId() == null) {
 			throw new IllegalArgumentException("Môn học và giáo viên là bắt buộc");
 		}
-		// Kiểm tra xem giáo viên đã có lịch dạy vào tiết học và buổi học đã chọn hay
-		// chưa
-		boolean isTeacherBusy = scheduleRepository.existsByTeacherIdAndDayOfWeekIdAndLessonIdAndStatus(
-				scheduleDTO.getTeacherId(), scheduleDTO.getDayOfWeekId(), scheduleDTO.getLessonId(),
-				ScheduleStatus.Active);
-		if (isTeacherBusy) {
-			throw new IllegalArgumentException("Giáo viên đã có lịch dạy vào thời điểm và tiết học đã chọn");
+		// // Kiểm tra xem giáo viên đã có lịch dạy vào tiết học và buổi học đã chọn hay
+		// // chưa
+		// boolean isTeacherBusy =
+		// scheduleRepository.existsByTeacherIdAndDayOfWeekIdAndLessonIdAndStatus(
+		// scheduleDTO.getTeacherId(), scheduleDTO.getDayOfWeekId(),
+		// scheduleDTO.getLessonId(),
+		// ScheduleStatus.Active);
+		// if (isTeacherBusy) {
+		// throw new IllegalArgumentException("Giáo viên đã có lịch dạy vào thời điểm và
+		// tiết học đã chọn");
+		// }
+
+		if (!Objects.equals(existingSchedule.getTeacher().getId(), scheduleDTO.getTeacherId())
+				|| !Objects.equals(existingSchedule.getSubject().getId(), scheduleDTO.getSubjectId())
+				|| !Objects.equals(existingSchedule.getDayOfWeek().getId(), scheduleDTO.getDayOfWeekId())
+				|| !Objects.equals(existingSchedule.getLesson().getId(), scheduleDTO.getLessonId())) {
+			// Kiểm tra trùng lặp chỉ khi có sự thay đổi
+			boolean isTeacherBusy = scheduleRepository.existsByTeacherIdAndDayOfWeekIdAndLessonIdAndStatus(
+					scheduleDTO.getTeacherId(), scheduleDTO.getDayOfWeekId(), scheduleDTO.getLessonId(),
+					ScheduleStatus.Active);
+			if (isTeacherBusy) {
+				throw new IllegalArgumentException("Giáo viên đã có lịch dạy vào thời điểm và tiết học đã chọn");
+			}
 		}
 
 		// Xử lý lỗi khóa ngoại
