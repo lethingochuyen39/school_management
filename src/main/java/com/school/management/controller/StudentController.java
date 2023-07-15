@@ -142,4 +142,15 @@ public class StudentController {
         }
     }
 
+    // huyen
+    @GetMapping("/{studentId}/Allclass")
+    public ResponseEntity<?> getAllClassByStudentId(@PathVariable Long studentId) {
+        List<Classes> foundClass = studentService.findAllClassByStudentId(studentId);
+        if (foundClass != null) {
+            return ResponseEntity.ok(foundClass);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

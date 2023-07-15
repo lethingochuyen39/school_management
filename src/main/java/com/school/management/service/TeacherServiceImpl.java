@@ -23,7 +23,6 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher createTeacher(TeacherDto teacherDto) {
         // Long userId = teacherDto.getUserId();
-
         // User user = userRepository.findById(userId)
         // .orElseThrow(() -> new IllegalArgumentException("User not found with id: " +
         // userId));
@@ -43,13 +42,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher updateTeacher(Long id, TeacherDto teacherDto) {
-
-        // Long userId = teacherDto.getUserId();
-
-        // User user = userRepository.findById(userId)
-        // .orElseThrow(() -> new IllegalArgumentException("User not found with id: " +
-        // userId));
-
         Teacher exitingTeacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + id));
 

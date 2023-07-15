@@ -1,14 +1,5 @@
 package com.school.management.service;
 
-import com.school.management.model.Document;
-import com.school.management.model.User;
-import com.school.management.repository.DocumentRepository;
-import com.school.management.repository.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,10 +7,19 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.school.management.model.Document;
+import com.school.management.model.User;
+import com.school.management.repository.DocumentRepository;
+import com.school.management.repository.UserRepository;
+
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
-	private static final String UPLOAD_FOLDER = "uploads/documents/";
+	private static final String UPLOAD_FOLDER = "src/main/resources/static/uploads/documents";
 
 	@Autowired
 	private DocumentRepository documentRepository;
@@ -58,22 +58,41 @@ public class DocumentServiceImpl implements DocumentService {
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
-			String fileName = generateUniqueFileName(file.getOriginalFilename());
-			String filePath = uploadPath + "/" + fileName;
+			String fileName = file.getOriginalFilename();
+			String fileExtension = getFileExtension(fileName);
+			String newName = generateUniqueFileName(fileExtension);
+			String filePath = uploadPath + "/" + newName;
 
-			Files.copy(file.getInputStream(), Path.of(filePath), StandardCopyOption.REPLACE_EXISTING);
+			Path destinationPath = uploadPath.resolve(newName);
+			Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
 			return filePath;
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new RuntimeException("Không thể lưu tệp.");
 		}
 	}
 
-	private String generateUniqueFileName(String originalFilename) {
-		String timestamp = String.valueOf(System.currentTimeMillis());
-		String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-		String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
-		return fileName + "_" + timestamp + extension;
+	// private String generateUniqueFileName(String originalFilename) {
+	// String timestamp = String.valueOf(System.currentTimeMillis());
+	// String extension =
+	// originalFilename.substring(originalFilename.lastIndexOf("."));
+	// String fileName = originalFilename.substring(0,
+	// originalFilename.lastIndexOf("."));
+	// return fileName + "_" + timestamp + extension;
+	// }
+
+	private String getFileExtension(String fileName) {
+		int dotIndex = fileName.lastIndexOf('.');
+		if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+			return fileName.substring(dotIndex + 1);
+		}
+		return "";
+	}
+
+	private String generateUniqueFileName(String fileExtension) {
+		String fileName = LocalDateTime.now().toString().replace(":", "-");
+		return fileName + "." + fileExtension;
 	}
 
 	@Override

@@ -15,6 +15,8 @@ public class ScoreDTO {
 	private Long studentId;
 	private Long subjectId;
 	private Long scoreTypeId;
+	private Long classId;
+	private Integer semester;
 	private BigDecimal score;
 
 }

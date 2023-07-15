@@ -21,4 +21,6 @@ public interface StudentService {
     String ConfirmStudent(StudentDTO studentDTO);
 
     Classes findClassByStudentId(Long studentId);
+
+    List<Classes> findAllClassByStudentId(Long studentId);
 }

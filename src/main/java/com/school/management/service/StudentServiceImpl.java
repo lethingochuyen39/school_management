@@ -17,7 +17,6 @@ import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
-
 import com.school.management.repository.UserRepository;
 
 @Service
@@ -190,6 +189,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Classes findClassByStudentId(Long studentId) {
         return studentRepository.findClassByStudentId(studentId);
+    }
+
+    // huyen
+    @Override
+    public List<Classes> findAllClassByStudentId(Long studentId) {
+        return studentRepository.findClassesByStudentId(studentId);
     }
 
 }
