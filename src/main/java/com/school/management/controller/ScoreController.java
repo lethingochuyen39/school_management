@@ -96,16 +96,4 @@ public class ScoreController {
 		return scoreServiceImpl.getScoresByClassAndSemesterAndStudentId(classId, semester, studentId);
 	}
 
-	@GetMapping("/average")
-	public ResponseEntity<BigDecimal> getAverageScoreByStudentClassAndSubjectAndScoreType(
-			@RequestParam("studentId") Long studentId,
-			@RequestParam("classId") Long classId,
-			@RequestParam("subjectId") Long subjectId,
-			@RequestParam("scoreTypeId") Long scoreTypeId,
-			@RequestParam("semester") Integer semester) {
-		BigDecimal averageScore = scoreServiceImpl.calculateAverageScoreByStudentClassAndSubjectAndScoreType(
-				studentId, classId, subjectId, scoreTypeId, semester);
-		return ResponseEntity.ok(averageScore);
-	}
-
 }

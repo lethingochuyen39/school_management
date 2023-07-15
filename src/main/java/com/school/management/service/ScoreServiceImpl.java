@@ -122,27 +122,4 @@ public class ScoreServiceImpl implements ScoreService {
 		return scoreRepository.findByClassesIdAndSemesterAndStudentId(classId, semester, studentId);
 	}
 
-	public BigDecimal calculateAverageScoreByStudentClassAndSubjectAndScoreType(Long studentId, Long classId,
-			Long subjectId, Long scoreTypeId, Integer semester) {
-		List<Score> scores = scoreRepository.findByStudentIdAndClassesIdAndSubjectIdAndScoreTypeId(studentId, classId,
-				subjectId, scoreTypeId);
-		BigDecimal sum = BigDecimal.ZERO;
-		BigDecimal totalCoefficient = BigDecimal.ZERO;
-		int count = 0;
-		for (Score score : scores) {
-			if (score.getSemester().equals(semester)) {
-				Integer coefficient = score.getScoreType().getCoefficient();
-				BigDecimal coefficientDecimal = BigDecimal.valueOf(coefficient);
-				sum = sum.add(score.getScore().multiply(coefficientDecimal));
-				totalCoefficient = totalCoefficient.add(coefficientDecimal);
-				count++;
-			}
-		}
-		if (count > 0 && totalCoefficient.compareTo(BigDecimal.ZERO) > 0) {
-			BigDecimal average = sum.divide(totalCoefficient, 2, RoundingMode.HALF_UP);
-			return average;
-		}
-		return BigDecimal.ZERO;
-	}
-
 }
