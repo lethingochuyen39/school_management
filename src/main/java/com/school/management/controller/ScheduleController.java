@@ -51,8 +51,17 @@ public class ScheduleController {
 	}
 
 	@PutMapping("/{scheduleId}/status")
-	public Schedule updateScheduleStatus(@PathVariable Long scheduleId, @RequestParam ScheduleStatus status) {
-		return scheduleServiceImpl.updateScheduleStatus(scheduleId, status);
+	public ResponseEntity<?> updateScheduleStatus(@PathVariable Long scheduleId, @RequestParam ScheduleStatus status) {
+		try {
+			scheduleServiceImpl.updateScheduleStatus(scheduleId, status);
+			return ResponseEntity.ok().build();
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (IllegalStateException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@GetMapping("/{id}")
