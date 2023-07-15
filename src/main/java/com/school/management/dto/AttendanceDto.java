@@ -18,4 +18,5 @@ public class AttendanceDto {
     private String status;
     private Long classId;
     private Long studentId;
+    private Long subjectId;
 }

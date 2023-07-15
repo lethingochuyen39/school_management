@@ -40,6 +40,10 @@ public class Attendance {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+
     @Column(name = "status", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String status;
 }
