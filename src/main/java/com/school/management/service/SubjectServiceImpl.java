@@ -1,12 +1,14 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
+import com.school.management.model.Teacher;
 import com.school.management.repository.SubjectRepository;
 import com.school.management.repository.TeacherRepository;
 
@@ -21,7 +23,17 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject createSubject(SubjectDto subjectDto) {
         Subject subject = new Subject();
         subject.setName(subjectDto.getName());
-        // Lưu ý: Thêm mã logic xử lý các giáo viên liên quan vào đây
+
+        Set<Teacher> teachers = subjectDto.getTeachers();
+        if (teachers != null && !teachers.isEmpty()) {
+            for (Teacher teacher : teachers) {
+                Teacher existingTeacher = teacherRepository.findById(teacher.getId())
+                        .orElseThrow(
+                                () -> new SubjectNotFoundException("Teacher not found with id: " + teacher.getId()));
+                subject.getTeachers().add(existingTeacher);
+            }
+        }
+
         return subjectRepository.save(subject);
     }
 
@@ -31,7 +43,17 @@ public class SubjectServiceImpl implements SubjectService {
                 .orElseThrow(() -> new SubjectNotFoundException("Subject not found with id: " + id));
 
         existingSubject.setName(subjectDto.getName());
-        // Lưu ý: Thêm mã logic xử lý các giáo viên liên quan vào đây
+
+        Set<Teacher> teachers = subjectDto.getTeachers();
+        if (teachers != null && !teachers.isEmpty()) {
+            existingSubject.getTeachers().clear();
+            for (Teacher teacher : teachers) {
+                Teacher existingTeacher = teacherRepository.findById(teacher.getId())
+                        .orElseThrow(
+                                () -> new SubjectNotFoundException("Teacher not found with id: " + teacher.getId()));
+                existingSubject.getTeachers().add(existingTeacher);
+            }
+        }
 
         return subjectRepository.save(existingSubject);
     }
@@ -63,7 +85,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     // @Override
     // public List<Subject> getSubjectsByTeacherId(Long teacherId) {
-    //     return subjectRepository.findByTeacherId(teacherId);
+    // return subjectRepository.findByTeacherId(teacherId);
     // }
 
     public class SubjectNotFoundException extends RuntimeException {
