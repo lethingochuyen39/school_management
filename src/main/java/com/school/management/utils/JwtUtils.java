@@ -64,8 +64,6 @@ public class JwtUtils {
         }
         if (teacher != null) {
             id = teacher.getId();
-        } else {
-            id = uid;
         }
         accessToken.setId(id);
         accessToken.setRefreshToken(refreshTokenService.createRefreshToken(login).getToken());
