@@ -18,6 +18,8 @@ public interface TeacherService {
 
     List<Teacher> getTeacherByName(String name);
 
+    Teacher updateTeacherStatus(Long id);
+
     // Long generateAccount();
 
 }

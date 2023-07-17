@@ -34,7 +34,7 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setEmail(teacherDto.getEmail());
         teacher.setAddress(teacherDto.getAddress());
         teacher.setPhone(teacherDto.getPhone());
-        teacher.setStatus(teacherDto.getStatus());
+        teacher.setIsActive(teacherDto.getIsActive());
         // teacher.setUser(user);
 
         return teacherRepository.save(teacher);
@@ -51,7 +51,7 @@ public class TeacherServiceImpl implements TeacherService {
         exitingTeacher.setEmail(teacherDto.getEmail());
         exitingTeacher.setAddress(teacherDto.getAddress());
         exitingTeacher.setPhone(teacherDto.getPhone());
-        exitingTeacher.setStatus(teacherDto.getStatus());
+        exitingTeacher.setIsActive(teacherDto.getIsActive());
         // exitingTeacher.setUser(user);
 
         return teacherRepository.save(exitingTeacher);
@@ -86,5 +86,16 @@ public class TeacherServiceImpl implements TeacherService {
         public TeacherNotFoundException(String message) {
             super(message);
         }
+    }
+
+    @Override
+    public Teacher updateTeacherStatus(Long id) {
+        Teacher existingTeacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Không tìm thấy với id: " + id));
+
+        boolean isActive = existingTeacher.getIsActive();
+        existingTeacher.setIsActive(!isActive);
+
+        return teacherRepository.save(existingTeacher);
     }
 }

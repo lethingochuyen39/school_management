@@ -45,7 +45,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setClasses(classes);
         attendance.setSubject(subject);
         attendance.setDate(attendance.getDate());
-        attendance.setStatus(attendanceDto.getStatus());
 
         return attendanceRepository.save(attendance);
     }
@@ -75,7 +74,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         existingAttendance.setClasses(classes);
         existingAttendance.setSubject(subject);
         existingAttendance.setDate(attendanceDto.getDate());
-        existingAttendance.setStatus(attendanceDto.getStatus());
 
         return attendanceRepository.save(existingAttendance);
     }

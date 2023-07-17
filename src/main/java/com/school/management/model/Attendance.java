@@ -44,6 +44,6 @@ public class Attendance {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @Column(name = "status", nullable = false, columnDefinition = "NVARCHAR(255)")
-    private String status;
+	@Column(name = "isActive")
+	private Boolean isActive;
 }

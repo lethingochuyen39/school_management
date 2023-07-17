@@ -18,6 +18,7 @@ import com.school.management.model.Classes;
 import com.school.management.model.Teacher;
 import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ClassesServiceImpl;
+import com.school.management.service.EventNewsServiceImpl.EventNewsNotFoundException;
 import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
 
@@ -101,5 +102,17 @@ public class TeacherController {
     public ResponseEntity<List<?>> getClassesByTeacherId(@PathVariable Long teacherId) {
         List<Classes> classes = classesServiceImpl.getClassesByTeacherId(teacherId);
         return ResponseEntity.ok(classes);
+    }
+
+    @PutMapping("/isActive/{id}")
+    public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
+        try {
+            Teacher updatedTeacher = teacherService.updateTeacherStatus(id);
+            return ResponseEntity.ok(updatedTeacher);
+        } catch (EventNewsNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
