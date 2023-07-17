@@ -75,4 +75,18 @@ public class EvaluationRecordServiceImpl implements EvaluationRecordService{
             super(message);
         }
     }
+
+    @Override
+    public List<EvaluationRecord> searchEvaluationRecordsByAchievement(String achievement) {
+        return evaluationRecordRepository.findByAchievementContainingIgnoreCase(achievement);
+    }
+
+    @Override
+    public List<EvaluationRecord> searchEvaluationRecords(String achievement) {
+        if (achievement == null || achievement.trim().isEmpty()) {
+			return getEvaluationRecords();
+		} else {
+			return searchEvaluationRecordsByAchievement(achievement);
+		}
+    }
 }

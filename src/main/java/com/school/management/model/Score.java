@@ -36,4 +36,11 @@ public class Score {
 	@Column(name = "score")
 	private BigDecimal score;
 
+	@Column(name = "semester", nullable = false)
+	private Integer semester;
+
+	@ManyToOne
+	@JoinColumn(name = "class_id", nullable = false)
+	private Classes classes;
+
 }

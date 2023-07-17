@@ -26,4 +26,5 @@ public interface ScheduleService {
 
 	List<Schedule> searchSchedule(String className);
 
+	List<Schedule> getTeacherSchedule(Long teacherId);
 }

@@ -10,4 +10,6 @@ public interface ScoreTypeRepository extends JpaRepository<ScoreType, Long> {
 	boolean existsByName(String name);
 
 	List<ScoreType> findByNameContainingIgnoreCase(String name);
+
+	ScoreType findByName(String name);
 }

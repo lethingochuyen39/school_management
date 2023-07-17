@@ -3,7 +3,6 @@ package com.school.management.service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -18,7 +17,6 @@ import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
-
 import com.school.management.repository.UserRepository;
 
 @Service
@@ -130,30 +128,33 @@ public class StudentServiceImpl implements StudentService {
     // // throw new StudentException("Student " +email+ " does not exist");
     // // }
     // }
-  
-//     @Override
-//     public Long generateAccount() {
-//         Long totalRowInStudent = studentRepository.count();
-//         List <Student> list = studentRepository.findByUser(null);
-//         // list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
-//         list.stream().forEach(student -> {
-//             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
-//             String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
-// // System.out.println( randomStr );
-//             UserDto userDto = userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
-//             Optional<User> user = userRepository.findByEmail(userDto.getEmail());
-//             if (!user.isPresent()){
-//                 throw new StudentException("User not found: " + userDto.getEmail());
-//             }
-//             studentRepository.save(student.setUser(user.get()));
-//         });
-//         return totalRowInStudent;
-//         //Student newStudent = modelMapper.map(student, Student.class);
-//         //studentRepository.save(newStudent);
-//         //return student;
-//     }
 
-
+    // @Override
+    // public Long generateAccount() {
+    // Long totalRowInStudent = studentRepository.count();
+    // List <Student> list = studentRepository.findByUser(null);
+    // // list.stream().forEach(student ->
+    // studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
+    // list.stream().forEach(student -> {
+    // char[] possibleCharacters = (new
+    // String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
+    // String randomStr = RandomStringUtils.random( 6, 0,
+    // possibleCharacters.length-1, false, false, possibleCharacters, new
+    // SecureRandom() );
+    // // System.out.println( randomStr );
+    // UserDto userDto = userService.signup(new UserDto(student.getEmail(),
+    // randomStr, new RoleDto("STUDENT")));
+    // Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+    // if (!user.isPresent()){
+    // throw new StudentException("User not found: " + userDto.getEmail());
+    // }
+    // studentRepository.save(student.setUser(user.get()));
+    // });
+    // return totalRowInStudent;
+    // //Student newStudent = modelMapper.map(student, Student.class);
+    // //studentRepository.save(newStudent);
+    // //return student;
+    // }
 
     // huyen
     public List<Student> findByClassId(Long classId) {
@@ -165,19 +166,35 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findByEmail(studentDTO.getEmail());
         Student confirmStudent = modelMapper.map(studentDTO, Student.class);
         confirmStudent.setClassName(student.getClassName()).setUser(null);
-        if(student.equals(confirmStudent)){
-            char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
-            String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
-// System.out.println( randomStr );
+        if (student.equals(confirmStudent)) {
+            char[] possibleCharacters = (new String(
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?"))
+                    .toCharArray();
+            String randomStr = RandomStringUtils.random(6, 0, possibleCharacters.length - 1, false, false,
+                    possibleCharacters, new SecureRandom());
+            // System.out.println( randomStr );
             userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
             User user = userRepository.findByEmail(student.getEmail()).get();
             student.setUser(user);
             student.setStatus("active");
             studentRepository.save(student);
             return "Confirmed Successfully";
-        }else{
-            throw new StudentException("Wrong information, if the system wrong please mail to longpntts2109002@fpt.edu.vn");
+        } else {
+            throw new StudentException(
+                    "Wrong information, if the system wrong please mail to longpntts2109002@fpt.edu.vn");
         }
+    }
+
+    // huyen
+    @Override
+    public Classes findClassByStudentId(Long studentId) {
+        return studentRepository.findClassByStudentId(studentId);
+    }
+
+    // huyen
+    @Override
+    public List<Classes> findAllClassByStudentId(Long studentId) {
+        return studentRepository.findClassesByStudentId(studentId);
     }
 
 }

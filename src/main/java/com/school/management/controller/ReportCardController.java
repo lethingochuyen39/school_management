@@ -66,8 +66,20 @@ public class ReportCardController {
 	}
 
     @GetMapping("/search/studentId")
-	public ResponseEntity<List<ReportCard>> searchScoresByStudentId(@RequestParam("id") Long studentId) {
+	public ResponseEntity<List<ReportCard>> searchReportCardsByStudentId(@RequestParam("id") Long studentId) {
 		List<ReportCard> reportCard = ReportCardServiceImpl.getReportCardByStudentId(studentId);
 		return ResponseEntity.ok(reportCard);
 	}
+
+	@GetMapping("/search")
+	public ResponseEntity<List<ReportCard>> searchReportCardsByViolate(@RequestParam("violate") String violate) {
+		List<ReportCard> reportCard = ReportCardServiceImpl.searchReportCardsByViolate(violate);
+		return ResponseEntity.ok(reportCard);
+	}
+
+	@GetMapping("/getReportCard")
+	public List<ReportCard> getReportCardsByStudent(
+		@RequestParam("studentId") Long studentId) {
+			return ReportCardServiceImpl.getReportCardByStudentId(studentId);
+		}
 }

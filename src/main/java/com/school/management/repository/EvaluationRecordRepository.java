@@ -9,4 +9,6 @@ import com.school.management.model.EvaluationRecord;
 public interface EvaluationRecordRepository extends JpaRepository<EvaluationRecord, Long>{
 
 	List<EvaluationRecord> findByStudentId(Long studentId);
+
+	List<EvaluationRecord> findByAchievementContainingIgnoreCase(String achievement);
 }
