@@ -1,5 +1,10 @@
 package com.school.management.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.school.management.model.Teacher;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +18,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SubjectDto {
     private String name;
-    private Long teacherId;
+    private Set<Teacher> teachers = new HashSet<>();
 }

@@ -2,10 +2,21 @@ package com.school.management.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,26 +53,15 @@ public class Teacher implements Serializable {
 	@Column(name = "phone", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String phone;
 
-	@Column(name = "status", nullable = false, columnDefinition = "NVARCHAR(255)")
-	private String status;
+	@Column(name = "isActive")
+	private Boolean isActive;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
 	@JoinColumn(name = "user_id", unique = true, nullable = true)
 	private User user;
 
-	// @Column(name = "image")
-	// private String image;
-
-	// @Column(name = "file_name", nullable = false, columnDefinition =
-	// "NVARCHAR(255)")
-	// private String fileName;
-
-	// @Column(name = "file_path", columnDefinition = "NVARCHAR(MAX)")
-	// private String filePath;
-
-	// @JsonIgnore
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @JoinColumn(name = "uploaded_by")
-	// private User uploadedBy;
+	@ManyToMany(mappedBy = "teachers")
+	@JsonIgnore
+	private Set<Subject> subjects = new HashSet<>();
 }

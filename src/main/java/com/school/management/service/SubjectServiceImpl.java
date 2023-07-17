@@ -1,6 +1,7 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,18 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject createSubject(SubjectDto subjectDto) {
-        Long teacherId = subjectDto.getTeacherId();
-
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + teacherId));
-
         Subject subject = new Subject();
         subject.setName(subjectDto.getName());
-        subject.setTeacher(teacher);
+
+        Set<Teacher> teachers = subjectDto.getTeachers();
+        if (teachers != null && !teachers.isEmpty()) {
+            for (Teacher teacher : teachers) {
+                Teacher existingTeacher = teacherRepository.findById(teacher.getId())
+                        .orElseThrow(
+                                () -> new SubjectNotFoundException("Teacher not found with id: " + teacher.getId()));
+                subject.getTeachers().add(existingTeacher);
+            }
+        }
 
         return subjectRepository.save(subject);
     }
@@ -35,25 +40,30 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject updateSubject(Long id, SubjectDto subjectDto) {
         Subject existingSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + id));
+                .orElseThrow(() -> new SubjectNotFoundException("Subject not found with id: " + id));
 
-        Long teachertId = subjectDto.getTeacherId();
-
-        Teacher teacher = teacherRepository.findById(teachertId)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teachertId));
-
-        existingSubject.setTeacher(teacher);
         existingSubject.setName(subjectDto.getName());
+
+        Set<Teacher> teachers = subjectDto.getTeachers();
+        if (teachers != null && !teachers.isEmpty()) {
+            existingSubject.getTeachers().clear();
+            for (Teacher teacher : teachers) {
+                Teacher existingTeacher = teacherRepository.findById(teacher.getId())
+                        .orElseThrow(
+                                () -> new SubjectNotFoundException("Teacher not found with id: " + teacher.getId()));
+                existingSubject.getTeachers().add(existingTeacher);
+            }
+        }
 
         return subjectRepository.save(existingSubject);
     }
 
     @Override
     public boolean deleteSubject(Long id) {
-        if (!subjectRepository.existsById(id)) {
-            throw new SubjectNotFoundException("Subject not found with id: " + id);
-        }
-        subjectRepository.deleteById(id);
+        Subject subject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject not found with id: " + id));
+
+        subjectRepository.delete(subject);
         return true;
     }
 
@@ -66,7 +76,6 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject getSubjectById(Long id) {
         return subjectRepository.findById(id)
                 .orElseThrow(() -> new SubjectNotFoundException("Subject not found with id: " + id));
-
     }
 
     @Override
@@ -74,15 +83,14 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository.findByNameContainingIgnoreCase(name);
     }
 
+    // @Override
+    // public List<Subject> getSubjectsByTeacherId(Long teacherId) {
+    // return subjectRepository.findByTeacherId(teacherId);
+    // }
+
     public class SubjectNotFoundException extends RuntimeException {
         public SubjectNotFoundException(String message) {
             super(message);
         }
-    }
-
-    // huyen
-    @Override
-    public List<Subject> getSubjectsByTeacherId(Long teacherId) {
-        return subjectRepository.findByTeacherId(teacherId);
     }
 }

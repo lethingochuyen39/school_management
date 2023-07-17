@@ -21,6 +21,7 @@ public class TeacherDto {
 	private String address;
 	private String phone;
 	private String status;
+	private Boolean isActive;
 
 	// private Long userId;
 }
