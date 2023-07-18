@@ -1,5 +1,7 @@
 package com.school.management.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +38,9 @@ public class Classes {
 	@Column(name = "grade", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String grade;
 
+	@ManyToMany(mappedBy = "className")
+	List<Student> students;
+  
 	@Column(name = "limitStudent", nullable = false)
 	private Integer limitStudent;
 
