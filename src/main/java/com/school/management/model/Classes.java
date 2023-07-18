@@ -39,4 +39,7 @@ public class Classes {
 	@Column(name = "limitStudent", nullable = false)
 	private Integer limitStudent;
 
+	@Column(name = "isActive")
+	private Boolean isActive;
+
 }

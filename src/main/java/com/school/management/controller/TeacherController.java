@@ -18,9 +18,9 @@ import com.school.management.model.Classes;
 import com.school.management.model.Teacher;
 import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ClassesServiceImpl;
-import com.school.management.service.EventNewsServiceImpl.EventNewsNotFoundException;
 import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
+import com.school.management.service.TeacherServiceImpl.TeacherNotFoundException;
 
 @RestController
 @RequestMapping("/api/teachers")
@@ -109,7 +109,7 @@ public class TeacherController {
         try {
             Teacher updatedTeacher = teacherService.updateTeacherStatus(id);
             return ResponseEntity.ok(updatedTeacher);
-        } catch (EventNewsNotFoundException e) {
+        } catch (TeacherNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

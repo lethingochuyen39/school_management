@@ -28,10 +28,10 @@ public class ClassesServiceImpl implements ClassesService {
         Long academicYearId = classesDto.getAcademicYearId();
 
         Teacher teacher = teacherRepository.findById(teacherId)
-            .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teacherId));
+                .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teacherId));
         AcademicYear academicYear = academicYearRepository.findById(academicYearId)
-            .orElseThrow(() -> new IllegalArgumentException("AcademicYear not found with id: " + academicYearId));
-        
+                .orElseThrow(() -> new IllegalArgumentException("AcademicYear not found with id: " + academicYearId));
+
         Classes classes = new Classes();
         classes.setName(classesDto.getName());
         classes.setDescription(classesDto.getDescription());
@@ -40,13 +40,13 @@ public class ClassesServiceImpl implements ClassesService {
         classes.setTeacher(teacher);
         classes.setAcademicYear(academicYear);
 
-        return classesRepository.save(classes); 
+        return classesRepository.save(classes);
     }
 
     @Override
     public Classes getClassesById(Long id) {
         return classesRepository.findById(id)
-				.orElseThrow(() -> new ClassesNotFoundException("Class not found with id: " + id));
+                .orElseThrow(() -> new ClassesNotFoundException("Class not found with id: " + id));
     }
 
     @Override
@@ -54,11 +54,11 @@ public class ClassesServiceImpl implements ClassesService {
         Long teacherId = classesDto.getTeacherId();
         Long academicYearId = classesDto.getAcademicYearId();
         Classes exitingClasses = classesRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + id));
-            Teacher teacher = teacherRepository.findById(teacherId)
-            .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teacherId));
+                .orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + id));
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + teacherId));
         AcademicYear academicYear = academicYearRepository.findById(academicYearId)
-            .orElseThrow(() -> new IllegalArgumentException("AcademicYear not found with id: " + academicYearId));
+                .orElseThrow(() -> new IllegalArgumentException("AcademicYear not found with id: " + academicYearId));
         exitingClasses.setName(classesDto.getName());
         exitingClasses.setDescription(classesDto.getDescription());
         exitingClasses.setGrade(classesDto.getGrade());
@@ -98,5 +98,16 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public List<Classes> getClassesByTeacherId(Long teacherId) {
         return classesRepository.findAllByTeacherId(teacherId);
+    }
+
+    @Override
+    public Classes updateClassesStatus(Long id) {
+        Classes existingClasses = classesRepository.findById(id)
+                .orElseThrow(() -> new ClassesNotFoundException("Không tìm thấy với id: " + id));
+
+        boolean isActive = existingClasses.getIsActive();
+        existingClasses.setIsActive(!isActive);
+
+        return classesRepository.save(existingClasses);
     }
 }
