@@ -124,10 +124,18 @@ public class StudentController {
         return ResponseEntity.ok(studentClass);
     }
 
-    @PostMapping("/student/confirm")
+    @PostMapping("/confirm")
     public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
         try {
             return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @PostMapping("/upgrade")
+    public ResponseEntity<?> upgradeClass(@RequestParam("email") String email, @RequestParam("classname") String classname){
+        try {
+            return ResponseEntity.ok(studentService.upgradeClass(classname,email));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

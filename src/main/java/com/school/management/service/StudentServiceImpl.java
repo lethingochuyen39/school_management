@@ -53,8 +53,9 @@ public class StudentServiceImpl implements StudentService {
         if (newStudent == null) {
             throw new StudentException("Student " + student.getEmail() + " cant be found");
         }
-        Classes classs = classesRepository.findByName(student.getClassName());
-        newStudent.setClassName(classs);
+        Classes classes = classesRepository.findByName(student.getClassName());
+        List<Classes> classList = new ArrayList<Classes>();
+        classList.add(classes);
         // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob()).setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage()).setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
         Student saveStudent = modelMapper.map(student, Student.class);
         studentRepository.save(saveStudent);
@@ -101,11 +102,28 @@ public class StudentServiceImpl implements StudentService {
 
         Student newStudent = modelMapper.map(student, Student.class);
         Classes classes = classesRepository.findByName(student.getClassName());
+        List<Classes> classList = new ArrayList<Classes>();
+        classList.add(classes);
         if (classes == null) {
             throw new StudentException("Class is not found");
         }
-        studentRepository.save(newStudent.setClassName(classes));
+        studentRepository.save(newStudent.setClassName(classList));
         return student;
+    }
+
+    public String upgradeClass(String className,String email){
+        try {
+        Classes classes = classesRepository.findByName(className);
+        // Classes classes = new Classes(0,className,)
+        Student student = studentRepository.findByEmail(email);
+        List<Classes> classList = new ArrayList<Classes>();
+        classList.add(classes);
+        student.setClassName(classList);
+        studentRepository.save(student);
+        return "upgrade successfullly";
+        } catch (Exception e) {
+            throw new StudentException("upgrade error, " + e.getMessage());
+        }
     }
 
     public class StudentException extends RuntimeException {
@@ -164,7 +182,8 @@ public class StudentServiceImpl implements StudentService {
     public String ConfirmStudent(StudentDTO studentDTO) {
         Student student = studentRepository.findByEmail(studentDTO.getEmail());
         Student confirmStudent = modelMapper.map(studentDTO, Student.class);
-        confirmStudent.setClassName(student.getClassName()).setUser(null);
+        student.setImage(null);
+        confirmStudent.setClassName(student.getClassName()).setUser(null).setImage(null);
         if(student.equals(confirmStudent)){
             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
             String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
