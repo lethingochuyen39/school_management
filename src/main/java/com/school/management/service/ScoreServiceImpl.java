@@ -112,10 +112,10 @@ public class ScoreServiceImpl implements ScoreService {
 		}
 	}
 
-	@Override
-	public List<Score> findByClassId(Long classId) {
-		return scoreRepository.findByClassId(classId);
-	}
+	// @Override
+	// public List<Score> findByClassId(Long classId) {
+	// return scoreRepository.findByClassId(classId);
+	// }
 
 	@Override
 	public List<Score> getScoresByClassAndSemesterAndStudentId(Long classId, Integer semester, Long studentId) {

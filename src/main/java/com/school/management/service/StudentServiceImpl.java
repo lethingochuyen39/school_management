@@ -109,16 +109,16 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public String upgradeClass(String className,String email) throws StudentException{
+    public String upgradeClass(String className, String email) throws StudentException {
         try {
-        Classes classes = classesRepository.findByName(className);
-        // Classes classes = new Classes(0,className,)
-        Student student = studentRepository.findByEmail(email);
-        List<Classes> classList = new ArrayList<Classes>();
-        classList.add(classes);
-        student.setClassName(classList);
-        studentRepository.save(student);
-        return null;
+            Classes classes = classesRepository.findByName(className);
+            // Classes classes = new Classes(0,className,)
+            Student student = studentRepository.findByEmail(email);
+            List<Classes> classList = new ArrayList<Classes>();
+            classList.add(classes);
+            student.setClassName(classList);
+            studentRepository.save(student);
+            return null;
         } catch (Exception e) {
             throw new StudentException("upgrade error, " + e.getMessage());
         }
@@ -130,21 +130,18 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-
-    // huyen
-    public List<Student> findByClassId(Long classId) {
-        return studentRepository.findByClassId(classId);
-    }
-
     @Override
     public String ConfirmStudent(StudentDTO studentDTO) {
         Student student = studentRepository.findByEmail(studentDTO.getEmail());
         Student confirmStudent = modelMapper.map(studentDTO, Student.class);
         student.setImage(null);
         confirmStudent.setClassName(student.getClassName()).setUser(null).setImage(null);
-        if(student.equals(confirmStudent)){
-            char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
-            String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
+        if (student.equals(confirmStudent)) {
+            char[] possibleCharacters = (new String(
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?"))
+                    .toCharArray();
+            String randomStr = RandomStringUtils.random(6, 0, possibleCharacters.length - 1, false, false,
+                    possibleCharacters, new SecureRandom());
 
             userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
             User user = userRepository.findByEmail(student.getEmail()).get();
@@ -158,16 +155,21 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    // huyen
-    @Override
-    public Classes findClassByStudentId(Long studentId) {
-        return studentRepository.findClassByStudentId(studentId);
-    }
+    // // huyen
+    // public List<Student> findByClassId(Long classId) {
+    // return studentRepository.findByClassId(classId);
+    // }
+
+    // // huyen
+    // @Override
+    // public Classes findClassByStudentId(Long studentId) {
+    // return studentRepository.findClassByStudentId(studentId);
+    // }
 
     // huyen
     @Override
-    public List<Classes> findAllClassByStudentId(Long studentId) {
-        return studentRepository.findClassesByStudentId(studentId);
+    public List<Classes> getAllClassesByStudentId(Long studentId) {
+        return classesRepository.findAllByStudentsId(studentId);
     }
 
 }

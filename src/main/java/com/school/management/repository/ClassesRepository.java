@@ -20,5 +20,8 @@ public interface ClassesRepository extends JpaRepository<Classes, Long> {
     // huyen
     List<Classes> findAllByTeacherId(Long teacherId);
 
+    // huyen
+    List<Classes> findAllByStudentsId(Long studentId);
+
     Classes findByName(String Name);
 }
