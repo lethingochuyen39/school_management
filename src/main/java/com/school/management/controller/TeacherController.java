@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.TeacherDto;
 import com.school.management.model.Classes;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ClassesServiceImpl;
@@ -114,5 +115,12 @@ public class TeacherController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // huyen
+    @GetMapping("/{teacherId}/subjects")
+    public ResponseEntity<List<?>> getAllSubjectsByTeacherId(@PathVariable Long teacherId) {
+        List<Subject> subjects = teacherService.getAllSubjectsByTeacherId(teacherId);
+        return ResponseEntity.ok(subjects);
     }
 }
