@@ -18,6 +18,8 @@ public interface ClassesService {
 
     List<Classes> getClassesByName(String name);
 
+    Classes updateClassesStatus(Long id);
+
     // huyen
     List<Classes> getClassesByTeacherId(Long teacherId);
 }

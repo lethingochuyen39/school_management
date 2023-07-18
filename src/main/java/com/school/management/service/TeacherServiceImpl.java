@@ -1,11 +1,13 @@
 package com.school.management.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.school.management.dto.TeacherDto;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.repository.TeacherRepository;
 
@@ -34,7 +36,7 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setEmail(teacherDto.getEmail());
         teacher.setAddress(teacherDto.getAddress());
         teacher.setPhone(teacherDto.getPhone());
-        teacher.setStatus(teacherDto.getStatus());
+        teacher.setIsActive(teacherDto.getIsActive());
         // teacher.setUser(user);
 
         return teacherRepository.save(teacher);
@@ -51,7 +53,7 @@ public class TeacherServiceImpl implements TeacherService {
         exitingTeacher.setEmail(teacherDto.getEmail());
         exitingTeacher.setAddress(teacherDto.getAddress());
         exitingTeacher.setPhone(teacherDto.getPhone());
-        exitingTeacher.setStatus(teacherDto.getStatus());
+        exitingTeacher.setIsActive(teacherDto.getIsActive());
         // exitingTeacher.setUser(user);
 
         return teacherRepository.save(exitingTeacher);
@@ -86,5 +88,24 @@ public class TeacherServiceImpl implements TeacherService {
         public TeacherNotFoundException(String message) {
             super(message);
         }
+    }
+
+    @Override
+    public Teacher updateTeacherStatus(Long id) {
+        Teacher existingTeacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Không tìm thấy với id: " + id));
+
+        boolean isActive = existingTeacher.getIsActive();
+        existingTeacher.setIsActive(!isActive);
+
+        return teacherRepository.save(existingTeacher);
+    }
+
+    @Override
+    public List<Subject> getAllSubjectsByTeacherId(Long teacherId) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy giáo viên"));
+
+        return teacherRepository.findSubjectsByTeacherId(teacherId);
     }
 }

@@ -142,23 +142,24 @@ public class StudentController {
     // huyen
     @GetMapping("/{studentId}/class")
     public ResponseEntity<?> getClassByStudentId(@PathVariable Long studentId) {
-        Classes foundClass = studentService.findClassByStudentId(studentId);
-        if (foundClass != null) {
-            return ResponseEntity.ok(foundClass);
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            Classes foundClass = studentService.findClassByStudentId(studentId);
+            return ResponseEntity.ok().body(foundClass);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // huyen
     @GetMapping("/{studentId}/Allclass")
     public ResponseEntity<?> getAllClassByStudentId(@PathVariable Long studentId) {
-        List<Classes> foundClass = studentService.findAllClassByStudentId(studentId);
-        if (foundClass != null) {
-            return ResponseEntity.ok(foundClass);
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            List<Classes> foundClass = studentService.findAllClassByStudentId(studentId);
+            return ResponseEntity.ok().body(foundClass);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
+
     }
 
 }

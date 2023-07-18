@@ -17,6 +17,7 @@ import com.school.management.dto.ClassesDto;
 import com.school.management.model.Classes;
 import com.school.management.service.ClassesService;
 import com.school.management.service.ClassesServiceImpl;
+import com.school.management.service.ClassesServiceImpl.ClassesNotFoundException;
 
 @RestController
 @RequestMapping("/api/classes")
@@ -24,15 +25,15 @@ public class ClassesController {
 	@Autowired
 	private ClassesService classesService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createClasses(@RequestBody ClassesDto classesDto) {
-        try {
-            Classes createdClasses = classesService.createClasses(classesDto);
-            return ResponseEntity.ok().body(createdClasses);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+	@PostMapping("/create")
+	public ResponseEntity<?> createClasses(@RequestBody ClassesDto classesDto) {
+		try {
+			Classes createdClasses = classesService.createClasses(classesDto);
+			return ResponseEntity.ok().body(createdClasses);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<?> getClassesById(@PathVariable Long id) {
@@ -77,6 +78,18 @@ public class ClassesController {
 	public ResponseEntity<List<Classes>> searchClassesByName(@PathVariable(value = "name") String name) {
 		List<Classes> classes = classesService.getClassesByName(name);
 		return ResponseEntity.ok(classes);
+	}
+
+	@PutMapping("/isActive/{id}")
+	public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
+		try {
+			Classes updatedClasses = classesService.updateClassesStatus(id);
+			return ResponseEntity.ok(updatedClasses);
+		} catch (ClassesNotFoundException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	// huyen

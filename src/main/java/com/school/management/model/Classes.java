@@ -40,4 +40,11 @@ public class Classes {
 
 	@ManyToMany(mappedBy = "className")
 	List<Student> students;
+  
+	@Column(name = "limitStudent", nullable = false)
+	private Integer limitStudent;
+
+	@Column(name = "isActive")
+	private Boolean isActive;
+
 }

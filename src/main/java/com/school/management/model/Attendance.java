@@ -15,35 +15,36 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Entity
 @Getter
 @Setter
-@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Attendance")
+@Table(name = "attendance")
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id", nullable = false)
+    private Subject subject;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id")
-    private Classes classes;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    @JoinColumn(name = "class_id", nullable = false)
+    private Classes classes;
 
-    @Column(name = "status", nullable = false, columnDefinition = "NVARCHAR(255)")
-    private String status;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
+
+    @Column(name = "is_present", nullable = false)
+    private Boolean isPresent;
+
+    @Column(name = "note")
+    private String note;
 }

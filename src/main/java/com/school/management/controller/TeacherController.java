@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.TeacherDto;
 import com.school.management.model.Classes;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ClassesServiceImpl;
 import com.school.management.service.TeacherService;
 import com.school.management.service.TeacherServiceImpl;
+import com.school.management.service.TeacherServiceImpl.TeacherNotFoundException;
 
 @RestController
 @RequestMapping("/api/teachers")
@@ -101,5 +103,24 @@ public class TeacherController {
     public ResponseEntity<List<?>> getClassesByTeacherId(@PathVariable Long teacherId) {
         List<Classes> classes = classesServiceImpl.getClassesByTeacherId(teacherId);
         return ResponseEntity.ok(classes);
+    }
+
+    @PutMapping("/isActive/{id}")
+    public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
+        try {
+            Teacher updatedTeacher = teacherService.updateTeacherStatus(id);
+            return ResponseEntity.ok(updatedTeacher);
+        } catch (TeacherNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // huyen
+    @GetMapping("/{teacherId}/subjects")
+    public ResponseEntity<List<?>> getAllSubjectsByTeacherId(@PathVariable Long teacherId) {
+        List<Subject> subjects = teacherService.getAllSubjectsByTeacherId(teacherId);
+        return ResponseEntity.ok(subjects);
     }
 }

@@ -1,15 +1,9 @@
 package com.school.management.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.school.management.dto.AttendanceDto;
 import com.school.management.model.Attendance;
-import com.school.management.model.Classes;
-import com.school.management.model.Student;
-import com.school.management.model.Subject;
 import com.school.management.repository.AttendanceRepository;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
@@ -18,75 +12,71 @@ import com.school.management.repository.SubjectRepository;
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
 
-    @Autowired
-    private AttendanceRepository attendanceRepository;
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private ClassesRepository classesRepository;
-    @Autowired
-    private SubjectRepository subjectRepository;
+        private final AttendanceRepository attendanceRepository;
+        private final SubjectRepository subjectRepository;
+        private final StudentRepository studentRepository;
+        private final ClassesRepository classesRepository;
 
-    @Override
-    public Attendance createAttendance(AttendanceDto attendanceDto) {
-        Long studentId = attendanceDto.getStudentId();
-        Long classId = attendanceDto.getClassId();
-        Long subjectId = attendanceDto.getSubjectId();
+        public AttendanceServiceImpl(AttendanceRepository attendanceRepository, SubjectRepository subjectRepository,
+                        StudentRepository studentRepository, ClassesRepository classesRepository) {
+                this.attendanceRepository = attendanceRepository;
+                this.subjectRepository = subjectRepository;
+                this.studentRepository = studentRepository;
+                this.classesRepository = classesRepository;
+        }
 
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        Classes classes = classesRepository.findById(classId)
-                .orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + classId));
-        Subject subject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + subjectId));
+        @Override
+        public Attendance createAttendance(AttendanceDto attendanceDto) {
+                Attendance attendance = new Attendance();
+                attendance.setDate(attendanceDto.getDate());
+                attendance.setIsPresent(attendanceDto.getIsPresent());
+                attendance.setNote(attendanceDto.getNote());
 
-        Attendance attendance = new Attendance();
-        attendance.setStudent(student);
-        attendance.setClasses(classes);
-        attendance.setSubject(subject);
-        attendance.setDate(attendance.getDate());
-        attendance.setStatus(attendanceDto.getStatus());
+                // Lấy subject từ subjectRepository
+                subjectRepository.findById(attendanceDto.getSubjectId()).ifPresent(attendance::setSubject);
 
-        return attendanceRepository.save(attendance);
-    }
+                // Lấy student từ studentRepository
+                studentRepository.findById(attendanceDto.getStudentId()).ifPresent(attendance::setStudent);
 
-    @Override
-    public Attendance getAttendanceById(Long id) {
-        return attendanceRepository.findById(id).orElse(null);
-    }
+                // Lấy classes từ classesRepository
+                classesRepository.findById(attendanceDto.getClassId()).ifPresent(attendance::setClasses);
 
-    @Override
-    public Attendance updateAttendance(Long id, AttendanceDto attendanceDto) {
-        Attendance existingAttendance = attendanceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
+                return attendanceRepository.save(attendance);
+        }
 
-        Long studentId = attendanceDto.getStudentId();
-        Long classId = attendanceDto.getClassId();
-        Long subjectId = attendanceDto.getSubjectId();
+        @Override
+        public Attendance updateAttendance(Long id, AttendanceDto attendanceDto) {
+                Attendance existingAttendance = attendanceRepository.findById(id)
+                                .orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
 
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        Classes classes = classesRepository.findById(classId)
-                .orElseThrow(() -> new IllegalArgumentException("Class not found with id: " + classId));
-        Subject subject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + subjectId));
+                existingAttendance.setDate(attendanceDto.getDate());
+                existingAttendance.setIsPresent(attendanceDto.getIsPresent());
+                existingAttendance.setNote(attendanceDto.getNote());
 
-        existingAttendance.setStudent(student);
-        existingAttendance.setClasses(classes);
-        existingAttendance.setSubject(subject);
-        existingAttendance.setDate(attendanceDto.getDate());
-        existingAttendance.setStatus(attendanceDto.getStatus());
+                // Lấy subject từ subjectRepository
+                subjectRepository.findById(attendanceDto.getSubjectId()).ifPresent(existingAttendance::setSubject);
 
-        return attendanceRepository.save(existingAttendance);
-    }
+                // Lấy student từ studentRepository
+                studentRepository.findById(attendanceDto.getStudentId()).ifPresent(existingAttendance::setStudent);
 
-    @Override
-    public List<Attendance> getAllAttendances() {
-        return attendanceRepository.findAll();
-    }
+                // Lấy classes từ classesRepository
+                classesRepository.findById(attendanceDto.getClassId()).ifPresent(existingAttendance::setClasses);
 
-    @Override
-    public void deleteAttendance(Long id) {
-        attendanceRepository.deleteById(id);
-    }
+                return attendanceRepository.save(existingAttendance);
+        }
+
+        @Override
+        public boolean deleteAttendance(Long id) {
+                Attendance attendance = attendanceRepository.findById(id)
+                                .orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
+
+                attendanceRepository.delete(attendance);
+                return true;
+        }
+
+        @Override
+        public Attendance getAttendanceById(Long id) {
+                return attendanceRepository.findById(id)
+                                .orElseThrow(() -> new IllegalArgumentException("Attendance not found with id: " + id));
+        }
 }
