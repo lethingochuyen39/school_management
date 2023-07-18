@@ -128,7 +128,6 @@ public class ManagementApplication {
 				scoreType6.setDescription("Kiểm tra cuối kì");
 				scoreTypeRepository.save(scoreType6);
 
-				System.out.println("Đã thêm dữ liệu mặc định vào bảng ScoreType");
 			}
 		};
 	}
