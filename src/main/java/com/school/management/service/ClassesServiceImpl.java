@@ -36,6 +36,7 @@ public class ClassesServiceImpl implements ClassesService {
         classes.setName(classesDto.getName());
         classes.setDescription(classesDto.getDescription());
         classes.setGrade(classesDto.getGrade());
+        classes.setLimitStudent(classesDto.getLimitStudent());
         classes.setTeacher(teacher);
         classes.setAcademicYear(academicYear);
 
@@ -61,6 +62,7 @@ public class ClassesServiceImpl implements ClassesService {
         exitingClasses.setName(classesDto.getName());
         exitingClasses.setDescription(classesDto.getDescription());
         exitingClasses.setGrade(classesDto.getGrade());
+        exitingClasses.setLimitStudent(classesDto.getLimitStudent());
         exitingClasses.setTeacher(teacher);
         exitingClasses.setAcademicYear(academicYear);
 
