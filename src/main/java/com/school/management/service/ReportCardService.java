@@ -17,4 +17,8 @@ public interface ReportCardService {
 	void deleteReportCard(Long id);
 
 	List<ReportCard> getReportCard();  
+
+	List<ReportCard> searchReportCardsByViolate(String violate);
+
+	List<ReportCard> searchReportCards(String violate);
 }

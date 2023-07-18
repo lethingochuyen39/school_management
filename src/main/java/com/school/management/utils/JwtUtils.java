@@ -15,7 +15,6 @@ import com.school.management.dto.AccessTokenDto;
 import com.school.management.model.Student;
 import com.school.management.model.Teacher;
 import com.school.management.model.User;
-import com.school.management.repository.ParentRepository;
 import com.school.management.repository.StudentRepository;
 import com.school.management.repository.TeacherRepository;
 import com.school.management.repository.UserRepository;
@@ -60,10 +59,10 @@ public class JwtUtils {
         accessToken.setRoles(roles);
         accessToken.setToken(token);
         accessToken.setUid(uid);
-        if(student != null){
+         if (student != null) {
             id = student.getId();
         }
-        if(teacher!= null){
+        if (teacher != null) {
             id = teacher.getId();
         }
         accessToken.setId(id);

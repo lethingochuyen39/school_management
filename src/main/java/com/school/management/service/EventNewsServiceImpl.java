@@ -15,8 +15,7 @@ import java.util.List;
 
 @Service
 public class EventNewsServiceImpl implements EventNewsService {
-	private static final String UPLOAD_FOLDER = "uploads/news/";
-	private static final String PUBLIC_IMAGE_FOLDER = "D:/Desktop/project/ui/school-ui/public/images/";
+	private static final String UPLOAD_FOLDER = "src/main/resources/static/uploads/news";
 
 	@Autowired
 	private EventNewsRepository eventNewsRepository;
@@ -34,6 +33,8 @@ public class EventNewsServiceImpl implements EventNewsService {
 		}
 
 		if (image != null) {
+			// String imageName =
+			// generateUniqueFileName(getFileExtension(image.getOriginalFilename()));
 			String imageName = image.getOriginalFilename();
 			String imagePath = saveImage(image);
 
@@ -41,7 +42,7 @@ public class EventNewsServiceImpl implements EventNewsService {
 			eventNews.setImagePath(imagePath);
 		}
 
-		eventNews.setIsActive(true);
+		eventNews.setIsActive(eventNews.getIsActive());
 		eventNews.setCreatedAt(LocalDateTime.now());
 		eventNews.setUpdatedAt(LocalDateTime.now());
 		return eventNewsRepository.save(eventNews);
@@ -75,7 +76,7 @@ public class EventNewsServiceImpl implements EventNewsService {
 		existingEventNews.setTitle(newTitle);
 		existingEventNews.setContent(eventNews.getContent());
 		existingEventNews.setIsActive(eventNews.getIsActive());
-		existingEventNews.setUpdatedAt(LocalDateTime.now());
+		existingEventNews.setUpdatedAt(eventNews.getUpdatedAt());
 
 		if (image != null && !image.isEmpty()) {
 			String imagePath = saveImage(image);
@@ -107,20 +108,21 @@ public class EventNewsServiceImpl implements EventNewsService {
 
 	private String saveImage(MultipartFile image) {
 		try {
-			Path publicImagePath = Path.of(PUBLIC_IMAGE_FOLDER).toAbsolutePath().normalize();
+			Path uploadFolderPath = Path.of(UPLOAD_FOLDER).toAbsolutePath().normalize();
 
-			if (!Files.exists(publicImagePath)) {
-				Files.createDirectories(publicImagePath);
+			if (!Files.exists(uploadFolderPath)) {
+				Files.createDirectories(uploadFolderPath);
 			}
 
 			String imageName = image.getOriginalFilename();
 			String imageExtension = getFileExtension(imageName);
 			String newImageName = generateUniqueFileName(imageExtension);
-			String publicImagePathStr = PUBLIC_IMAGE_FOLDER + newImageName;
+			String imagePath = "/uploads/news/" + newImageName;
 
-			Files.copy(image.getInputStream(), Path.of(publicImagePathStr), StandardCopyOption.REPLACE_EXISTING);
+			Path destinationPath = uploadFolderPath.resolve(newImageName);
+			Files.copy(image.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
-			return "images/" + newImageName;
+			return imagePath;
 		} catch (IOException e) {
 			throw new RuntimeException("Lỗi.");
 		}

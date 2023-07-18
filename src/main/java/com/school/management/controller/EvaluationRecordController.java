@@ -74,8 +74,14 @@ public class EvaluationRecordController {
 	}
 
 	@GetMapping("/search/studentId")
-	public ResponseEntity<List<EvaluationRecord>> searchScoresByStudentId(@RequestParam("id") Long studentId) {
+	public ResponseEntity<List<EvaluationRecord>> searchEvaluationRecordByStudentId(@RequestParam("id") Long studentId) {
 		List<EvaluationRecord> evaluationRecord = evaluationRecordServiceImpl.getEvaluationRecordByStudentId(studentId);
+		return ResponseEntity.ok(evaluationRecord);
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<List<EvaluationRecord>> searchEvaluationRecordsByViolate(@RequestParam("achievement") String achievement) {
+		List<EvaluationRecord> evaluationRecord = evaluationRecordServiceImpl.searchEvaluationRecordsByAchievement(achievement);
 		return ResponseEntity.ok(evaluationRecord);
 	}
 }

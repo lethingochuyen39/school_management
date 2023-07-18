@@ -2,6 +2,7 @@ package com.school.management.dto;
 
 import java.time.LocalDate;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,12 +11,12 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
-public class ReportCardDto {
-    private Long studentId;
-    private String violate;
-    private String description;
+public class AttendanceDto {
     private LocalDate date;
-    private Long academicYearId;
-
+    private String status;
+    private Long classId;
+    private Long studentId;
+    private Long subjectId;
 }

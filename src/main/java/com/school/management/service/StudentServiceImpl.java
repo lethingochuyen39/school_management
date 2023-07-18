@@ -3,7 +3,6 @@ package com.school.management.service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -18,7 +17,6 @@ import com.school.management.model.Student;
 import com.school.management.model.User;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
-
 import com.school.management.repository.UserRepository;
 
 @Service
@@ -111,7 +109,7 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public String upgradeClass(String className,String email){
+    public String upgradeClass(String className,String email) throws StudentException{
         try {
         Classes classes = classesRepository.findByName(className);
         // Classes classes = new Classes(0,className,)
@@ -120,7 +118,7 @@ public class StudentServiceImpl implements StudentService {
         classList.add(classes);
         student.setClassName(classList);
         studentRepository.save(student);
-        return "upgrade successfullly";
+        return null;
         } catch (Exception e) {
             throw new StudentException("upgrade error, " + e.getMessage());
         }
@@ -131,46 +129,6 @@ public class StudentServiceImpl implements StudentService {
             super(message);
         }
     }
-
-    // @Override
-    // public Student GiveAccessAccount(String email,Student student) {
-    // Optional<User> user = userRepository.findByEmail(email);
-    // return student.setUser(user.get());
-    // // if (student.getUser() != null) {
-    // // throw new StudentException("Student has already been added the user " +
-    // student.getUser().getEmail());
-    // // }
-    // // if (user.isPresent()&&student!=null) {
-    // // student.setUser(user.get());
-    // // studentRepository.save(student);
-    // // return student;
-    // // } else {
-    // // throw new StudentException("Student " +email+ " does not exist");
-    // // }
-    // }
-  
-//     @Override
-//     public Long generateAccount() {
-//         Long totalRowInStudent = studentRepository.count();
-//         List <Student> list = studentRepository.findByUser(null);
-//         // list.stream().forEach(student -> studentRepository.save(studentService.GiveAccessAccount(student.getEmail(),student)));
-//         list.stream().forEach(student -> {
-//             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
-//             String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
-// // System.out.println( randomStr );
-//             UserDto userDto = userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
-//             Optional<User> user = userRepository.findByEmail(userDto.getEmail());
-//             if (!user.isPresent()){
-//                 throw new StudentException("User not found: " + userDto.getEmail());
-//             }
-//             studentRepository.save(student.setUser(user.get()));
-//         });
-//         return totalRowInStudent;
-//         //Student newStudent = modelMapper.map(student, Student.class);
-//         //studentRepository.save(newStudent);
-//         //return student;
-//     }
-
 
 
     // huyen
@@ -187,16 +145,29 @@ public class StudentServiceImpl implements StudentService {
         if(student.equals(confirmStudent)){
             char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?")).toCharArray();
             String randomStr = RandomStringUtils.random( 6, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
-// System.out.println( randomStr );
+
             userService.signup(new UserDto(student.getEmail(), randomStr, new RoleDto("STUDENT")));
             User user = userRepository.findByEmail(student.getEmail()).get();
             student.setUser(user);
             student.setStatus("active");
             studentRepository.save(student);
             return "Confirmed Successfully";
-        }else{
-            throw new StudentException("Wrong information, if the system wrong please mail to longpntts2109002@fpt.edu.vn");
+        } else {
+            throw new StudentException(
+                    "Wrong information, if the system wrong please mail to longpntts2109002@fpt.edu.vn");
         }
+    }
+
+    // huyen
+    @Override
+    public Classes findClassByStudentId(Long studentId) {
+        return studentRepository.findClassByStudentId(studentId);
+    }
+
+    // huyen
+    @Override
+    public List<Classes> findAllClassByStudentId(Long studentId) {
+        return studentRepository.findClassesByStudentId(studentId);
     }
 
 }
