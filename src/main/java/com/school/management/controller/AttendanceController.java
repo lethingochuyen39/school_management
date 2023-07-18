@@ -1,8 +1,6 @@
 package com.school.management.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,45 +19,34 @@ import com.school.management.service.AttendanceService;
 @RequestMapping("/api/attendance")
 public class AttendanceController {
 
-    @Autowired
-    private AttendanceService attendanceService;
+    private final AttendanceService attendanceService;
+
+    public AttendanceController(AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Attendance> createAttendance(@RequestBody AttendanceDto attendanceDto) {
         Attendance createdAttendance = attendanceService.createAttendance(attendanceDto);
-        return ResponseEntity.ok(createdAttendance);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Attendance> getAttendanceById(@PathVariable("id") Long id) {
-        Attendance attendance = attendanceService.getAttendanceById(id);
-        if (attendance != null) {
-            return ResponseEntity.ok(attendance);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAttendance);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Attendance> updateAttendance(@PathVariable("id") Long id,
+    public ResponseEntity<Attendance> updateAttendance(@PathVariable Long id,
             @RequestBody AttendanceDto attendanceDto) {
         Attendance updatedAttendance = attendanceService.updateAttendance(id, attendanceDto);
-        if (updatedAttendance != null) {
-            return ResponseEntity.ok(updatedAttendance);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Attendance>> getAllAttendances() {
-        List<Attendance> attendances = attendanceService.getAllAttendances();
-        return ResponseEntity.ok(attendances);
+        return ResponseEntity.ok(updatedAttendance);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteAttendance(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteAttendance(@PathVariable Long id) {
         attendanceService.deleteAttendance(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<Attendance> getAttendanceById(@PathVariable Long id) {
+        Attendance attendance = attendanceService.getAttendanceById(id);
+        return ResponseEntity.ok(attendance);
     }
 }

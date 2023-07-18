@@ -17,4 +17,5 @@ public class ClassesDto {
     private String grade;
     private Long teacherId;
     private Long academicYearId;
+    private Integer limitStudent;
 }

@@ -36,4 +36,7 @@ public class Classes {
 	@Column(name = "grade", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String grade;
 
+	@Column(name = "limitStudent", nullable = false)
+	private Integer limitStudent;
+
 }
