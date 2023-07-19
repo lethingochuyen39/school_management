@@ -2,6 +2,7 @@ package com.school.management.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,11 +102,10 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.save(existingTeacher);
     }
 
-    @Override
-    public List<Subject> getAllSubjectsByTeacherId(Long teacherId) {
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy giáo viên"));
 
-        return teacherRepository.findSubjectsByTeacherId(teacherId);
+        public Set<Teacher> getTeachersBySubjectId(Long subjectId) {
+        // Lấy tất cả giáo viên của môn học dựa vào ID môn học
+        return teacherRepository.findTeachersBySubjectId(subjectId);
+
     }
 }
