@@ -1,9 +1,11 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
+import com.school.management.model.Student;
 
 public interface StudentService {
     StudentDTO GetStudent(String email);
@@ -20,7 +22,12 @@ public interface StudentService {
     // Long generateAccount();
     String ConfirmStudent(StudentDTO studentDTO);
 
-    Classes findClassByStudentId(Long studentId);
+    String upgradeClass(String className, String email);
 
-    List<Classes> findAllClassByStudentId(Long studentId);
+    // huyen
+    List<Classes> getAllClassesByStudentId(Long studentId);
+
+    List<Student> getStudentsByClassId(Long classId);
+
+    Optional<Student> getStudentsById(Long studentId);
 }

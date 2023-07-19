@@ -76,4 +76,10 @@ public class ReportCardController {
 		List<ReportCard> reportCard = ReportCardServiceImpl.searchReportCardsByViolate(violate);
 		return ResponseEntity.ok(reportCard);
 	}
+
+	@GetMapping("/getReportCard")
+	public List<ReportCard> getReportCardsByStudent(
+		@RequestParam("studentId") Long studentId) {
+			return ReportCardServiceImpl.getReportCardByStudentId(studentId);
+		}
 }

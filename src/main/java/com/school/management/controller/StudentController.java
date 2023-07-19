@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -115,14 +116,7 @@ public class StudentController {
         }
     }
 
-    // huyen
-    @GetMapping("/classes/{classId}/students")
-    public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId) {
-        List<Student> studentClass = studentServiceImpl.findByClassId(classId);
-        return ResponseEntity.ok(studentClass);
-    }
-
-    @PostMapping("/student/confirm")
+    @PostMapping("/confirm")
     public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
         try {
             return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
@@ -131,26 +125,33 @@ public class StudentController {
         }
     }
 
-    // huyen
-    @GetMapping("/{studentId}/class")
-    public ResponseEntity<?> getClassByStudentId(@PathVariable Long studentId) {
-        Classes foundClass = studentService.findClassByStudentId(studentId);
-        if (foundClass != null) {
-            return ResponseEntity.ok(foundClass);
-        } else {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/upgrade")
+    public ResponseEntity<?> upgradeClass(@RequestParam("email") String email,
+            @RequestParam("classname") String classname) {
+        try {
+            return ResponseEntity.ok(studentService.upgradeClass(classname, email));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // huyen
-    @GetMapping("/{studentId}/Allclass")
-    public ResponseEntity<?> getAllClassByStudentId(@PathVariable Long studentId) {
-        List<Classes> foundClass = studentService.findAllClassByStudentId(studentId);
-        if (foundClass != null) {
-            return ResponseEntity.ok(foundClass);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/{classId}/students")
+    public List<Student> getStudentsByClassId(@PathVariable Long classId) {
+        return studentService.getStudentsByClassId(classId);
+    }
+
+    // huyen
+    @GetMapping("/{studentId}/classes")
+    public ResponseEntity<List<Classes>> getAllClassesByStudentId(@PathVariable Long studentId) {
+        List<Classes> classes = studentService.getAllClassesByStudentId(studentId);
+        return ResponseEntity.ok(classes);
+    }
+
+    // huyen
+    public ResponseEntity<?> getStudentsById(@PathVariable Long studentsId) {
+        Optional<Student> student = studentService.getStudentsById(studentsId);
+        return ResponseEntity.ok(student);
     }
 
 }

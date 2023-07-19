@@ -5,8 +5,11 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.data.repository.query.Param;
 
+
+import com.school.management.model.Subject;
 // import com.school.management.model.Student;
 import com.school.management.model.Teacher;
 import com.school.management.model.User;
@@ -23,7 +26,9 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     boolean existsByPhone(String phone);
 
+
     @Query("SELECT t FROM Teacher t JOIN t.subjects s WHERE s.id = :subjectId")
     Set<Teacher> findTeachersBySubjectId(@Param("subjectId") Long subjectId);
+
 
 }

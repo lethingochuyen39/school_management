@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.management.dto.TeacherDto;
 import com.school.management.model.Classes;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.service.AcademicYearServiceImpl;
 import com.school.management.service.ClassesServiceImpl;
@@ -107,9 +108,11 @@ public class TeacherController {
         }
     }
 
+
     @GetMapping("/subjects/{subjectId}/teachers")
     public ResponseEntity<Set<Teacher>> getTeachersBySubjectId(@PathVariable Long subjectId) {
         Set<Teacher> teachers = teacherService.getTeachersBySubjectId(subjectId);
         return ResponseEntity.ok(teachers);
+
     }
 }

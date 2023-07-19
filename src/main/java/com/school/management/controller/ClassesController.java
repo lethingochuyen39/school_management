@@ -80,21 +80,22 @@ public class ClassesController {
 		return ResponseEntity.ok(classes);
 	}
 
-	@PutMapping("/isActive/{id}")
-	public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
-		try {
-			Classes updatedClasses = classesService.updateClassesStatus(id);
-			return ResponseEntity.ok(updatedClasses);
-		} catch (ClassesNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
+	// @PutMapping("/isActive/{id}")
+	// public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
+	// 	try {
+	// 		Classes updatedClasses = classesService.updateClassesStatus(id);
+	// 		return ResponseEntity.ok(updatedClasses);
+	// 	} catch (ClassesNotFoundException e) {
+	// 		return ResponseEntity.badRequest().body(e.getMessage());
+	// 	} catch (Exception e) {
+	// 		return ResponseEntity.badRequest().body(e.getMessage());
+	// 	}
+	// }
 
 	// huyen
 	@GetMapping("/teachers/{teacherId}")
 	public List<Classes> getClassesByTeacherId(@PathVariable Long teacherId) {
 		return classesService.getClassesByTeacherId(teacherId);
 	}
+
 }

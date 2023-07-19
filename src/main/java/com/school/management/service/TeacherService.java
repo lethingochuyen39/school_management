@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.school.management.dto.TeacherDto;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 
 public interface TeacherService {
@@ -23,6 +24,8 @@ public interface TeacherService {
 
     // Long generateAccount();
 
+
     Set<Teacher> getTeachersBySubjectId(Long subjectId);
+
 
 }

@@ -18,5 +18,5 @@ public class ClassesDto {
     private Long teacherId;
     private Long academicYearId;
     private Integer limitStudent;
-    private Boolean isActive;
+    // private Boolean isActive;
 }

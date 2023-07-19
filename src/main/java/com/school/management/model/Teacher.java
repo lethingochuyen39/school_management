@@ -57,11 +57,11 @@ public class Teacher implements Serializable {
 	private Boolean isActive;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
+	// @JsonIgnore
 	@JoinColumn(name = "user_id", unique = true, nullable = true)
 	private User user;
 
 	@ManyToMany(mappedBy = "teachers")
-	@JsonIgnore
+	// @JsonIgnore
 	private Set<Subject> subjects = new HashSet<>();
 }
