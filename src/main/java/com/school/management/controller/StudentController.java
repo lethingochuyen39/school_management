@@ -134,36 +134,11 @@ public class StudentController {
         }
     }
 
-    // // huyen
-    // @GetMapping("/classes/{classId}/students")
-    // public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId)
-    // {
-    // List<Student> studentClass = studentServiceImpl.findByClassId(classId);
-    // return ResponseEntity.ok(studentClass);
-    // }
-    // // huyen
-    // @GetMapping("/{studentId}/class")
-    // public ResponseEntity<?> getClassByStudentId(@PathVariable Long studentId) {
-    // try {
-    // Classes foundClass = studentService.findClassByStudentId(studentId);
-    // return ResponseEntity.ok().body(foundClass);
-    // } catch (Exception e) {
-    // return ResponseEntity.badRequest().body(e.getMessage());
-    // }
-    // }
-
-    // // huyen
-    // @GetMapping("/{studentId}/Allclass")
-    // public ResponseEntity<?> getAllClassByStudentId(@PathVariable Long studentId)
-    // {
-    // try {
-    // List<Classes> foundClass = studentService.findAllClassByStudentId(studentId);
-    // return ResponseEntity.ok().body(foundClass);
-    // } catch (Exception e) {
-    // return ResponseEntity.badRequest().body(e.getMessage());
-    // }
-
-    // }
+    // huyen
+    @GetMapping("/{classId}/students")
+    public List<Student> getStudentsByClassId(@PathVariable Long classId) {
+        return studentService.getStudentsByClassId(classId);
+    }
 
     // huyen
     @GetMapping("/{studentId}/classes")

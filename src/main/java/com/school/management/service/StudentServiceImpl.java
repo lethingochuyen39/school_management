@@ -155,21 +155,16 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    // // huyen
-    // public List<Student> findByClassId(Long classId) {
-    // return studentRepository.findByClassId(classId);
-    // }
-
-    // // huyen
-    // @Override
-    // public Classes findClassByStudentId(Long studentId) {
-    // return studentRepository.findClassByStudentId(studentId);
-    // }
-
     // huyen
     @Override
     public List<Classes> getAllClassesByStudentId(Long studentId) {
         return classesRepository.findAllByStudentsId(studentId);
+    }
+
+    // huyen
+    @Override
+    public List<Student> getStudentsByClassId(Long classId) {
+        return studentRepository.findAllByClassNameId(classId);
     }
 
 }
