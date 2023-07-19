@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
+import com.school.management.model.Student;
 
 public interface StudentService {
     StudentDTO GetStudent(String email);
@@ -19,9 +20,11 @@ public interface StudentService {
     // Student GiveAccessAccount(String email,Student student);
     // Long generateAccount();
     String ConfirmStudent(StudentDTO studentDTO);
-    String upgradeClass(String className,String email);
 
-    Classes findClassByStudentId(Long studentId);
+    String upgradeClass(String className, String email);
 
-    List<Classes> findAllClassByStudentId(Long studentId);
+    // huyen
+    List<Classes> getAllClassesByStudentId(Long studentId);
+
+    List<Student> getStudentsByClassId(Long classId);
 }

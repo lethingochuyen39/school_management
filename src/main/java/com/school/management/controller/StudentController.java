@@ -115,13 +115,6 @@ public class StudentController {
         }
     }
 
-    // huyen
-    @GetMapping("/classes/{classId}/students")
-    public ResponseEntity<List<?>> getAllStudentClass(@PathVariable Long classId) {
-        List<Student> studentClass = studentServiceImpl.findByClassId(classId);
-        return ResponseEntity.ok(studentClass);
-    }
-
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
         try {
@@ -130,36 +123,28 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @PostMapping("/upgrade")
-    public ResponseEntity<?> upgradeClass(@RequestParam("email") String email, @RequestParam("classname") String classname){
+    public ResponseEntity<?> upgradeClass(@RequestParam("email") String email,
+            @RequestParam("classname") String classname) {
         try {
-            return ResponseEntity.ok(studentService.upgradeClass(classname,email));
+            return ResponseEntity.ok(studentService.upgradeClass(classname, email));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // huyen
-    @GetMapping("/{studentId}/class")
-    public ResponseEntity<?> getClassByStudentId(@PathVariable Long studentId) {
-        try {
-            Classes foundClass = studentService.findClassByStudentId(studentId);
-            return ResponseEntity.ok().body(foundClass);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/{classId}/students")
+    public List<Student> getStudentsByClassId(@PathVariable Long classId) {
+        return studentService.getStudentsByClassId(classId);
     }
 
     // huyen
-    @GetMapping("/{studentId}/Allclass")
-    public ResponseEntity<?> getAllClassByStudentId(@PathVariable Long studentId) {
-        try {
-            List<Classes> foundClass = studentService.findAllClassByStudentId(studentId);
-            return ResponseEntity.ok().body(foundClass);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
+    @GetMapping("/{studentId}/classes")
+    public ResponseEntity<List<Classes>> getAllClassesByStudentId(@PathVariable Long studentId) {
+        List<Classes> classes = studentService.getAllClassesByStudentId(studentId);
+        return ResponseEntity.ok(classes);
     }
 
 }

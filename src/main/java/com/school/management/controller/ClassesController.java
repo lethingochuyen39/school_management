@@ -97,4 +97,5 @@ public class ClassesController {
 	public List<Classes> getClassesByTeacherId(@PathVariable Long teacherId) {
 		return classesService.getClassesByTeacherId(teacherId);
 	}
+
 }

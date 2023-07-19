@@ -82,11 +82,12 @@ public class ScoreController {
 		return ResponseEntity.ok(scores);
 	}
 
-	@GetMapping("/class-scores/{classId}")
-	public ResponseEntity<List<Score>> searchClassScores(@RequestParam("classId") Long classId) {
-		List<Score> scores = scoreServiceImpl.findByClassId(classId);
-		return ResponseEntity.ok(scores);
-	}
+	// @GetMapping("/class-scores/{classId}")
+	// public ResponseEntity<List<Score>> searchClassScores(@RequestParam("classId")
+	// Long classId) {
+	// List<Score> scores = scoreServiceImpl.findByClassId(classId);
+	// return ResponseEntity.ok(scores);
+	// }
 
 	@GetMapping("/semester")
 	public List<Score> getScoresByClassAndSemesterAndStudent(

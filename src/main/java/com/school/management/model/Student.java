@@ -48,15 +48,8 @@ public class Student {
 	@Column(name = "image")
 	private String image;
 
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @JsonIgnore
-	// @JoinColumn(name = "class_id", nullable = false)
-	// private Classes className;
 	@ManyToMany
-	@JoinTable(
-  		name = "student_class", 
-  		joinColumns = @JoinColumn(name = "student_id"), 
-  		inverseJoinColumns = @JoinColumn(name = "class_id"))
+	@JoinTable(name = "student_class", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "class_id"))
 	private List<Classes> className;
 
 	@OneToOne(fetch = FetchType.LAZY)
