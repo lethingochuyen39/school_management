@@ -1,6 +1,7 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,5 +98,10 @@ public class TeacherServiceImpl implements TeacherService {
         existingTeacher.setIsActive(!isActive);
 
         return teacherRepository.save(existingTeacher);
+    }
+
+        public Set<Teacher> getTeachersBySubjectId(Long subjectId) {
+        // Lấy tất cả giáo viên của môn học dựa vào ID môn học
+        return teacherRepository.findTeachersBySubjectId(subjectId);
     }
 }
