@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
+import com.school.management.model.Score;
 import com.school.management.model.Student;
 import com.school.management.service.StudentService;
 import com.school.management.service.StudentServiceImpl;
@@ -149,9 +150,14 @@ public class StudentController {
     }
 
     // huyen
-    public ResponseEntity<?> getStudentsById(@PathVariable Long studentsId) {
-        Optional<Student> student = studentService.getStudentsById(studentsId);
-        return ResponseEntity.ok(student);
+    @GetMapping("/{studentId}")
+    public ResponseEntity<?> getScoreById(@PathVariable("studentId") Long studentId) {
+        try {
+            Student student = studentService.getStudentsById(studentId);
+            return ResponseEntity.ok(student);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
