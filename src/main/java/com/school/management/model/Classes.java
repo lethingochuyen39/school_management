@@ -32,7 +32,6 @@ public class Classes implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "teacher_id", nullable = false)
-	@JsonBackReference
 	private Teacher teacher;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,7 +48,7 @@ public class Classes implements Serializable {
 	@Column(name = "limitStudent", nullable = false)
 	private Integer limitStudent;
 
-	@Column(name = "isActive")
-	private Boolean isActive;
+	// @Column(name = "isActive")
+	// private Boolean isActive;
 
 }
