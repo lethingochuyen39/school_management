@@ -3,6 +3,7 @@ package com.school.management.service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -165,6 +166,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getStudentsByClassId(Long classId) {
         return studentRepository.findAllByClassNameId(classId);
+    }
+
+    public Optional<Student> getStudentsById(Long studentId) {
+        return studentRepository.findById(studentId);
+
     }
 
 }

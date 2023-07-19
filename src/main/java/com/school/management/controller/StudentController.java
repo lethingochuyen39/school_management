@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -145,6 +146,12 @@ public class StudentController {
     public ResponseEntity<List<Classes>> getAllClassesByStudentId(@PathVariable Long studentId) {
         List<Classes> classes = studentService.getAllClassesByStudentId(studentId);
         return ResponseEntity.ok(classes);
+    }
+
+    // huyen
+    public ResponseEntity<?> getStudentsById(@PathVariable Long studentsId) {
+        Optional<Student> student = studentService.getStudentsById(studentsId);
+        return ResponseEntity.ok(student);
     }
 
 }
