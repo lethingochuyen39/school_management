@@ -78,4 +78,12 @@ public class SubjectController {
         return ResponseEntity.ok(subject);
     }
 
+    @PostMapping("/{subjectId}/teachers/{teacherId}")
+    public ResponseEntity<String> addTeacherToSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long teacherId) {
+        subjectService.addTeacherToSubject(subjectId, teacherId);
+        return ResponseEntity.ok("Thêm giáo viên vào môn học thành công.");
+    }
+
 }

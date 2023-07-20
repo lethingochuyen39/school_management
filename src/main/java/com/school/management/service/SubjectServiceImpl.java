@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
+import com.school.management.model.Teacher;
 import com.school.management.repository.SubjectRepository;
 import com.school.management.repository.TeacherRepository;
 
@@ -66,5 +67,19 @@ public class SubjectServiceImpl implements SubjectService {
         }
     }
 
+    @Override
+    public void addTeacherToSubject(Long subjectId, Long teacherId) {
+        // Lấy đối tượng môn học từ cơ sở dữ liệu bằng ID của môn học
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Không tìm thấy môn học với ID: " + subjectId));
+
+        // Lấy đối tượng giáo viên từ cơ sở dữ liệu bằng ID của giáo viên
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new SubjectNotFoundException("Không tìm thấy giáo viên với ID: " + teacherId));
+
+        // Thêm giáo viên vào môn học
+        subject.getTeachers().add(teacher);
+        subjectRepository.save(subject);
+    }
 
 }
