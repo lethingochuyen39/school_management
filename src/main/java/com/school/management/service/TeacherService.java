@@ -23,9 +23,9 @@ public interface TeacherService {
     Teacher updateTeacherStatus(Long id);
 
     // Long generateAccount();
-
+    // huyen
+    List<Subject> getAllSubjectsByTeacherId(Long teacherId);
 
     Set<Teacher> getTeachersBySubjectId(Long subjectId);
-
 
 }
