@@ -1,9 +1,13 @@
 package com.school.management.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import org.springframework.data.repository.query.Param;
+
 
 import com.school.management.model.Subject;
 // import com.school.management.model.Student;
@@ -22,8 +26,11 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     boolean existsByPhone(String phone);
 
-    // huyen
+    // huyen update
     @Query("SELECT t.subjects FROM Teacher t WHERE t.id = :teacherId")
     List<Subject> findSubjectsByTeacherId(Long teacherId);
+
+    @Query("SELECT t FROM Teacher t JOIN t.subjects s WHERE s.id = :subjectId")
+    Set<Teacher> findTeachersBySubjectId(@Param("subjectId") Long subjectId);
 
 }

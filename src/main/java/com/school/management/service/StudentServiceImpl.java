@@ -180,4 +180,11 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findAllByClassNameId(classId);
     }
 
+    // huyen
+    @Override
+    public Student getStudentsById(Long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy điểm với id: " + studentId));
+    }
+
 }
