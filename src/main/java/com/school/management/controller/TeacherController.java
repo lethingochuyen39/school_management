@@ -108,11 +108,16 @@ public class TeacherController {
         }
     }
 
-
+    // huyen update
+    @GetMapping("/{teacherId}/subjects")
+    public ResponseEntity<List<?>> getAllSubjectsByTeacherId(@PathVariable Long teacherId) {
+        List<Subject> subjects = teacherService.getAllSubjectsByTeacherId(teacherId);
+        return ResponseEntity.ok(subjects);
+      
     @GetMapping("/subjects/{subjectId}/teachers")
     public ResponseEntity<Set<Teacher>> getTeachersBySubjectId(@PathVariable Long subjectId) {
         Set<Teacher> teachers = teacherService.getTeachersBySubjectId(subjectId);
         return ResponseEntity.ok(teachers);
-
     }
+
 }

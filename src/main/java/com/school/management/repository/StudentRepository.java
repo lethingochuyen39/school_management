@@ -16,6 +16,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     // @Query("SELECT u FROM Student u WHERE u.user = :user")
     Student findByUser(User user);
 
-    // huyen
+    // huyen update
     List<Student> findAllByClassNameId(Long classId);
 }

@@ -102,10 +102,14 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.save(existingTeacher);
     }
 
+    // huyen
+    @Override
+    public List<Subject> getAllSubjectsByTeacherId(Long teacherId) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy giáo viên"));
 
         public Set<Teacher> getTeachersBySubjectId(Long subjectId) {
         // Lấy tất cả giáo viên của môn học dựa vào ID môn học
         return teacherRepository.findTeachersBySubjectId(subjectId);
-
     }
 }
