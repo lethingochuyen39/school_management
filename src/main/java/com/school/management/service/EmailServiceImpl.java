@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.school.management.model.User;
@@ -68,9 +69,41 @@ public class EmailServiceImpl implements EmailService {
 
 		// Catch block to handle the exceptions
 		catch (Exception e) {
-			return null;
+			return e.getMessage();
 		}
 	}
 	// long
+
+	public String sendUsernamePassword(String email,String newpassword) throws MessagingException, UnsupportedEncodingException{
+		Optional<User> findUser = userRepository.findByEmail(email);
+		if(findUser.isPresent()){
+			MimeMessage message = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message);
+			String username = findUser.get().getEmail().toString();
+			String content = "<p>Hello,</p>"
+            + "<p>This is your new account linked to the school.</p>"
+            + "<p>Username: "+username+"</p>"
+            + "<p>Password: "+newpassword+"</p>"
+            + "<br>"
+            + "<p>Ignore this email if you do remember your password, "
+            + "or you have not made the request.</p>";
+			// Creating a simple mail message
+			// SimpleMailMessage mailMessage = new SimpleMailMessage();
+			
+			// Setting up necessary details
+			helper.setFrom(sender);
+			helper.setTo(email);
+			helper.setText(content,true);
+			helper.setSubject("Get Account To Access The School Website");
+			// Sending the mail
+			emailSender.send(message);
+			// TokenResetPasswordDTO token = new TokenResetPasswordDTO();
+			// token.setResetPasswordToken(code);
+			return "Send successfully";
+		}
+		else{
+			return "Send failed";
+		}
+	}
 
 }

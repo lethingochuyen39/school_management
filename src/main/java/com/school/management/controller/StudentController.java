@@ -117,11 +117,11 @@ public class StudentController {
 
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
-        try {
+        // try {
             return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        // } catch (Exception e) {
+        //     return ResponseEntity.badRequest().body(e.getMessage());
+        // }
     }
 
     @PostMapping("/upgrade")

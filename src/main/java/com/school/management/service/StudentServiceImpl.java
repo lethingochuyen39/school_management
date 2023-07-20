@@ -37,6 +37,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public StudentDTO GetStudent(String email) {
         Student student = studentRepository.findByEmail(email);
@@ -133,12 +136,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public String ConfirmStudent(StudentDTO studentDTO) {
         Student student = studentRepository.findByEmail(studentDTO.getEmail());
-        Student confirmStudent = modelMapper.map(studentDTO, Student.class);
-        student.setImage(null);
-        confirmStudent.setClassName(student.getClassName()).setUser(null).setImage(null);
-        if (student.equals(confirmStudent)) {
+        StudentDTO confirmStudent = modelMapper.map(student, StudentDTO.class);
+        confirmStudent.setId(null).setImage(null).setAddress(null).setStatus(null).setClassName(null);
+        // if(studentDTO.getDob().equals(confirmStudent.getDob())){
+        //     confirmStudent.setDob(studentDTO.getDob());
+        // }
+        if (studentDTO.getEmail().equals(confirmStudent.getEmail())&&studentDTO.getGender().equals(confirmStudent.getGender())&&studentDTO.getName().equals(confirmStudent.getName())&&studentDTO.getPhone().equals(confirmStudent.getPhone())) {
             char[] possibleCharacters = (new String(
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?"))
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
                     .toCharArray();
             String randomStr = RandomStringUtils.random(6, 0, possibleCharacters.length - 1, false, false,
                     possibleCharacters, new SecureRandom());
@@ -147,12 +152,20 @@ public class StudentServiceImpl implements StudentService {
             User user = userRepository.findByEmail(student.getEmail()).get();
             student.setUser(user);
             student.setStatus("active");
+            student.setImage("student.png");
             studentRepository.save(student);
+        try {
+            emailService.sendUsernamePassword(user.getEmail(),randomStr);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+           
             return "Confirmed Successfully";
         } else {
             throw new StudentException(
                     "Wrong information, if the system wrong please mail to longpntts2109002@fpt.edu.vn");
         }
+
     }
 
     // huyen
