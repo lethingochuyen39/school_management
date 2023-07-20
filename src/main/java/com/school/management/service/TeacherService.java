@@ -1,6 +1,7 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.school.management.dto.TeacherDto;
 import com.school.management.model.Subject;
@@ -23,7 +24,8 @@ public interface TeacherService {
 
     // Long generateAccount();
 
-    // huyen
-    List<Subject> getAllSubjectsByTeacherId(Long teacherId);
+
+    Set<Teacher> getTeachersBySubjectId(Long subjectId);
+
 
 }

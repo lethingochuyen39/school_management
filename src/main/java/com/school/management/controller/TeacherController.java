@@ -1,6 +1,7 @@
 package com.school.management.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -72,16 +73,6 @@ public class TeacherController {
         return ResponseEntity.ok(teacher);
     }
 
-    // @GetMapping("/findById/{email}")
-    // public ResponseEntity<?> getTeacherById(@PathVariable String email) {
-    // try {
-    // TeacherDto teacher = teacherService.getTeacherByEmail(email);
-    // return ResponseEntity.ok(teacher);
-    // } catch (TeacherServiceImpl.TeacherNotFoundException e) {
-    // return ResponseEntity.badRequest().body(e.getMessage());
-    // }
-    // }
-
     @GetMapping("/findByName/{name}")
     public ResponseEntity<List<Teacher>> getTeacherByName(@PathVariable(value = "name") String name) {
         List<Teacher> teacher = teacherService.getTeacherByName(name);
@@ -122,6 +113,11 @@ public class TeacherController {
     public ResponseEntity<List<?>> getAllSubjectsByTeacherId(@PathVariable Long teacherId) {
         List<Subject> subjects = teacherService.getAllSubjectsByTeacherId(teacherId);
         return ResponseEntity.ok(subjects);
+      
+    @GetMapping("/subjects/{subjectId}/teachers")
+    public ResponseEntity<Set<Teacher>> getTeachersBySubjectId(@PathVariable Long subjectId) {
+        Set<Teacher> teachers = teacherService.getTeachersBySubjectId(subjectId);
+        return ResponseEntity.ok(teachers);
     }
 
 }

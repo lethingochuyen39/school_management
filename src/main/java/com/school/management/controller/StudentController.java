@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
+import com.school.management.model.Score;
 import com.school.management.model.Student;
 import com.school.management.service.StudentService;
 import com.school.management.service.StudentServiceImpl;
@@ -145,6 +147,17 @@ public class StudentController {
     public ResponseEntity<List<Classes>> getAllClassesByStudentId(@PathVariable Long studentId) {
         List<Classes> classes = studentService.getAllClassesByStudentId(studentId);
         return ResponseEntity.ok(classes);
+    }
+
+    // huyen
+    @GetMapping("/{studentId}")
+    public ResponseEntity<?> getScoreById(@PathVariable("studentId") Long studentId) {
+        try {
+            Student student = studentService.getStudentsById(studentId);
+            return ResponseEntity.ok(student);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

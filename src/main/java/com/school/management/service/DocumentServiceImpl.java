@@ -61,7 +61,7 @@ public class DocumentServiceImpl implements DocumentService {
 			String fileName = file.getOriginalFilename();
 			String fileExtension = getFileExtension(fileName);
 			String newName = generateUniqueFileName(fileExtension);
-			String filePath = uploadPath + "/" + newName;
+			String filePath = "/uploads/documents/" + newName;
 
 			Path destinationPath = uploadPath.resolve(newName);
 			Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
@@ -72,15 +72,6 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new RuntimeException("Không thể lưu tệp.");
 		}
 	}
-
-	// private String generateUniqueFileName(String originalFilename) {
-	// String timestamp = String.valueOf(System.currentTimeMillis());
-	// String extension =
-	// originalFilename.substring(originalFilename.lastIndexOf("."));
-	// String fileName = originalFilename.substring(0,
-	// originalFilename.lastIndexOf("."));
-	// return fileName + "_" + timestamp + extension;
-	// }
 
 	private String getFileExtension(String fileName) {
 		int dotIndex = fileName.lastIndexOf('.');

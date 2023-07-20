@@ -78,9 +78,12 @@ public class SubjectController {
         return ResponseEntity.ok(subject);
     }
 
-    // huyen update
-    // @GetMapping("/teachers/{teacherId}")
-    // public List<Subject> getSubjectsByTeacherId(@PathVariable Long teacherId) {
-    // return subjectService.getSubjectsByTeacherId(teacherId);
-    // }
+    @PostMapping("/{subjectId}/teachers/{teacherId}")
+    public ResponseEntity<String> addTeacherToSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long teacherId) {
+        subjectService.addTeacherToSubject(subjectId, teacherId);
+        return ResponseEntity.ok("Thêm giáo viên vào môn học thành công.");
+    }
+
 }

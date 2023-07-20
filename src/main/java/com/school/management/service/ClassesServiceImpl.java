@@ -100,14 +100,14 @@ public class ClassesServiceImpl implements ClassesService {
         return classesRepository.findAllByTeacherId(teacherId);
     }
 
-    @Override
-    public Classes updateClassesStatus(Long id) {
-        Classes existingClasses = classesRepository.findById(id)
-                .orElseThrow(() -> new ClassesNotFoundException("Không tìm thấy với id: " + id));
+    // @Override
+    // public Classes updateClassesStatus(Long id) {
+    //     Classes existingClasses = classesRepository.findById(id)
+    //             .orElseThrow(() -> new ClassesNotFoundException("Không tìm thấy với id: " + id));
 
-        boolean isActive = existingClasses.getIsActive();
-        existingClasses.setIsActive(!isActive);
+    //     boolean isActive = existingClasses.getIsActive();
+    //     existingClasses.setIsActive(!isActive);
 
-        return classesRepository.save(existingClasses);
-    }
+    //     return classesRepository.save(existingClasses);
+    // }
 }

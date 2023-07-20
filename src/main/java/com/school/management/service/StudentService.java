@@ -1,6 +1,7 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
@@ -27,4 +28,6 @@ public interface StudentService {
     List<Classes> getAllClassesByStudentId(Long studentId);
 
     List<Student> getStudentsByClassId(Long classId);
+
+    Student getStudentsById(Long studentId);
 }

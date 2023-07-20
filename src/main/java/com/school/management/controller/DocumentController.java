@@ -34,6 +34,8 @@ public class DocumentController {
 	@Autowired
 	private DocumentServiceImpl documentServiceImpl;
 
+	private static final String UPLOAD_FOLDER = "src/main/resources/static";
+
 	@PostMapping()
 	public ResponseEntity<?> createDocument(@ModelAttribute Document document, @RequestPart("file") MultipartFile file,
 			@RequestParam("uploadedById") Long uploadedById) {
@@ -110,7 +112,7 @@ public class DocumentController {
 		try {
 			Document document = documentServiceImpl.getDocumentById(id);
 			String filePath = document.getFilePath();
-			Path file = Paths.get(filePath);
+			Path file = Paths.get(UPLOAD_FOLDER, filePath);
 			Resource resource = new UrlResource(file.toUri());
 
 			if (resource.exists() && resource.isReadable()) {

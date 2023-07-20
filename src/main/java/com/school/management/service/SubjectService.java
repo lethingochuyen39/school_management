@@ -19,6 +19,6 @@ public interface SubjectService {
 
     List<Subject> getSubjectByName(String name);
 
-    // huyen
-    //List<Subject> getSubjectsByTeacherId(Long teacherId);
+    void addTeacherToSubject(Long subjectId, Long teacherId);
+
 }
