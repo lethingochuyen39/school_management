@@ -22,7 +22,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     boolean existsByPhone(String phone);
 
-    // huyen
+    // huyen update
     @Query("SELECT t.subjects FROM Teacher t WHERE t.id = :teacherId")
     List<Subject> findSubjectsByTeacherId(Long teacherId);
 

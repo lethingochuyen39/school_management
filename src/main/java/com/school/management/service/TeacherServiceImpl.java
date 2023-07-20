@@ -101,6 +101,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.save(existingTeacher);
     }
 
+    // huyen
     @Override
     public List<Subject> getAllSubjectsByTeacherId(Long teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId)

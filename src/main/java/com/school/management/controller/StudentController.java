@@ -134,13 +134,13 @@ public class StudentController {
         }
     }
 
-    // huyen
+    // huyen update
     @GetMapping("/{classId}/students")
     public List<Student> getStudentsByClassId(@PathVariable Long classId) {
         return studentService.getStudentsByClassId(classId);
     }
 
-    // huyen
+    // huyen update
     @GetMapping("/{studentId}/classes")
     public ResponseEntity<List<Classes>> getAllClassesByStudentId(@PathVariable Long studentId) {
         List<Classes> classes = studentService.getAllClassesByStudentId(studentId);

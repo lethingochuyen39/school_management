@@ -78,9 +78,9 @@ public class SubjectController {
         return ResponseEntity.ok(subject);
     }
 
-    // huyen
+    // huyen update
     // @GetMapping("/teachers/{teacherId}")
     // public List<Subject> getSubjectsByTeacherId(@PathVariable Long teacherId) {
-    //     return subjectService.getSubjectsByTeacherId(teacherId);
+    // return subjectService.getSubjectsByTeacherId(teacherId);
     // }
 }
