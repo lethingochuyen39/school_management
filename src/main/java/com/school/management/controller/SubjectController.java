@@ -86,4 +86,15 @@ public class SubjectController {
         return ResponseEntity.ok("Thêm giáo viên vào môn học thành công.");
     }
 
+    @DeleteMapping("/{subjectId}/teachers/{teacherId}")
+    public ResponseEntity<?> deleteTeacherFromSubject(
+            @PathVariable Long subjectId,
+            @PathVariable Long teacherId) {
+        try {
+            subjectService.deleteTeacherFromSubject(subjectId, teacherId);
+            return ResponseEntity.ok().build();
+        } catch (SubjectServiceImpl.SubjectNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

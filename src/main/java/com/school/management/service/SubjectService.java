@@ -21,4 +21,6 @@ public interface SubjectService {
 
     void addTeacherToSubject(Long subjectId, Long teacherId);
 
+    void deleteTeacherFromSubject(Long subjectId, Long teacherId);
+
 }

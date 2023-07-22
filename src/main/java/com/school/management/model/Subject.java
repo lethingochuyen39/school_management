@@ -41,4 +41,9 @@ public class Subject implements Serializable {
 	@JoinTable(name = "subject_teacher", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
 	private Set<Teacher> teachers = new HashSet<>();
 
+	public void removeTeacher(Teacher teacher) {
+		teachers.remove(teacher);
+		teacher.getSubjects().remove(this);
+	}
+
 }
