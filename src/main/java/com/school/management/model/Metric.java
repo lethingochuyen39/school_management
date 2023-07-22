@@ -1,6 +1,7 @@
 package com.school.management.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,8 @@ public class Metric {
 	@Column(name = "value", precision = 10, scale = 2)
 	private BigDecimal value;
 
-	@Column(name = "year")
-	private Integer year;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "academic_year_id", nullable = false)
+	private AcademicYear academicYear;
 
 }
