@@ -1,9 +1,11 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.school.management.dto.SubjectDto;
 import com.school.management.model.Subject;
@@ -12,6 +14,7 @@ import com.school.management.repository.SubjectRepository;
 import com.school.management.repository.TeacherRepository;
 
 @Service
+@Transactional
 public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
@@ -80,6 +83,25 @@ public class SubjectServiceImpl implements SubjectService {
         // Thêm giáo viên vào môn học
         subject.getTeachers().add(teacher);
         subjectRepository.save(subject);
+    }
+
+    @Override
+    public void deleteTeacherFromSubject(Long subjectId, Long teacherId) {
+        Optional<Subject> subjectOptional = subjectRepository.findById(subjectId);
+        Optional<Teacher> teacherOptional = teacherRepository.findById(teacherId);
+
+        if (subjectOptional.isPresent() && teacherOptional.isPresent()) {
+            Subject subject = subjectOptional.get();
+            Teacher teacher = teacherOptional.get();
+
+            subject.removeTeacher(teacher); // Implement a method in Subject entity to remove the teacher from the list
+                                            // of teachers associated with the subject.
+
+            // Optionally, you can save the changes to the subject entity in the database.
+            // subjectRepository.save(subject);
+        } else {
+            throw new SubjectNotFoundException("Subject or Teacher not found.");
+        }
     }
 
 }
