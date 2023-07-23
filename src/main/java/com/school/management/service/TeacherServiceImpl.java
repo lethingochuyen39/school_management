@@ -27,6 +27,9 @@ public class TeacherServiceImpl implements TeacherService {
     private UserService userService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -53,6 +56,11 @@ public class TeacherServiceImpl implements TeacherService {
             userService.signup(new UserDto(teacher.getEmail(), randomStr, new RoleDto("TEACHER")));
             User user = userRepository.findByEmail(teacher.getEmail()).get();
             teacher.setUser(user);
+            try {
+                emailService.sendUsernamePassword(user.getEmail(),randomStr);
+            } catch (Exception e) {
+                throw new  IllegalArgumentException(e.getMessage());
+            }
         return teacherRepository.save(teacher);
     }
 
