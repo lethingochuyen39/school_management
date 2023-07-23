@@ -139,9 +139,12 @@ public class StudentServiceImpl implements StudentService {
         StudentDTO confirmStudent = modelMapper.map(student, StudentDTO.class);
         confirmStudent.setId(null).setImage(null).setAddress(null).setStatus(null).setClassName(null);
         // if(studentDTO.getDob().equals(confirmStudent.getDob())){
-        //     confirmStudent.setDob(studentDTO.getDob());
+        // confirmStudent.setDob(studentDTO.getDob());
         // }
-        if (studentDTO.getEmail().equals(confirmStudent.getEmail())&&studentDTO.getGender().equals(confirmStudent.getGender())&&studentDTO.getName().equals(confirmStudent.getName())&&studentDTO.getPhone().equals(confirmStudent.getPhone())) {
+        if (studentDTO.getEmail().equals(confirmStudent.getEmail())
+                && studentDTO.getGender().equals(confirmStudent.getGender())
+                && studentDTO.getName().equals(confirmStudent.getName())
+                && studentDTO.getPhone().equals(confirmStudent.getPhone())) {
             char[] possibleCharacters = (new String(
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
                     .toCharArray();
@@ -154,12 +157,12 @@ public class StudentServiceImpl implements StudentService {
             student.setStatus("active");
             student.setImage("student.png");
             studentRepository.save(student);
-        try {
-            emailService.sendUsernamePassword(user.getEmail(),randomStr);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-           
+            try {
+                emailService.sendUsernamePassword(user.getEmail(), randomStr);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+
             return "Confirmed Successfully";
         } else {
             throw new StudentException(
@@ -185,6 +188,11 @@ public class StudentServiceImpl implements StudentService {
     public Student getStudentsById(Long studentId) {
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy điểm với id: " + studentId));
+    }
+
+    // duy
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 
 }

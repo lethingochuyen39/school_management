@@ -120,9 +120,9 @@ public class StudentController {
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
         // try {
-            return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
+        return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
         // } catch (Exception e) {
-        //     return ResponseEntity.badRequest().body(e.getMessage());
+        // return ResponseEntity.badRequest().body(e.getMessage());
         // }
     }
 
@@ -158,6 +158,13 @@ public class StudentController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // duy
+    @GetMapping("/all")
+    public ResponseEntity<List<?>> getAllStudents() {
+        List<Student> students = studentServiceImpl.getAllStudents();
+        return ResponseEntity.ok(students);
     }
 
 }
