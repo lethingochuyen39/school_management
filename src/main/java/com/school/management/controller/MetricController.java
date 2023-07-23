@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.MetricDto;
 import com.school.management.model.Metric;
 import com.school.management.service.MetricServiceImpl;
 
@@ -24,9 +25,9 @@ public class MetricController {
 	private MetricServiceImpl metricServiceImpl;
 
 	@PostMapping
-	public ResponseEntity<?> createMetric(@RequestBody Metric metric) {
+	public ResponseEntity<?> createMetric(@RequestBody MetricDto metricDto) {
 		try {
-			Metric createdMetric = metricServiceImpl.createMetric(metric);
+			Metric createdMetric = metricServiceImpl.createMetric(metricDto);
 			return ResponseEntity.ok().body(createdMetric);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage()); // Thông báo lỗi nếu không thể tạo Metric
@@ -45,9 +46,9 @@ public class MetricController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateMetric(@PathVariable Long id,
-			@RequestBody Metric metric) {
+			@RequestBody MetricDto metricDto) {
 		try {
-			Metric updatedMetric = metricServiceImpl.updateMetric(id, metric);
+			Metric updatedMetric = metricServiceImpl.updateMetric(id, metricDto);
 			return ResponseEntity.ok(updatedMetric);
 		} catch (MetricServiceImpl.MetricNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());

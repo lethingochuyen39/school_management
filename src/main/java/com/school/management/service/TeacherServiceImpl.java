@@ -1,27 +1,36 @@
 package com.school.management.service;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.school.management.dto.RoleDto;
 import com.school.management.dto.TeacherDto;
+import com.school.management.dto.UserDto;
 import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
+import com.school.management.model.User;
 import com.school.management.repository.TeacherRepository;
+import com.school.management.repository.UserRepository;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    // @Autowired
-    // private UserService userService;
+    @Autowired
+    private UserService userService;
 
-    // @Autowired
-    // private UserRepository userRepository;
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Teacher createTeacher(TeacherDto teacherDto) {
@@ -38,8 +47,20 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setAddress(teacherDto.getAddress());
         teacher.setPhone(teacherDto.getPhone());
         teacher.setIsActive(teacherDto.getIsActive());
-        // teacher.setUser(user);
+                    char[] possibleCharacters = (new String(
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"))
+                    .toCharArray();
+            String randomStr = RandomStringUtils.random(6, 0, possibleCharacters.length - 1, false, false,
+                    possibleCharacters, new SecureRandom());
 
+            userService.signup(new UserDto(teacher.getEmail(), randomStr, new RoleDto("TEACHER")));
+            User user = userRepository.findByEmail(teacher.getEmail()).get();
+            teacher.setUser(user);
+            try {
+                emailService.sendUsernamePassword(user.getEmail(),randomStr);
+            } catch (Exception e) {
+                throw new  IllegalArgumentException(e.getMessage());
+            }
         return teacherRepository.save(teacher);
     }
 
