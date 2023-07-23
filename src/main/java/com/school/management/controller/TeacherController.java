@@ -30,6 +30,10 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    //duy
+    @Autowired
+    private TeacherServiceImpl teacherServiceImpl;
+
     // huyen
     @Autowired
     private ClassesServiceImpl classesServiceImpl;
@@ -118,6 +122,13 @@ public class TeacherController {
     @GetMapping("/subjects/{subjectId}/teachers")
     public ResponseEntity<Set<Teacher>> getTeachersBySubjectId(@PathVariable Long subjectId) {
         Set<Teacher> teachers = teacherService.getTeachersBySubjectId(subjectId);
+        return ResponseEntity.ok(teachers);
+    }
+
+    //duy
+    @GetMapping("/all")
+    public ResponseEntity<List<?>> getAllTeachers(){
+        List<Teacher> teachers = teacherServiceImpl.getAllTeacher();
         return ResponseEntity.ok(teachers);
     }
 
