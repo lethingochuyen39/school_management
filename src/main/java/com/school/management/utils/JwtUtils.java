@@ -66,6 +66,7 @@ public class JwtUtils {
             id = teacher.getId();
         }
         accessToken.setId(id);
+        accessToken.setUsername(user.getUsername());
         accessToken.setRefreshToken(refreshTokenService.createRefreshToken(login).getToken());
         return accessToken;
 
@@ -85,6 +86,7 @@ public class JwtUtils {
         AccessTokenDto accessToken = new AccessTokenDto();
         accessToken.setRoles(roles);
         accessToken.setToken(token);
+        accessToken.setUsername(user.getEmail());
         accessToken.setRefreshToken(refreshTokenService.createRefreshToken(email).getToken());
         return accessToken;
 

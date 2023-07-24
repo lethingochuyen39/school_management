@@ -23,4 +23,6 @@ public interface UserService {
     // Long generateAccount();
 
     String deleteAccount(String email);
+
+    String changePassword(Long uid,String oldPassword,String newPassword);
 }
