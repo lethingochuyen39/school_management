@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.management.dto.ChangePass;
 import com.school.management.dto.ForgotPassRequest;
 import com.school.management.dto.LoginRequest;
 import com.school.management.dto.ResetPassRequest;
@@ -42,8 +43,8 @@ public class UserController {
     RefreshTokenService refreshTokenService;
     @Autowired
     JwtUtils jwtUtils;
-	@Autowired
-	private EmailService emailService;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private UserServiceImpl userServiceImpl;
@@ -84,43 +85,55 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
-
-	@PostMapping("/forgot_password")
-	public ResponseEntity<?> forgotpassword(HttpServletRequest request, @RequestBody ForgotPassRequest email) {
+    @PostMapping("/forgot_password")
+    public ResponseEntity<?> forgotpassword(HttpServletRequest request, @RequestBody ForgotPassRequest email) {
         String token = RandomString.make(30);
         // String email = request.getParameter("email");
-            try {
-                if(userService.checkUserExistByEmail(email.getEmail())){
-                    String resetPasswordLink =  /*Utility.getSiteURL(request)*/"http://localhost:3000" +"/reset_password?token="+ token;
-                    // userService.updateResetPasswordToken(token,email);
-                    return ResponseEntity.ok(emailService.sendSimpleMail(email.getEmail(), resetPasswordLink,token));
-                }
-                else{
-                    return ResponseEntity.badRequest().body("Cannot find user");
-                }
-            } catch (UnsupportedEncodingException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            } catch (MessagingException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
+        try {
+            if (userService.checkUserExistByEmail(email.getEmail())) {
+                String resetPasswordLink = /* Utility.getSiteURL(request) */"http://localhost:3000"
+                        + "/reset_password?token=" + token;
+                // userService.updateResetPasswordToken(token,email);
+                return ResponseEntity.ok(emailService.sendSimpleMail(email.getEmail(), resetPasswordLink, token));
+            } else {
+                return ResponseEntity.badRequest().body("Cannot find user");
             }
-	}
+        } catch (UnsupportedEncodingException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (MessagingException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping("/reset_password")
-	public ResponseEntity<?> resetPassword(@RequestParam("token") String token,@RequestBody ResetPassRequest resetPassRequest) {
+    public ResponseEntity<?> resetPassword(@RequestParam("token") String token,
+            @RequestBody ResetPassRequest resetPassRequest) {
         // userService.updatePassword(user, password);
         String password = resetPassRequest.getPassword();
         return ResponseEntity.ok(userService.updateResetPasswordToken(token, password));
-	}
+    }
 
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteAccount(@RequestBody String email){
+    public ResponseEntity<?> deleteAccount(@RequestBody String email) {
         return ResponseEntity.ok(userService.deleteAccount(email));
     }
 
     // duy
     @GetMapping("/all")
-    public ResponseEntity<List<?>> getAllUsers(){
+    public ResponseEntity<List<?>> getAllUsers() {
         List<User> users = userServiceImpl.getAllUser();
         return ResponseEntity.ok(users);
     }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<?> changepassword(@RequestBody ChangePass entity) {
+        // TODO: process POST request
+        try {
+            return ResponseEntity.ok(userService.changePassword(entity.getId(), entity.getOldpass(), entity.getNewpass()));
+
+        } catch (Exception e) {
+                        return ResponseEntity.badRequest().body("Change failed, "+ e.getMessage());
+        }
+    }
+
 }
