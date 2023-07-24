@@ -57,19 +57,14 @@ public class StudentServiceImpl implements StudentService {
         Classes classes = classesRepository.findByName(student.getClassName());
         List<Classes> classList = new ArrayList<Classes>();
         classList.add(classes);
+        User user = userRepository.findByEmail(newStudent.getUser().getEmail()).get();
+        if(user !=null){
+            user.setEmail(student.getEmail());
+            userRepository.save(user);
+        }
         // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob()).setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage()).setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
         Student saveStudent = modelMapper.map(student, Student.class).setId(newStudent.getId());
         studentRepository.save(saveStudent);
-
-        // if (newStudent == null) {
-        // throw new StudentNotFoundException("Student " + student.getEmail() + " cant
-        // be found");
-        // }
-        // Classes classs = classesRepository.findByName(student.getClassName());
-        // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob())
-        // .setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage())
-        // .setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
-        // studentRepository.save(newStudent);
 
         return student;
     }
@@ -101,13 +96,7 @@ public class StudentServiceImpl implements StudentService {
             throw new StudentException("Student already exists, "+existStudent.getName()+" "+existStudent.getEmail());
         }
 
-        Student newStudent = modelMapper.map(student, Student.class);
-        // Classes classes = classesRepository.findByName(student.getClassName());
-        // List<Classes> classList = new ArrayList<Classes>();
-        // classList.add(classes);
-        // if (classes == null) {
-        //     throw new StudentException("Class is not found");
-        // }
+        Student newStudent = modelMapper.map(student, Student.class).setStatus("pending");
         studentRepository.save(newStudent.setClassName(null));
         return student;
     }

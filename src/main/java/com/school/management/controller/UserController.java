@@ -127,12 +127,11 @@ public class UserController {
 
     @PostMapping("/changepassword")
     public ResponseEntity<?> changepassword(@RequestBody ChangePass entity) {
-        // TODO: process POST request
         try {
             return ResponseEntity.ok(userService.changePassword(entity.getId(), entity.getOldpass(), entity.getNewpass()));
 
         } catch (Exception e) {
-                        return ResponseEntity.badRequest().body("Change failed, "+ e.getMessage());
+            return ResponseEntity.badRequest().body("Change failed, "+ e.getMessage());
         }
     }
 

@@ -68,7 +68,11 @@ public class TeacherServiceImpl implements TeacherService {
     public Teacher updateTeacher(Long id, TeacherDto teacherDto) {
         Teacher exitingTeacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + id));
-
+        User user = userRepository.findByEmail(exitingTeacher.getUser().getEmail()).get();
+        if(user !=null){
+            user.setEmail(teacherDto.getEmail());
+            userRepository.save(user);
+        }
         exitingTeacher.setName(teacherDto.getName());
         exitingTeacher.setGender(teacherDto.getGender());
         exitingTeacher.setDob(teacherDto.getDob());
