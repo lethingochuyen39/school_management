@@ -13,4 +13,5 @@ public class AccessTokenDto {
     private String refreshToken;
     private Long uid;
     private Long id;
+    private String username;
 }

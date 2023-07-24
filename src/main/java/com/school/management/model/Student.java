@@ -24,10 +24,10 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false,columnDefinition = "NVARCHAR(255)")
 	private String name;
 
-	@Column(name = "gender")
+	@Column(name = "gender",columnDefinition = "NVARCHAR(255)")
 	private String gender;
 
 	@Column(name = "dob")
@@ -36,7 +36,7 @@ public class Student {
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "address")
+	@Column(name = "address",columnDefinition = "NVARCHAR(255)")
 	private String address;
 
 	@Column(name = "phone")

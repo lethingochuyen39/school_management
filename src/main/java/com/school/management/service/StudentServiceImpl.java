@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
         List<Classes> classList = new ArrayList<Classes>();
         classList.add(classes);
         // newStudent.setAddress(student.getAddress()).setClassName(classs).setDob(student.getDob()).setEmail(student.getEmail()).setGender(student.getGender()).setImage(student.getImage()).setName(student.getName()).setPhone(student.getPhone()).setStatus(student.getStatus());
-        Student saveStudent = modelMapper.map(student, Student.class);
+        Student saveStudent = modelMapper.map(student, Student.class).setId(newStudent.getId());
         studentRepository.save(saveStudent);
 
         // if (newStudent == null) {
@@ -83,8 +83,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public String DeleteStudent(String email) {
-        Student deleteStudent = studentRepository.findByEmail(email);
+    public String DeleteStudent(Long email) {
+        Student deleteStudent = studentRepository.findById(email).get();
 
         if (deleteStudent == null) {
             throw new StudentException("Student " + email + " cant be found");

@@ -65,10 +65,10 @@ public class StudentController {
         }
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> delete(@RequestBody String email) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(studentService.DeleteStudent(email));
+            return ResponseEntity.ok(studentService.DeleteStudent(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -162,7 +162,7 @@ public class StudentController {
     }
 
     // huyen
-    @GetMapping("/{studentId}")
+    @GetMapping("studentId/{studentId}")
     public ResponseEntity<?> getScoreById(@PathVariable("studentId") Long studentId) {
         try {
             Student student = studentService.getStudentsById(studentId);

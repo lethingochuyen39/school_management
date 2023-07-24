@@ -162,5 +162,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    
+    @Override
+    public String changePassword(Long uid, String oldPassword, String newPassword){
+        User user = userRepository.findById(uid).get();
+        if(user!=null){
+            if(user.getPassword().equals(oldPassword)){
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                return "Change successfully";
+            }
+            return "Old password is incorrect";
+        }
+        else{
+            throw new IllegalStateException("User is not found");
+        }
+    }
 }
