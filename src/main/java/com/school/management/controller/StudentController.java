@@ -162,7 +162,8 @@ public class StudentController {
     }
 
     // huyen
-    @GetMapping("studentId/{studentId}")
+
+    @GetMapping("/studentId/{studentId}")
     public ResponseEntity<?> getScoreById(@PathVariable("studentId") Long studentId) {
         try {
             Student student = studentService.getStudentsById(studentId);
