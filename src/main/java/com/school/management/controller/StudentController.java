@@ -173,7 +173,7 @@ public class StudentController {
     }
 
     // duy
-    @GetMapping("/all")
+    @GetMapping("/allStudent")
     public ResponseEntity<List<?>> getAllStudents() {
         List<Student> students = studentServiceImpl.getAllStudents();
         return ResponseEntity.ok(students);
