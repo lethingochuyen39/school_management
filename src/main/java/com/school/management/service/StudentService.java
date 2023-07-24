@@ -8,7 +8,7 @@ import com.school.management.model.Classes;
 import com.school.management.model.Student;
 
 public interface StudentService {
-    StudentDTO GetStudent(String email);
+    StudentDTO GetStudent(Long id);
 
     StudentDTO UpdateProfile(StudentDTO student);
 

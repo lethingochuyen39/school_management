@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserService {
             userDto.setPassword("");
             // long
 
+        }else{
+            throw new IllegalStateException("This account is already in use");
         }
 
         return userDto;

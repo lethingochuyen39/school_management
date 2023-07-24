@@ -43,8 +43,12 @@ public class UserController {
 	private EmailService emailService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signup(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.signup(userDto));
+    public ResponseEntity<?> signup(@RequestBody UserDto userDto) {
+        try {
+            return ResponseEntity.ok(userService.signup(userDto));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 

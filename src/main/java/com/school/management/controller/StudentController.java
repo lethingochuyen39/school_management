@@ -20,6 +20,7 @@ import com.school.management.dto.StudentDTO;
 import com.school.management.model.Classes;
 import com.school.management.model.Score;
 import com.school.management.model.Student;
+import com.school.management.repository.StudentRepository;
 import com.school.management.service.StudentService;
 import com.school.management.service.StudentServiceImpl;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,25 +35,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-    // huyen
-    @Autowired
-    private StudentServiceImpl studentServiceImpl;
 
-    @GetMapping("/allStudent")
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @GetMapping("/all")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.ok(studentService.GetAllStudent());
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> getStudent(@RequestBody String email) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getStudent(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(studentService.GetStudent(email));
+            return ResponseEntity.ok(studentService.GetStudent(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PostMapping("/createStudent")
+    @PostMapping("/create")
     public ResponseEntity<?> addStudent(@RequestBody StudentDTO entity) {
         try {
             return ResponseEntity.ok(studentService.AddStudent(entity));
@@ -61,7 +62,7 @@ public class StudentController {
         }
     }
 
-    @DeleteMapping("/deleteStudent")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestBody String email) {
         try {
             return ResponseEntity.ok(studentService.DeleteStudent(email));
@@ -99,13 +100,21 @@ public class StudentController {
             for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
                 XSSFRow row = worksheet.getRow(i);
                 StudentDTO tempStudent = new StudentDTO();
+
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
                 String date = row.getCell(2).toString();
                 LocalDate localDate = LocalDate.parse(date, formatter);
-                tempStudent.setAddress(row.getCell(3).toString()).setClassName(row.getCell(7).toString())
-                        .setDob(localDate).setEmail(row.getCell(2).toString()).setGender(row.getCell(1).toString())
-                        .setImage(null).setName(row.getCell(0).toString()).setPhone(row.getCell(5).toString())
+                tempStudent.setAddress(row.getCell(4).toString()).setClassName(null)
+                        .setDob(localDate).setEmail(row.getCell(3).toString()).setGender(row.getCell(1).toString())
+                        .setImage("student.png").setName(row.getCell(0).toString()).setPhone(row.getCell(5).toString())
                         .setStatus("pending");
+                Student existStudent = studentRepository.findByEmail(tempStudent.getEmail());
+
+                if (existStudent != null) {
+                    // throw new StudentException("Student already exists,
+                    // "+existStudent.getName()+" "+existStudent.getEmail());
+                    continue;
+                }
                 // tempStudent.setId((int) row.getCell(0).getNumericCellValue());
                 // tempStudent.setContent(row.getCell(1).getStringCellValue());
                 // tempStudentList.add(tempStudent);
@@ -120,9 +129,9 @@ public class StudentController {
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmStudent(@RequestBody StudentDTO studentDTO) {
         // try {
-            return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
+        return ResponseEntity.ok(studentService.ConfirmStudent(studentDTO));
         // } catch (Exception e) {
-        //     return ResponseEntity.badRequest().body(e.getMessage());
+        // return ResponseEntity.badRequest().body(e.getMessage());
         // }
     }
 

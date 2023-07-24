@@ -41,8 +41,8 @@ public class StudentServiceImpl implements StudentService {
     private EmailService emailService;
 
     @Override
-    public StudentDTO GetStudent(String email) {
-        Student student = studentRepository.findByEmail(email);
+    public StudentDTO GetStudent(Long id) {
+        Student student = studentRepository.findById(id).get();
         StudentDTO model = modelMapper.map(student, StudentDTO.class);
         return model;
     }
@@ -98,17 +98,17 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO AddStudent(StudentDTO student) {
         Student existStudent = studentRepository.findByEmail(student.getEmail());
         if (existStudent != null) {
-            throw new StudentException("Student already exists");
+            throw new StudentException("Student already exists, "+existStudent.getName()+" "+existStudent.getEmail());
         }
 
         Student newStudent = modelMapper.map(student, Student.class);
-        Classes classes = classesRepository.findByName(student.getClassName());
-        List<Classes> classList = new ArrayList<Classes>();
-        classList.add(classes);
-        if (classes == null) {
-            throw new StudentException("Class is not found");
-        }
-        studentRepository.save(newStudent.setClassName(classList));
+        // Classes classes = classesRepository.findByName(student.getClassName());
+        // List<Classes> classList = new ArrayList<Classes>();
+        // classList.add(classes);
+        // if (classes == null) {
+        //     throw new StudentException("Class is not found");
+        // }
+        studentRepository.save(newStudent.setClassName(null));
         return student;
     }
 
