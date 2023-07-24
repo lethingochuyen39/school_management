@@ -24,8 +24,8 @@ import com.school.management.service.ClassesServiceImpl.ClassesNotFoundException
 public class ClassesController {
 	@Autowired
 	private ClassesService classesService;
-	
-	//duy
+
+	// duy
 	@Autowired
 	private ClassesServiceImpl classesServiceImpl;
 
@@ -86,14 +86,14 @@ public class ClassesController {
 
 	// @PutMapping("/isActive/{id}")
 	// public ResponseEntity<?> updateIsActive(@PathVariable("id") Long id) {
-	// 	try {
-	// 		Classes updatedClasses = classesService.updateClassesStatus(id);
-	// 		return ResponseEntity.ok(updatedClasses);
-	// 	} catch (ClassesNotFoundException e) {
-	// 		return ResponseEntity.badRequest().body(e.getMessage());
-	// 	} catch (Exception e) {
-	// 		return ResponseEntity.badRequest().body(e.getMessage());
-	// 	}
+	// try {
+	// Classes updatedClasses = classesService.updateClassesStatus(id);
+	// return ResponseEntity.ok(updatedClasses);
+	// } catch (ClassesNotFoundException e) {
+	// return ResponseEntity.badRequest().body(e.getMessage());
+	// } catch (Exception e) {
+	// return ResponseEntity.badRequest().body(e.getMessage());
+	// }
 	// }
 
 	// huyen
@@ -103,9 +103,18 @@ public class ClassesController {
 	}
 
 	// duy
-    @GetMapping("/all")
+	@GetMapping("/all")
 	public ResponseEntity<List<?>> getAllClasses2() {
 		List<Classes> classes = classesServiceImpl.getAllClasses();
 		return ResponseEntity.ok(classes);
+	}
+
+	// huyen
+	@PostMapping("/{classId}/students/{studentId}")
+	public ResponseEntity<String> addTeacherToSubject(
+			@PathVariable Long classId,
+			@PathVariable Long studentId) {
+		classesServiceImpl.addStudentToClass(classId, studentId);
+		return ResponseEntity.ok("Thêm học sinh vào lớp học thành công.");
 	}
 }

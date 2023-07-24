@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.school.management.dto.ClassesDto;
 import com.school.management.model.AcademicYear;
 import com.school.management.model.Classes;
+import com.school.management.model.Student;
 import com.school.management.model.Teacher;
 import com.school.management.repository.AcademicYearRespository;
 import com.school.management.repository.ClassesRepository;
+import com.school.management.repository.StudentRepository;
 import com.school.management.repository.TeacherRepository;
 
 @Service
@@ -21,6 +23,9 @@ public class ClassesServiceImpl implements ClassesService {
     private TeacherRepository teacherRepository;
     @Autowired
     private AcademicYearRespository academicYearRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Override
     public Classes createClasses(ClassesDto classesDto) {
@@ -102,12 +107,25 @@ public class ClassesServiceImpl implements ClassesService {
 
     // @Override
     // public Classes updateClassesStatus(Long id) {
-    //     Classes existingClasses = classesRepository.findById(id)
-    //             .orElseThrow(() -> new ClassesNotFoundException("Không tìm thấy với id: " + id));
+    // Classes existingClasses = classesRepository.findById(id)
+    // .orElseThrow(() -> new ClassesNotFoundException("Không tìm thấy với id: " +
+    // id));
 
-    //     boolean isActive = existingClasses.getIsActive();
-    //     existingClasses.setIsActive(!isActive);
+    // boolean isActive = existingClasses.getIsActive();
+    // existingClasses.setIsActive(!isActive);
 
-    //     return classesRepository.save(existingClasses);
+    // return classesRepository.save(existingClasses);
     // }
+
+    @Override
+    public void addStudentToClass(Long classId, Long studentId) {
+        Classes classes = classesRepository.findById(classId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp học với ID: " + classId));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy học sinh với ID: " + studentId));
+
+        classes.getStudents().add(student);
+        classesRepository.save(classes);
+    }
 }
