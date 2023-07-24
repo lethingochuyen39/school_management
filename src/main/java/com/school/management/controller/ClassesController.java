@@ -24,6 +24,10 @@ import com.school.management.service.ClassesServiceImpl.ClassesNotFoundException
 public class ClassesController {
 	@Autowired
 	private ClassesService classesService;
+	
+	//duy
+	@Autowired
+	private ClassesServiceImpl classesServiceImpl;
 
 	@PostMapping("/create")
 	public ResponseEntity<?> createClasses(@RequestBody ClassesDto classesDto) {
@@ -98,4 +102,10 @@ public class ClassesController {
 		return classesService.getClassesByTeacherId(teacherId);
 	}
 
+	// duy
+    @GetMapping("/all")
+	public ResponseEntity<List<?>> getAllClasses2() {
+		List<Classes> classes = classesServiceImpl.getAllClasses();
+		return ResponseEntity.ok(classes);
+	}
 }

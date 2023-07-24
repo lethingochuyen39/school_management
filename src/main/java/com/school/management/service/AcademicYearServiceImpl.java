@@ -45,6 +45,11 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 							&& academicYear.getEndDate().isEqual(existingEndDate))) {
 				throw new IllegalArgumentException("Thòi gian năm học trùng lặp với năm học đã tồn tại.");
 			}
+
+			if ((academicYear.getStartDate().isBefore(existingEndDate)
+					&& academicYear.getEndDate().isAfter(existingStartDate))) {
+				throw new IllegalArgumentException("Thời gian năm học đã tồn tại.");
+			}
 		}
 		return academicYearRepository.save(academicYear);
 	}

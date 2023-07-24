@@ -1,6 +1,7 @@
 package com.school.management.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,11 @@ import com.school.management.dto.TokenRefreshDto;
 import com.school.management.dto.UserDto;
 import com.school.management.exception.TokenRefreshException;
 import com.school.management.model.RefreshToken;
+import com.school.management.model.User;
 import com.school.management.service.EmailService;
 import com.school.management.service.RefreshTokenService;
 import com.school.management.service.UserService;
+import com.school.management.service.UserServiceImpl;
 import com.school.management.utils.JwtUtils;
 import com.school.management.utils.Utility;
 
@@ -41,6 +44,9 @@ public class UserController {
     JwtUtils jwtUtils;
 	@Autowired
 	private EmailService emailService;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserDto userDto) {
@@ -109,5 +115,12 @@ public class UserController {
     @PostMapping("/delete")
     public ResponseEntity<?> deleteAccount(@RequestBody String email){
         return ResponseEntity.ok(userService.deleteAccount(email));
+    }
+
+    // duy
+    @GetMapping("/all")
+    public ResponseEntity<List<?>> getAllUsers(){
+        List<User> users = userServiceImpl.getAllUser();
+        return ResponseEntity.ok(users);
     }
 }
