@@ -39,6 +39,9 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private StudentServiceImpl studentServiceImpl;
+
     @GetMapping("/all")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.ok(studentService.GetAllStudent());
