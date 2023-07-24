@@ -95,4 +95,11 @@ public class EventNewsController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
+	//duy
+	@GetMapping("/allNew")
+	public ResponseEntity<List<?>> getAllEventNews2() {
+		List<EventNews> eventNewsList = eventNewsServiceImpl.getAllEventNews();
+		return ResponseEntity.ok(eventNewsList);
+	}
 }

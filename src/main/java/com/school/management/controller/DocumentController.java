@@ -131,4 +131,11 @@ public class DocumentController {
 		}
 	}
 
+	//duy
+	@GetMapping("/allDocument")
+	public ResponseEntity<List<?>> getAllDocuments2() {
+		List<Document> documents = documentServiceImpl.getAllDocuments();
+		return ResponseEntity.ok(documents);
+	}
+
 }
