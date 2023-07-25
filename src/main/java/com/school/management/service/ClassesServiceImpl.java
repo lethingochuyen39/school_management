@@ -1,6 +1,7 @@
 package com.school.management.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +10,13 @@ import com.school.management.dto.ClassesDto;
 import com.school.management.model.AcademicYear;
 import com.school.management.model.Classes;
 import com.school.management.model.Student;
+import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.repository.AcademicYearRespository;
 import com.school.management.repository.ClassesRepository;
 import com.school.management.repository.StudentRepository;
 import com.school.management.repository.TeacherRepository;
+import com.school.management.service.SubjectServiceImpl.SubjectNotFoundException;
 
 @Service
 public class ClassesServiceImpl implements ClassesService {
@@ -119,13 +122,54 @@ public class ClassesServiceImpl implements ClassesService {
 
     @Override
     public void addStudentToClass(Long classId, Long studentId) {
+        // Kiểm tra xem lớp học có tồn tại không
         Classes classes = classesRepository.findById(classId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp học với ID: " + classId));
 
+        // Kiểm tra xem học sinh có tồn tại không
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy học sinh với ID: " + studentId));
 
-        classes.getStudents().add(student);
-        classesRepository.save(classes);
+        // Kiểm tra xem lớp học đã đạt tới giới hạn số học sinh chưa
+        if (classes.getStudents().size() >= classes.getLimitStudent()) {
+            throw new IllegalStateException("Lớp học đã đạt tới giới hạn số học sinh.");
+        }
+
+        // Kiểm tra xem học sinh đã tồn tại trong lớp học hay chưa
+        if (classes.getStudents().contains(student)) {
+            throw new IllegalArgumentException("Học sinh đã tồn tại trong lớp học.");
+        }
+
+        // Thêm học sinh vào lớp học
+        try {
+            classes.getStudents().add(student);
+            student.getClassName().add(classes);
+            studentRepository.save(student);
+            System.out.println("Đã lưu thông tin lớp học thành công.");
+        } catch (Exception e) {
+            // Xử lý ngoại lệ khi lưu dữ liệu
+            System.err.println("Lỗi khi lưu thông tin lớp học: " + e.getMessage());
+        }
+
+        System.out.println("Đã thêm học sinh " + student.getName() + " vào lớp học " + classes.getName());
+    }
+        @Override
+    public void deleteClassFromStudent(Long subjectId, Long teacherId) {
+        Optional<Student> subjectOptional = studentRepository.findById(subjectId);
+        Optional<Classes> teacherOptional = classesRepository.findById(teacherId);
+
+        if (subjectOptional.isPresent() && teacherOptional.isPresent()) {
+            Student subject = subjectOptional.get();
+            Classes teacher = teacherOptional.get();
+
+            subject.remove(teacher);
+             // Implement a method in Subject entity to remove the teacher from the list
+             // of teachers associated with the subject.
+
+            // Optionally, you can save the changes to the subject entity in the database.
+            // subjectRepository.save(subject);
+        } else {
+            throw new ClassesNotFoundException("Subject or Teacher not found.");
+        }
     }
 }

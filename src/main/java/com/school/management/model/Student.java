@@ -24,10 +24,10 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false,columnDefinition = "NVARCHAR(255)")
+	@Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String name;
 
-	@Column(name = "gender",columnDefinition = "NVARCHAR(255)")
+	@Column(name = "gender", columnDefinition = "NVARCHAR(255)")
 	private String gender;
 
 	@Column(name = "dob")
@@ -36,7 +36,7 @@ public class Student {
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "address",columnDefinition = "NVARCHAR(255)")
+	@Column(name = "address", columnDefinition = "NVARCHAR(255)")
 	private String address;
 
 	@Column(name = "phone")
@@ -48,13 +48,16 @@ public class Student {
 	@Column(name = "image")
 	private String image;
 
-	@ManyToMany
-	@JoinTable(name = "student_class", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "class_id"))
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "student_class", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"))
 	private List<Classes> className;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
 	@JoinColumn(name = "user_id", unique = true, nullable = true)
 	private User user;
-
+	public void remove(Classes teacher) {
+		className.remove(teacher);
+		teacher.getStudents().remove(this);
+	}
 }
