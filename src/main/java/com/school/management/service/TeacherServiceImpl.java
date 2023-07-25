@@ -1,7 +1,6 @@
 package com.school.management.service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,12 +12,15 @@ import org.springframework.stereotype.Service;
 import com.school.management.dto.RoleDto;
 import com.school.management.dto.TeacherDto;
 import com.school.management.dto.UserDto;
+import com.school.management.model.Classes;
+import com.school.management.model.RefreshToken;
 import com.school.management.model.Subject;
 import com.school.management.model.Teacher;
 import com.school.management.model.User;
+import com.school.management.repository.ClassesRepository;
+import com.school.management.repository.RefreshTokenRepository;
 import com.school.management.repository.TeacherRepository;
 import com.school.management.repository.UserRepository;
-import com.school.management.service.StudentServiceImpl.StudentException;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -26,7 +28,13 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherRepository teacherRepository;
 
     @Autowired
+    private ClassesRepository classesRepository;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenReposity;
 
     @Autowired
     private EmailService emailService;
@@ -99,11 +107,24 @@ public class TeacherServiceImpl implements TeacherService {
             throw new TeacherNotFoundException("Teacher " + teacher.get().getEmail() + " cant be found");
 
         }
+        List<Classes> classes = classesRepository.findAllByTeacherId(id);
+            if(classes.size()>0){
+                classes.forEach((oneclass)->{
+                oneclass.setTeacher(null);
+                classesRepository.save(oneclass);
+            });
+            }
+        teacherRepository.deleteById(id);
         if(user != null) {
+            List<RefreshToken> list= refreshTokenReposity.findByUser(user);
+            if(list.size()>0){
+                list.forEach((token)->{
+                refreshTokenReposity.delete(token);
+            });
+            }
             userRepository.delete(user);
 
         }
-        teacherRepository.deleteById(id);
         return true;
     }
 

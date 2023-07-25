@@ -31,7 +31,7 @@ public class Classes implements Serializable {
 	private String description;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "teacher_id", nullable = false)
+	@JoinColumn(name = "teacher_id", nullable = true)
 	private Teacher teacher;
 
 	@ManyToOne(fetch = FetchType.LAZY)
