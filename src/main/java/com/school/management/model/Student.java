@@ -56,5 +56,8 @@ public class Student {
 	@JsonIgnore
 	@JoinColumn(name = "user_id", unique = true, nullable = true)
 	private User user;
-
+	public void remove(Classes teacher) {
+		className.remove(teacher);
+		teacher.getStudents().remove(this);
+	}
 }

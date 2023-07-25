@@ -24,5 +24,7 @@ public interface ClassesService {
     List<Classes> getClassesByTeacherId(Long teacherId);
 
     void addStudentToClass(Long classId, Long studentId);
+    
+    void deleteClassFromStudent(Long subjectId, Long teacherId);
 
 }

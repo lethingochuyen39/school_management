@@ -50,5 +50,4 @@ public class Classes implements Serializable {
 
 	// @Column(name = "isActive")
 	// private Boolean isActive;
-
 }
