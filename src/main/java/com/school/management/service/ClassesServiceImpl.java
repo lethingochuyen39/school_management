@@ -119,13 +119,35 @@ public class ClassesServiceImpl implements ClassesService {
 
     @Override
     public void addStudentToClass(Long classId, Long studentId) {
+        // Kiểm tra xem lớp học có tồn tại không
         Classes classes = classesRepository.findById(classId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lớp học với ID: " + classId));
 
+        // Kiểm tra xem học sinh có tồn tại không
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy học sinh với ID: " + studentId));
 
-        classes.getStudents().add(student);
-        classesRepository.save(classes);
+        // Kiểm tra xem lớp học đã đạt tới giới hạn số học sinh chưa
+        if (classes.getStudents().size() >= classes.getLimitStudent()) {
+            throw new IllegalStateException("Lớp học đã đạt tới giới hạn số học sinh.");
+        }
+
+        // Kiểm tra xem học sinh đã tồn tại trong lớp học hay chưa
+        if (classes.getStudents().contains(student)) {
+            throw new IllegalArgumentException("Học sinh đã tồn tại trong lớp học.");
+        }
+
+        // Thêm học sinh vào lớp học
+        try {
+            classes.getStudents().add(student);
+            student.getClassName().add(classes);
+            studentRepository.save(student);
+            System.out.println("Đã lưu thông tin lớp học thành công.");
+        } catch (Exception e) {
+            // Xử lý ngoại lệ khi lưu dữ liệu
+            System.err.println("Lỗi khi lưu thông tin lớp học: " + e.getMessage());
+        }
+
+        System.out.println("Đã thêm học sinh " + student.getName() + " vào lớp học " + classes.getName());
     }
 }

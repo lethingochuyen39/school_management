@@ -41,7 +41,7 @@ public class Classes implements Serializable {
 	@Column(name = "grade", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String grade;
 
-	@ManyToMany(mappedBy = "className")
+	@ManyToMany(mappedBy = "className", cascade = CascadeType.ALL)
 	@JsonBackReference
 	List<Student> students;
 
