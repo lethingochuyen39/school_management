@@ -3,6 +3,7 @@ package com.school.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,10 +112,18 @@ public class ClassesController {
 
 	// huyen
 	@PostMapping("/{classId}/students/{studentId}")
-	public ResponseEntity<String> addTeacherToSubject(
+	public ResponseEntity<String> addStudentToClass(
 			@PathVariable Long classId,
 			@PathVariable Long studentId) {
-		classesServiceImpl.addStudentToClass(classId, studentId);
-		return ResponseEntity.ok("Thêm học sinh vào lớp học thành công.");
+		try {
+			classesService.addStudentToClass(classId, studentId);
+			return ResponseEntity.ok("Thêm học sinh vào lớp học thành công.");
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		} catch (IllegalStateException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi không xác định.");
+		}
 	}
 }
