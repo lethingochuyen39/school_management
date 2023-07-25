@@ -3,6 +3,7 @@ package com.school.management.service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
@@ -79,13 +80,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String DeleteStudent(Long email) {
-        Student deleteStudent = studentRepository.findById(email).get();
-
-        if (deleteStudent == null) {
+        Optional<Student> deleteStudent = studentRepository.findById(email);
+        User user = deleteStudent.get().getUser();
+        
+        if (!deleteStudent.isPresent()) {
             throw new StudentException("Student " + email + " cant be found");
 
         }
-        studentRepository.delete(deleteStudent);
+        if(user != null) {
+                    userRepository.delete(user);
+
+        }
+        studentRepository.delete(deleteStudent.get());
+
         return "Delete Successfully";
     }
 
