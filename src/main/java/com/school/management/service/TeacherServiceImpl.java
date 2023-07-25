@@ -3,6 +3,7 @@ package com.school.management.service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -17,6 +18,7 @@ import com.school.management.model.Teacher;
 import com.school.management.model.User;
 import com.school.management.repository.TeacherRepository;
 import com.school.management.repository.UserRepository;
+import com.school.management.service.StudentServiceImpl.StudentException;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -89,6 +91,17 @@ public class TeacherServiceImpl implements TeacherService {
     public boolean deleteTeacher(Long id) {
         if (!teacherRepository.existsById(id)) {
             throw new TeacherNotFoundException("Teacher not found with id: " + id);
+        }
+        Optional<Teacher> teacher = teacherRepository.findById(id);
+         User user = teacher.get().getUser();
+        
+        if (!teacher.isPresent()) {
+            throw new TeacherNotFoundException("Teacher " + teacher.get().getEmail() + " cant be found");
+
+        }
+        if(user != null) {
+            userRepository.delete(user);
+
         }
         teacherRepository.deleteById(id);
         return true;
